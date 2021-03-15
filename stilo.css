@@ -1,0 +1,33 @@
+input.error {
+    border: 2px solid #f00;
+}
+.error{
+    color: red;
+}
+
+.valid {
+    border: 2px solid green;
+}
+/*
+form, input {
+    margin: 10px;
+}
+*/
+#foot{
+    
+    background-image: 
+    linear-gradient(
+        rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.438)
+      ),
+    
+    url('foot1.jpg');
+  color: white;
+   
+}
+
+#firstnavbar
+    {
+      font-size: 16px;
+    }
+

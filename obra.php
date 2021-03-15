@@ -62,11 +62,20 @@ if(isset($_SESSION['usuario'])){
     </ul>
 	
 
-	
-    <div class="row flex-fill" style="min-height:0">
+
+    <div class="row flex-fill h-100" style="min-height:0">
 	<div class="col-4 border mh-100" style="overflow-y: scroll;">
-	<img  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class="img-thumbnail"  alt="" />
-	
+	 <img style="width: 18rem; height: 20rem;  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  " class="card-img-top" src=<?php echo "Imagenes/Obras/".$obra->getportada(); ?> alt="Card image cap">
+	<?php 
+	if(isset($_SESSION['usuario'])){
+		?>
+		 <button type="button" class="close" data-dismiss="modal" aria-label="Close">Añadir a lista</button>
+		<?php 
+	}
+	?>
 	</div>
 
         <div class="col-8 border mh-100 tab-content" style="overflow-y: scroll;">
@@ -214,11 +223,7 @@ if(isset($_SESSION['usuario'])){
             
         </div>
 		</div>
-      </div>
-    </div>
-			</div>
-			
-</div>
+    
     <?php 
 include("Includes/footer.php")
 ?>

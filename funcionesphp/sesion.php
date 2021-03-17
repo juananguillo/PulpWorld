@@ -6,7 +6,13 @@ include("conexionbd.php");
 $bd = conectardb();
 include("funcionesusuarios.php");
 include("../clases/usuarios.class.php");
-$us = unusuario($bd, $_POST['usulog']);
+$us;
+$campo=filter_var($_POST['usulog'], FILTER_VALIDATE_EMAIL)? "email":"usuario";
+echo $campo;
+if($campo=="email"){ $us=obtenerusuario2($bd, $_POST['usulog']);}
+else{
+    $us = unusuario($bd, $_POST['usulog']);
+}
 $_SESSION['usuario']=$us->getid();
 switch (comprobartipo($bd, $_SESSION['usuario'])) {
     case 0:

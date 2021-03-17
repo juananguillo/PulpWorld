@@ -103,6 +103,21 @@ function obtenerusuario($db, $email){
     
 }
 
+function obtenerusuario2($db, $email){
+    try {
+    $sentencia = $db->prepare("SELECT * FROM usuario WHERE email like :email");
+    $sentencia->bindParam(":email", $email, PDO::PARAM_STR);
+    $sentencia->execute();
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+        $usuario = $sentencia->fetch();
+    return $usuario; 
+
+} catch (Exception $e) {
+        
+    header("Location: error.php?error=Error");
+}
+    
+}
 
 
 function unusuario($bd, $usuario){

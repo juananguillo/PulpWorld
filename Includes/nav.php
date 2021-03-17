@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
 
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="index.php">
 
         Pulp Word
     </a>
@@ -10,7 +10,7 @@
     </button>
     <div class="collapse navbar-collapse" id="firstnavbar">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Autores</a></li>
             <?php if(isset($_SESSION['usuario'])){?>
             <li class="nav-item dropdown notifications-dropdown">

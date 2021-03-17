@@ -19,7 +19,6 @@ echo false;
     }
     
     else{
-       
             $email=$_POST['email'];
             $sentencia = $conn->prepare("SELECT COUNT(*) FROM usuario WHERE email like :email");
             $sentencia->execute(array(

@@ -1,17 +1,16 @@
 $(document).on("ready", function() {
-   $(".com").slice(0, 4).show();
-   alert($(".com").length);
-   $("#loadMore").on('click', function (e) {
-       e.preventDefault();
-       $("div:hidden").slice(0, 4).slideDown();
-       if ($("div:hidden").length == 0) {
-           $("#load").fadeOut('slow');
-       }
-       $('html,body').animate({
-           scrollTop: $(this).offset().top
-       }, 1500);
-   });
-   
+   ta = $(".com").size();
+   alert(ta);
+    x=3;
+    $('.com div:lt('+x+')').show();
+    $('#loadMore').click(function () {
+        x= (x+5 <= size_li) ? x+5 : size_li;
+        $('#myList li:lt('+x+')').show();
+    });
+    $('#showLess').click(function () {
+        x=(x-5<0) ? 3 : x-5;
+        $('#myList li').not(':lt('+x+')').hide();
+    });
 
 
 

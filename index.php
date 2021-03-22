@@ -103,7 +103,7 @@ if(isset($_SESSION['usuario'])){
              <?php }
              else {
              ?>
-              <a class="btn btn-primary btn-lg" href="#" role="button">Empieza a escribir</a>
+              <a class="btn btn-primary btn-lg" href="#" role="button">Crear nueva obra</a>
               <?php } ?>
 
   </div>
@@ -115,7 +115,7 @@ if(isset($_SESSION['usuario'])){
     <h1 class="display-3 text-center mb-5">Historias Pulp</h1>
     </div>
  
-    <div class="container mb-3">
+    <div class="container-fluid mb-3">
 	<div class="row">
 		<div class="col-md-12">
         <form  action="./funcionesphp/filtrar.php" method="POST" class="form-horizontal" role="form">
@@ -182,17 +182,19 @@ if(isset($_SESSION['usuario'])){
 <?php $linea=20; 
     
 ?>
-    <div id="coleccion" class="card-group mr-5 ml-5 mb-3">
+
+    <div id="coleccion" class="card-group">
+    <div class="container-fluid mb-3">
+    <div class="row"> 
         <?php for ($i = 0; $i < 12; $i++) {
-          if($i>=$linea) break;
-            if($i==4 || $i==8 || $i==12 ){
-                echo "</div> <div class='card-group mr-5 ml-5 mb-3'>";
-            }
+          
         ?>
         <?php if($i<$total-$desplazamiento){ ?>
         <a class="noDecoration" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> >
-            <div class="card ml-4">
-                <img style="width: 18rem; height: 20rem;" class="card-img-top" src=<?php echo "Imagenes/Obras/".$obras[$i]->getportada(); ?> alt="Card image cap">
+        
+            <div class="card col-md-3 col-xs-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <img style="width: 80%; height: 20rem; display:block;
+margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/".$obras[$i]->getportada(); ?> alt="Card image cap">
                 <div  class="card-body">
                     <h5 class="card-title">
                     <?php 
@@ -261,7 +263,8 @@ if(isset($_SESSION['usuario'])){
 
 
     </div>
-   
+    </div>
+    </div>
    
 
     <nav aria-label="...">
@@ -311,7 +314,8 @@ if(isset($_SESSION['usuario'])){
             </li>
         </ul>
     </nav>
-    <?php  if(isset($_GET['alerta'])) { ?> <script>alert("<?php echo $_GET['alerta']; ?>")</script> <?php } ?> ?>
+    
+    <?php  if(isset($_GET['alerta'])) { ?> <script>alert("<?php echo $_GET['alerta']; ?>")</script> <?php } ?> 
    
     <!-- Modal -->
     <script>

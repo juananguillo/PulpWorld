@@ -14,6 +14,7 @@ include("funcionesphp/funcionescategorias.php");
 include("clases/comentarios.class.php");
 include("funcionesphp/funcionescomentarios.php");
 if(isset($_GET["obra"])){
+	
 	$obra=obtenerunaobra($bd,$_GET["obra"]);
 	$comentarios=obtenercoments($bd, $_GET["obra"]);
 	$usuarios=arrayusuariostodos($bd);
@@ -26,7 +27,7 @@ $categorias=categorias($bd);
 
 if(isset($_SESSION['usuario'])){
    $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
-
+	$readonly=$_SESSION['usuario']!=$obra->getautor() ? "disabled" :"";
 
 
 }
@@ -48,37 +49,42 @@ if(isset($_SESSION['usuario'])){
 
 	
     <div class="container h-100 mt-5 mb-5 d-flex flex-column">
-	<h1 class="text-center"><?php echo $obra->gettitulo(); ?></h1>
+	<h1 class="text-center">
+	<?php echo $obra->gettitulo(); ?>
+	
+	</h1>
 	<ul class="nav nav-tabs">
       <li class="nav-item">
-	  <a class="nav-link active" href="#obra" data-toggle="tab">Obra</a>
+	  <a class="nav-link active" href="#obra" data-toggle="tab">Listado de capitulos</a>
 	  </li>
 	  <li class="nav-item">
-	  <a class="nav-link" href="#sinopsis" data-toggle="tab">Sinopsis</a>
+	  <a class="nav-link" href="#sinopsis" data-toggle="tab">Detalles de la obra</a>
 	  </li>
 	  <li class="nav-item">
 	  <a class="nav-link" href="#comentarios" data-toggle="tab">Comentarios</a>
 	  </li>
-    </ul>
+	  <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
+		<ul class="navbar-nav  ml-auto">
+            <li class="nav-item">
+			<a class="btn btn-primary"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Guardar</a>
+            </li>
+			</ul>
+       
+	  <?php } ?>
+	  </ul>
+	 
+    
 	
 
-
+	
     <div class="row flex-fill h-100" style="min-height:0">
-	<div class="col-4 border mh-100" style="overflow-y: scroll;">
-	 <img style="width: 18rem; height: 20rem;  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  " class="card-img-top" src=<?php echo "Imagenes/Obras/".$obra->getportada(); ?> alt="Card image cap">
-	<?php 
-	if(isset($_SESSION['usuario'])){
-		?>
-		 <button type="button" class="close" data-dismiss="modal" aria-label="Close">Añadir a lista</button>
-		<?php 
-	}
-	?>
+	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 border mh-100" style="overflow-y: scroll;">
+	<img style="width: 80%; height: 20rem; display:block;
+margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class="img-thumbnail"  alt="" />
+	
 	</div>
 
-        <div class="col-8 border mh-100 tab-content" style="overflow-y: scroll;">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 border mh-100 tab-content" style="overflow-y: scroll;">
 
 		<div class="tab-pane active in" id="obra">
 		<h3 class="text-center">Listado de Capitulos</h3>
@@ -106,10 +112,14 @@ if(isset($_SESSION['usuario'])){
       </div>
 
 	  <div class="tab-pane fade" id="sinopsis">
-	  <p class="justify">
+	  
+	  <label for="titulo">Titulo:</label><br>
+  <input class="form-control" type="text" id="titobra" name="titulo" $readonly  value="<?php echo $obra->gettitulo(); ?>"><br><br>
+  <label for="sinopsis">Sinopsis:</label><br>
+  <textarea style="resize: none;" class="form-control" id="sinopsisobra"  rows="22">
 	<?php echo $obra->getsinopsis();
 	 ?>
-	</p>
+	</textarea>
       </div>
 
 
@@ -189,6 +199,7 @@ if(isset($_SESSION['usuario'])){
 			<?php for($i=0; $i<count($comentarios); $i++) {
 				$respuestas=obtenerespuestas($bd, $comentarios[$i]->getid());
 				?>
+				<div class="com">
 				<div class="comment clearfix">
 						<div class="comment-details">
 							<span class="comment-name"><?php echo $usuarios[$comentarios[$i]->getid_usuario()]->getusuario(); ?></span>
@@ -199,7 +210,7 @@ if(isset($_SESSION['usuario'])){
 				</div>
 						
 						
-						<div>
+						
 							<!-- reply -->
 							<?php for($e=0; $e<count($respuestas); $e++) {?>
 							<div class="comment reply clearfix">
@@ -211,9 +222,15 @@ if(isset($_SESSION['usuario'])){
 									<a class="reply-btn resp2" data-toggle="modal" data-target="#coment" href="#"  <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a>
 								</div>
 							</div>
+							</div>
 							<?php } ?>
 						</div>
-						<?php } ?>
+						<?php 
+					
+					}
+				
+					?>
+					<a href="#" id="loadMore">Load More</a>
 					</div>
 			</div>
 			<!-- // comments wrapper -->
@@ -223,7 +240,11 @@ if(isset($_SESSION['usuario'])){
             
         </div>
 		</div>
-    
+      </div>
+    </div>
+			</div>
+			
+</div>
     <?php 
 include("Includes/footer.php")
 ?>

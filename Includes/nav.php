@@ -47,6 +47,7 @@
 			            </li>
             <li class="nav-item"><a class="nav-link" href="#">Mensajes<span class="badge badge-primary">4</span></a></li>
                 <?php } ?>
+                <li class="nav-item"><a class="nav-link" href="new.php">Escribir obra</a></li>
         </ul>
         <?php if(isset($_SESSION['usuario'])){
             ?>

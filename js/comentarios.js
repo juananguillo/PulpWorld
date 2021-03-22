@@ -1,4 +1,23 @@
 $(document).on("ready", function() {
+   $(".com").slice(0, 4).show();
+   alert($(".com").length);
+   $("#loadMore").on('click', function (e) {
+       e.preventDefault();
+       $("div:hidden").slice(0, 4).slideDown();
+       if ($("div:hidden").length == 0) {
+           $("#load").fadeOut('slow');
+       }
+       $('html,body').animate({
+           scrollTop: $(this).offset().top
+       }, 1500);
+   });
+   
+
+
+
+
+
+
    $("#mn").on("change keyup keydown paste cut copy", function () {
       if($("#mn").val()==""){
      

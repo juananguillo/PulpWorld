@@ -1,16 +1,21 @@
 $(document).on("ready", function() {
-   size_li = $("#comments-wrapper li").size();
+  
+  function vermas() {
+   var total = $("#comments-wrapper li").size();
+   
    x=54;
    $('#showLess').hide();
    $('#comments-wrapper li:lt('+x+')').show();
    $('#loadMore').click(function () {
+      if(x<total){
        x+=54;
        $('#comments-wrapper li:lt('+x+')').show();
        $('#showLess').show();
+      }
 
    });
    $('#showLess').click(function () {
-      alert(x);
+     
       if(x>54){
        x-=54;
        $('#comments-wrapper li').not(':lt('+x+')').hide();
@@ -18,6 +23,9 @@ $(document).on("ready", function() {
          $('#showLess').hide();
        }
    });
+  }
+  vermas();
+   
   
      
   
@@ -42,6 +50,7 @@ $(document).on("ready", function() {
       resp1();
   
       $("#commentarionew").text("");
+      
      
       
    }); 
@@ -52,6 +61,7 @@ $(document).on("ready", function() {
       var us=$(this).data("value");
       $("#commentarionew").text("Responder a @"+us);
       resp2(res, us);
+      vermas();
      
            
 
@@ -88,7 +98,8 @@ $(document).on("ready", function() {
                $("#mn").val("");
                $("#commentarionew").text("");
                $("#enviarcoment").prop('disabled', true);
-
+      
+               vermas();
                $("#submit_comment").on("click", function () {
                   resp1();
                });
@@ -136,6 +147,7 @@ $(document).on("ready", function() {
             $("#coment").modal('toggle');
             $("#mn").val("");
             $("#enviarcoment").prop('disabled', true);
+            vermas();
             $("#submit_comment").on("click", function () {
                resp1();
             });

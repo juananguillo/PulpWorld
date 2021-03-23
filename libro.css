@@ -25,4 +25,5 @@ textarea { display: block; margin-bottom: 10px; }
 	} 
 } 
 
- 
+ #comments-wrapper li{ display:none;
+}

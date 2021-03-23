@@ -226,7 +226,8 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 				
 					?>
 					</ul>
-					
+					<div id="loadMore">Load more</div>
+<div id="showLess">Show less</div>
 					</div>
 			</div>
 			<!-- // comments wrapper -->

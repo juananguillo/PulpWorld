@@ -84,7 +84,7 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 	
 	</div>
 
-        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 border mh-100 tab-content" style="overflow-y: scroll;">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 border mh-100 tab-content" style="overflow-y: scroll; word-wrap: break-word">
 
 		<div class="tab-pane active in" id="obra">
 		<h3 class="text-center">Listado de Capitulos</h3>
@@ -195,42 +195,38 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 			<hr>
 			<!-- comments wrapper -->
 			
-			<div id="comments-wrapper">
+			
+			<ul style="list-style:none;  margin:0 0 0 0;padding:0 0 0 0;" id="comments-wrapper">
 			<?php for($i=0; $i<count($comentarios); $i++) {
 				$respuestas=obtenerespuestas($bd, $comentarios[$i]->getid());
 				?>
-				<div class="com">
-				<div class="comment clearfix">
-						<div class="comment-details">
-							<span class="comment-name"><?php echo $usuarios[$comentarios[$i]->getid_usuario()]->getusuario(); ?></span>
-							<span class="comment-date"><?php echo $comentarios[$i]->getid_usuario(); ?></span>
-							<p><?php echo $comentarios[$i]->getmensaje(); ?></p>
-							<a class="reply-btn resp2"  href="#" data-toggle="modal" data-target="#coment" <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a>
-						</div>
-				</div>
-						
-						
-						
+				<li class="font-weight-bold prin" id=" <?php echo $i; ?>"><?php echo $usuarios[$comentarios[$i]->getid_usuario()]->getusuario(); ?></li>
+				<li><?php echo $comentarios[$i]->getmensaje(); ?></li>
+				<li><a class="reply-btn resp2"  href="#" data-toggle="modal" data-target="#coment" <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
+	
+							
 							<!-- reply -->
+							<ul style="list-style:none;">
 							<?php for($e=0; $e<count($respuestas); $e++) {?>
-							<div class="comment reply clearfix">
 								
-								<div class="comment-details">
-									<span class="comment-name"><?php echo $usuarios[$respuestas[$e]->getid_usuario()]->getusuario(); ?></span>
-									<span class="comment-date"></span>
-									<p><?php echo $respuestas[$e]->getmensaje(); ?></p>
-									<a class="reply-btn resp2" data-toggle="modal" data-target="#coment" href="#"  <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a>
-								</div>
-							</div>
-							</div>
-							<?php } ?>
-						</div>
+								
+							<li class="font-weight-bold"><?php echo $usuarios[$respuestas[$e]->getid_usuario()]->getusuario(); ?></li>
+							<li><?php echo $respuestas[$e]->getmensaje(); ?></li>
+							<li><a class="reply-btn resp2" data-toggle="modal" data-target="#coment" href="#"  <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
+									
+							
+							
+							<?php }
+							?>
+							
+							</ul>
 						<?php 
 					
 					}
 				
 					?>
-					<a href="#" id="loadMore">Load More</a>
+					</ul>
+					
 					</div>
 			</div>
 			<!-- // comments wrapper -->

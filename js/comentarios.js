@@ -1,16 +1,30 @@
 $(document).on("ready", function() {
-   ta = $(".com").size();
-   alert(ta);
-    x=3;
-    $('.com div:lt('+x+')').show();
-    $('#loadMore').click(function () {
-        x= (x+5 <= size_li) ? x+5 : size_li;
-        $('#myList li:lt('+x+')').show();
-    });
-    $('#showLess').click(function () {
-        x=(x-5<0) ? 3 : x-5;
-        $('#myList li').not(':lt('+x+')').hide();
-    });
+   size_li = $("#comments-wrapper li").size();
+   x=10;/*
+   $('#showLess').hide();
+   $('#prin li:lt('+x+')').show();
+   $('#loadMore').click(function () {
+       x+=10;
+       $('#comments-wrapper li:lt('+x+')').show();
+       $('#showLess').show();
+
+   });
+   $('#showLess').click(function () {
+      alert(x);
+      if(x>10){
+       x-=10;
+       $('#comments-wrapper li').not(':lt('+x+')').hide();
+       }else{
+         $('#showLess').hide();
+       }
+   });*/
+  var array= $(".prin").toArray().length;
+  for (let index = 0; index < array.length; index++) {
+     if(index>1){
+        $("#".index).hide();
+     }
+     
+  }
 
 
 

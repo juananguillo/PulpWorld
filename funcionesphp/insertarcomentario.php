@@ -26,35 +26,20 @@ $usuarios=arrayusuariostodos($bd);
  for($i=0; $i<count($comentarios); $i++) {
     $respuestas=obtenerespuestas($bd, $comentarios[$i]->getid());
    echo "
-    <div class='comment clearfix'>
-            <div class='comment-details'>
-                <span class='comment-name'>";
-                echo $usuarios[$comentarios[$i]->getid_usuario()]->getusuario(); echo "</span>
-                <span class='comment-date'>"; echo $comentarios[$i]->getid_usuario(); echo "</span>
-                <p>"; echo $comentarios[$i]->getmensaje(); echo "</p>
-                <a class='reply-btn resp2'  href='#' data-toggle='modal' data-target='#coment' data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()} >Responder</a>
-            </div>
-    </div>
-            
-            
-            <div>";
-               
-                for($e=0; $e<count($respuestas); $e++) {
-               echo "<div class='comment reply clearfix'>
-                    
-                    <div class='comment-details'>
-                        <span class='comment-name'>"; echo $usuarios[$respuestas[$e]->getid_usuario()]->getusuario(); echo "</span>
-                        <span class='comment-date'></span>
-                        <p>"; echo $respuestas[$e]->getmensaje(); echo "</p>
-                        <a class='reply-btn resp2' data-toggle='modal' data-target='#coment' href='#'  data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}>Responder</a>
-                    </div>
-                </div>";
-                 }
-                 echo "
-            </div>";
-             } 
+   <li class='font-weight-bold'>{$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()}</li>
+				<li>{$comentarios[$i]->getmensaje()}</li>
+				<li><a class='reply-btn resp2'  href='#' data-toggle='modal' data-target='#coment'  data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}>Responder</a></li>
+							<ul style='list-style:none;'>";
+							for($e=0; $e<count($respuestas); $e++) {
+								echo "	
+							<li class='font-weight-bold'>{$usuarios[$respuestas[$e]->getid_usuario()]->getusuario()}</li>
+							<li>{$respuestas[$e]->getmensaje()}</li>
+							<li><a class='reply-btn resp2' data-toggle='modal' data-target='#coment' href='#' data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}>Responder</a></li>
+							";
+             }
+             echo "</ul>"; 
                 }
+            }
                 else{
-                    header("Location :./index.php");
+                    header('Location :./index.php');
                 }
-?>

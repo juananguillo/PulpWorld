@@ -11,7 +11,7 @@ $(document).on("ready", function () {
   }, 'La contraseña es debil, tiene que tener seis letras, un numero al menos y un caracter\'.')
 
   $.validator.addMethod('comparar', function(value, element) {
-    alert($("#contrareg").val()+"+"+value);
+    
     return this.optional(element) 
       || value==$("#contrareg").val();
   }, 'No coincide con la primera contraseña\'.')

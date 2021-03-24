@@ -24,7 +24,7 @@ else{
 	header("Location: index.php");
 }
 $categorias=categorias($bd);
-
+$readonly="disabled";
 if(isset($_SESSION['usuario'])){
    $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
 	$readonly=$_SESSION['usuario']!=$obra->getautor() ? "disabled" :"";
@@ -37,7 +37,7 @@ if(isset($_SESSION['usuario'])){
     <link rel="stylesheet" href="libro.css">
 	<script src="js/comentarios.js"></script>
     </head>
-<body>
+	<body>
     <?php 
     include("Includes/nav.php");
 
@@ -45,7 +45,7 @@ if(isset($_SESSION['usuario'])){
 
 
     ?>
-    <body>
+   
 
 	
     <div class="container h-100 mt-5 mb-5 d-flex flex-column">
@@ -114,9 +114,9 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 	  <div class="tab-pane fade" id="sinopsis">
 	  
 	  <label for="titulo">Titulo:</label><br>
-  <input class="form-control" type="text" id="titobra" name="titulo" $readonly  value="<?php echo $obra->gettitulo(); ?>"><br><br>
+  <input class="form-control" type="text" id="titobra" name="titulo" <?php echo $readonly ?> value="<?php echo $obra->gettitulo(); ?>"><br><br>
   <label for="sinopsis">Sinopsis:</label><br>
-  <textarea style="resize: none;" class="form-control" id="sinopsisobra"  rows="22">
+  <textarea <?php echo $readonly ?>  style="resize: none;" class="form-control" id="sinopsisobra"  rows="22">
 	<?php echo $obra->getsinopsis();
 	 ?>
 	</textarea>
@@ -202,8 +202,9 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 				?>
 				<li class="font-weight-bold prin" id=" <?php echo $i; ?>"><?php echo $usuarios[$comentarios[$i]->getid_usuario()]->getusuario(); ?></li>
 				<li><?php echo $comentarios[$i]->getmensaje(); ?></li>
+				<?php if(isset($_SESSION["usuario"])){ ?>
 				<li><a class="reply-btn resp2"  href="#" data-toggle="modal" data-target="#coment" <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
-	
+					<?php } ?>
 							
 							<!-- reply -->
 							<ul style="list-style:none;">
@@ -212,11 +213,12 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 								
 							<li class="font-weight-bold"><?php echo $usuarios[$respuestas[$e]->getid_usuario()]->getusuario(); ?></li>
 							<li><?php echo $respuestas[$e]->getmensaje(); ?></li>
+							<?php if(isset($_SESSION["usuario"])){ ?>
 							<li><a class="reply-btn resp2" data-toggle="modal" data-target="#coment" href="#"  <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
 									
 							
 							
-							<?php }
+							<?php } }
 							?>
 							
 							</ul>

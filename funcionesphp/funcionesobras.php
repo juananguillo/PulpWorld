@@ -1,5 +1,29 @@
 <?php 
 
+
+function nuevaobra($bd, $titulo, $sinopsis, $img)
+{
+    try {
+       
+        $sentencia = $db->prepare("Insert INTO obras(id,mensaje,id_usuario,id_obra,res)
+    VALUES(:id, :mensaje, :id_usuario, :id_obra, :res)");
+        $sentencia->execute(array(
+            ':id' => null, ':mensaje' => $mensaje, ':id_usuario' => $id_usuario, ':id_obra' => $id_obra, ':res'=>$res)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+        
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+
+
 function obras($bd,$desc,$orden){
     try {
         $sentencia = $bd->prepare("SELECT * FROM obras WHERE estado like 1 AND publico like 1  ORDER BY $orden DESC

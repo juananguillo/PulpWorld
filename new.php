@@ -13,6 +13,7 @@ if(!isset($_SESSION["usuario"])){
     header("Location: index.php");
 }
 $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+$categorias=categorias($bd);
 include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="libro.css">
@@ -56,11 +57,31 @@ margin:auto; " src="Imagenes/Obras/default.jpg" class="img-thumbnail"  alt="" />
 <form  action="#" id="dataform" method="POST">
 <br>
 <p id="err"></p>
+<input type="hidden" id="autor" value=<?php echo $_SESSION['usuario']; ?>>
 <label for="titulo">Titulo:</label><br>
 
-  <input class="form-control" type="text" id="titobra" name="titulo"><br><br>
- 
-  <label for="sinopsis">Sinopsis:</label><br>
+  <input class="form-control" type="text" id="titobra" name="titulo"><br>
+
+
+
+  
+  <label for="filter">Selecciona el genero (Minimo 1 Maximo 4)</label>
+                                        <select class="selectpicker" id="categorias">
+                                        <option value="0" selected>Selecciona el genero</option>
+                                       <?php 
+                                       for ($i=0; $i <count($categorias) ; $i++) { 
+                                          
+                                           echo "<option value='{$categorias[$i]->getid()}'>{$categorias[$i]->getnombre()}</option>";
+                                           
+                                        }
+                                       
+                                       ?>
+                                    </select><br>
+                                    <p id="err2"></p>
+ <div id="selecat">
+
+ </div><br>
+  <label for="sinopsis">Sinopsis: (Maximo 250 palabras)</label><br>
   <textarea style="resize: none;" class="form-control" id="sinopsisobra"  rows="22" maxlength="1684"></textarea>
 </form>
  

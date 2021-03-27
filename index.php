@@ -187,7 +187,7 @@ if(isset($_SESSION['usuario'])){
     <div class="container-fluid mb-3">
     <div class="row"> 
         <?php for ($i = 0; $i < 12; $i++) {
-          
+          $generos=generos($bd, $obras[$i]->getid());
         ?>
         <?php if($i<$total-$desplazamiento){ ?>
         <a class="noDecoration" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> >

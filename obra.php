@@ -14,13 +14,17 @@ include("funcionesphp/funcionescategorias.php");
 include("clases/comentarios.class.php");
 include("funcionesphp/funcionescomentarios.php");
 if(isset($_GET["obra"])){
-	
+	$categorias=categorias($bd);
 	$obra=obtenerunaobra($bd,$_GET["obra"]);
+	$generos=generos($bd, $obra->getid());
 	$comentarios=obtenercoments($bd, $_GET["obra"]);
 	$usuarios=arrayusuariostodos($bd);
 	$capitulos= capitulos($bd, $_GET["obra"]);
 }
 else{
+	header("Location: index.php");
+}
+if($obra->getpublico()==0 && $_SESSION["usuario"]!=$obra->getautor() && $_SESSION["tipo"]!=1){
 	header("Location: index.php");
 }
 $categorias=categorias($bd);
@@ -36,6 +40,7 @@ if(isset($_SESSION['usuario'])){
     ?>
     <link rel="stylesheet" href="libro.css">
 	<script src="js/comentarios.js"></script>
+	<script src="js/obra.js"></script>
     </head>
 	<body>
     <?php 
@@ -81,12 +86,18 @@ if(isset($_SESSION['usuario'])){
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 border mh-100" style="overflow-y: scroll;">
 	<img style="width: 80%; height: 20rem; display:block;
 margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class="img-thumbnail"  alt="" />
-	
+	<br>
+<?php 
+for ($i=0; $i < count($generos); $i++) { 
+	echo " <p class='btn btn-primary'>{$generos[$i]->getnombre()}</p>";
+}
+?>
+
 	</div>
 
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 border mh-100 tab-content" style="overflow-y: scroll; word-wrap: break-word">
 
-		<div class="tab-pane active in" id="obra">
+		<div class="tab-pane active in" id="obra"><br>
 		<h3 class="text-center">Listado de Capitulos</h3>
 		<ul class="list-group">
 		<?php for($i=0; $i<count($capitulos); $i++) {?>
@@ -112,10 +123,37 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
       </div>
 
 	  <div class="tab-pane fade" id="sinopsis">
-	  
+	  <br>
 	  <label for="titulo">Titulo:</label><br>
   <input class="form-control" type="text" id="titobra" name="titulo" <?php echo $readonly ?> value="<?php echo $obra->gettitulo(); ?>"><br><br>
-  <label for="sinopsis">Sinopsis:</label><br>
+  
+ <?php 
+ if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){
+	 ?>
+	  <label for="filter">Selecciona el genero (Minimo 1 Maximo 4)</label>
+                                        <select class="selectpicker" id="categorias">
+                                        <option value="0" selected>Selecciona el genero</option>
+                                       <?php 
+                                       for ($i=0; $i <count($categorias) ; $i++) { 
+                                          
+                                           echo "<option value='{$categorias[$i]->getid()}'>{$categorias[$i]->getnombre()}</option>";
+                                           
+                                        }
+                                       
+                                       ?>
+                                    </select><br>
+                                    <p id="err2"></p>
+ <div id="selecat">
+ <?php 
+for ($i=0; $i < count($generos); $i++) { 
+	echo " <p id={$generos[$i]->getid()} class='btn btn-primary sel'>{$generos[$i]->getnombre()}<span aria-hidden='true'>&times;</span></p>";
+}
+?>
+ </div><br>
+ <?php  
+ }
+ ?>
+  <label for="sinopsis">Sinopsis:</label>
   <textarea <?php echo $readonly ?>  style="resize: none;" class="form-control" id="sinopsisobra"  rows="22">
 	<?php echo $obra->getsinopsis();
 	 ?>
@@ -154,7 +192,7 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 
 			<!-- Display total number of comments on this post  -->
 			<p class="d-none" id="obranum"><?php echo $_GET["obra"]; ?></p>
-			<p class="d-none" id="sesionnum"><?php echo $_SESSION["usuario"]; ?></p>
+			<p class="d-none" id="sesionnum"><?php echo $_SESSION["usuario"]; ?></p><br>
 			<h2><span id="comments_count"><?php echo totalcoments($bd, $_GET["obra"]); ?></span> Comentarios
 			<?php if(isset($_SESSION["usuario"])) {?>
 			<button class="btn btn-primary btn-sm pull-right ml-4"  data-toggle="modal" data-target="#coment" id="submit_comment">Añadir comentario</button>

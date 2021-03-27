@@ -1,20 +1,26 @@
 <?php 
 
 
-function nuevaobra($bd, $titulo, $sinopsis, $img)
+function nuevaobra($bd, $titulo, $sinopsis, $autor)
 {
     try {
        
-        $sentencia = $db->prepare("Insert INTO obras(id,mensaje,id_usuario,id_obra,res)
-    VALUES(:id, :mensaje, :id_usuario, :id_obra, :res)");
+        $sentencia = $bd->prepare("Insert INTO obras(id,titulo,sinopsis,autor,portada, publico, estado,
+         lecturas, likes, terminada)
+    VALUES(:id, :titulo, :sinopsis, :autor, :portada, :publico, :estado, :lecturas, :likes, :terminada)");
         $sentencia->execute(array(
-            ':id' => null, ':mensaje' => $mensaje, ':id_usuario' => $id_usuario, ':id_obra' => $id_obra, ':res'=>$res)
+            ':id' => null, ':titulo' => $titulo, ':sinopsis' => $sinopsis, ':autor' => $autor,
+            ':portada'=>"default.jpg", ':publico'=>0, ':publico'=>0,':estado'=>1, ':lecturas'=>0, ':likes'=>0,
+            ':terminada'=>0)
             
         );
        
         if ($sentencia->rowCount() == 0) {
             throw new Exception();
         }
+
+        $id = $bd->lastInsertId();
+        return $id;
         
     } catch (Exception $e) {
         echo $e->getMessage();
@@ -22,6 +28,23 @@ function nuevaobra($bd, $titulo, $sinopsis, $img)
     }
 }
 
+function cambiarfoto($bd,$img, $id){
+    try {
+        $sentencia = $bd->prepare("UPDATE obras SET portada= :portada WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           ':portada' => $img,'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
 
 
 function obras($bd,$desc,$orden){
@@ -48,6 +71,8 @@ function obras($bd,$desc,$orden){
     }
 
 }
+
+
 
 function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat){
     try {

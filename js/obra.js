@@ -1,4 +1,42 @@
 $(document).on("ready", function () {
+  
+  $(".redi").on("click", function () { 
+    var href=$(this).attr('href');
+    var obra=$("#obraid").val()
+    window.history.pushState( {} , '', '?obra='+obra+'&section='+href.substr(1) );
+   
+    
+  });
+  var section= getParameterByName('section');
+
+  switch (section) {
+    case "comentarios":
+      $("#navcom").click();
+      
+      break;
+      case "sinopsis":
+      $("#navdet").click();
+      
+      break;
+
+      case "obra":
+      $("#navcapi").click();
+      
+      break;
+  
+    default:
+      break;
+  }
+
+  function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
     $(".sel").each(function () {
                   
         $('#categorias option[value='+$(this).attr('id')+']').prop("disabled", true);

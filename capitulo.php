@@ -22,6 +22,7 @@ if(isset($_GET["cap"])){
     for ($i=0; $i < count($capitulos); $i++) { 
         if($capitulos[$i]->getid()==$capitulo->getid()){
             $anterior=$i==0 ? false : $capitulos[$i-1]->getid();
+            if($capitulos[$i]->getpublico())
             $siguiente=$i+1>=count($capitulos)? false : $capitulos[$i+1]->getid();
             break;
             

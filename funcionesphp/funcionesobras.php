@@ -47,10 +47,17 @@ function cambiarfoto($bd,$img, $id){
 }
 
 
-function obras($bd,$desc,$orden){
+function obras($bd,$desc,$orden,$tipo){
     try {
-        $sentencia = $bd->prepare("SELECT * FROM obras WHERE estado like 1 AND publico like 1  ORDER BY $orden DESC
-        LIMIT $desc, 20000000");
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT * FROM obras WHERE estado like 1 AND publico like 1  ORDER BY $orden DESC
+              LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT * FROM obras ORDER BY $orden DESC
+            LIMIT $desc, 20000000");
+        }
+       
         $sentencia->execute();
         if($sentencia->rowCount()==0)
         {
@@ -74,14 +81,23 @@ function obras($bd,$desc,$orden){
 
 
 
-function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat){
+function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat,$tipo){
     try {
+        if($tipo==0){
         $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
         o.estado like 1 AND publico like 1 AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
         ORDER BY o.$orden DESC
         LIMIT $desc, 20000000");
+        }else{
+            $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+            (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+            OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+            AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
+            ORDER BY o.$orden DESC
+            LIMIT $desc, 20000000"); 
+        }
         $sentencia->execute();
         if($sentencia->rowCount()==0)
         {
@@ -103,14 +119,23 @@ function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat){
 
 }
 
-function totalobraspalabrasconcat($db,$desc, $orden,$palabra,$cat){
+function totalobraspalabrasconcat($db,$desc, $orden,$palabra,$cat,$tipo){
 
     try {
+        if($tipo==0){
         $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
         o.estado like 1 AND publico like 1 AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
         ORDER BY o.$orden DESC");
+        }
+        else{
+            $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+            (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+            OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+            AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
+            ORDER BY o.$orden DESC");
+        }
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
         return $total;
@@ -123,13 +148,21 @@ function totalobraspalabrasconcat($db,$desc, $orden,$palabra,$cat){
     }
 
 
-function obraspalabras($bd,$desc,$orden,$palabra){
+function obraspalabras($bd,$desc,$orden,$palabra,$tipo){
     try {
+        if($tipo==0){
         $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
         o.estado like 1 AND publico like 1 AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         ORDER BY o.$orden DESC
         LIMIT $desc, 20000000");
+        }else{
+            $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+        (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+        OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+        ORDER BY o.$orden DESC
+        LIMIT $desc, 20000000");
+        }
         $sentencia->execute();
         if($sentencia->rowCount()==0)
         {
@@ -152,13 +185,20 @@ function obraspalabras($bd,$desc,$orden,$palabra){
 }
 
 
-function totalobraspalabras($db,$desc, $orden,$palabra){
+function totalobraspalabras($db,$desc, $orden,$palabra,$tipo){
 
     try {
+        if($tipo==0){
         $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
         o.estado like 1 AND publico like 1 AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         ORDER BY o.$orden DESC");
+        }else{
+            $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+            (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+            OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+            ORDER BY o.$orden DESC");
+        }
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
         return $total;
@@ -170,12 +210,19 @@ function totalobraspalabras($db,$desc, $orden,$palabra){
     
     }
 
-function filtrarobras1($bd,$desc,$orden,$cat){
+function filtrarobras1($bd,$desc,$orden,$cat,$tipo){
     try {
+        if($tipo==0){
         $sentencia = $bd->prepare("SELECT o.* from obras o, genero g
         WHERE estado like 1 AND  g.id_categoria like $cat AND g.id_obra LIKE o.id
         ORDER BY $orden DESC
         LIMIT $desc, 200000");
+        }else{
+            $sentencia = $bd->prepare("SELECT o.* from obras o, genero g
+            WHERE  g.id_categoria like $cat AND g.id_obra LIKE o.id
+            ORDER BY $orden DESC
+            LIMIT $desc, 200000");
+        }
         $sentencia->execute();
         if($sentencia->rowCount()==0)
         {
@@ -197,15 +244,24 @@ function filtrarobras1($bd,$desc,$orden,$cat){
 
 }
 
-function totalobras1($db,$desc, $orden, $cat){
+function totalobras1($db,$desc, $orden, $cat,$tipo){
 
     try {
-        $sentencia = $db->prepare("SELECT count(*) from obras o, genero g
+        if($tipo==0){
+            $sentencia = $db->prepare("SELECT count(*) from obras o, genero g
         WHERE estado like 1 AND  g.id_categoria like $cat AND g.id_obra LIKE o.id
+        ORDER BY $orden DESC");
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn();  
+        }
+        else{
+        $sentencia = $db->prepare("SELECT count(*) from obras o, genero g
+        WHERE  g.id_categoria like $cat AND g.id_obra LIKE o.id
         ORDER BY $orden DESC");
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
         return $total;
+        }
     
     } catch (Exception $e) {
         echo $e->getMessage();
@@ -217,12 +273,18 @@ function totalobras1($db,$desc, $orden, $cat){
 
 
 
-function totalobras($db){
+function totalobras($db,$tipo){
 
     try {
-        $sentencia = $db->prepare("SELECT COUNT(*) FROM obras WHERE publico LIKE 1 AND estado like 1");
+        if($tipo==0){
+            $sentencia = $db->prepare("SELECT COUNT(*) FROM obras WHERE publico LIKE 1 AND estado like 1");
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
+        }else{
+        $sentencia = $db->prepare("SELECT COUNT(*) FROM obras");
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn();
+        } 
         return $total;
     
     } catch (Exception $e) {

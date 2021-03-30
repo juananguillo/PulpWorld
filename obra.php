@@ -18,9 +18,21 @@ if(isset($_GET["obra"])){
 	$obra=obtenerunaobra($bd,$_GET["obra"]);
 	$generos=generos($bd, $obra->getid());
 	$comentarios=obtenercoments($bd, $_GET["obra"]);
-	$usuarios=arrayusuariostodos($bd);
-	$capitulos= capitulos($bd, $_GET["obra"]);
-	$marcapaginas=$capitulos[0]->getid();
+	$usuarios=arrayusuariosporid($bd);
+
+	if(!isset($_SESSION["usuario"])){
+		$capitulos= capitulos($bd, $_GET["obra"]);
+	}
+	if(isset($_SESSION["usuario"])){
+		if($_SESSION["usuario"]==$obra->getautor() || $_SESSION["tipo"]==1){
+			$capitulos= allcapitulos($bd, $_GET["obra"]);
+		}
+		else{
+			$capitulos= capitulos($bd, $_GET["obra"]);
+		}
+	}
+
+	
 }
 else{
 	header("Location: index.php");
@@ -36,7 +48,7 @@ if(isset($_SESSION['usuario'])){
 
 
 }
-
+$marcapaginas=count($capitulos)>0 ? $capitulos[0]->getid():0;
     include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="libro.css">
@@ -118,14 +130,7 @@ for ($i=0; $i < count($generos); $i++) {
 		
 		<ul class="list-group">
 		<?php for($i=0; $i<count($capitulos); $i++) {
-			if($capitulos[$i]->getpublico()==0 && !isset($_SESSION["usuario"])){
-				continue;
-			}
-			if(isset($_SESSION["usuario"])){
-				if($capitulos[$i]->getpublico()==0 && ($_SESSION["usuario"]!=$obra->getautor() && $_SESSION["tipo"]!=1)){
-					continue;
-				}
-			}
+			
 			?>
                     
                         <li class="list-group-item">

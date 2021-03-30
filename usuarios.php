@@ -8,14 +8,20 @@ include("funcionesphp/funcionesobras.php");
 include("clases/usuarios.class.php");
 include("clases/categorias.class.php");
 include("funcionesphp/funcionescategorias.php");
-$categorias=categorias($bd);
+$categorias=["Autores","Usuarios"];
+$usuarios=arrayusuarios($bd); 
 $ses=isset($_SESSION['tipo'])?$_SESSION['tipo']: 0;
 if(isset($_SESSION['usuario'])){
    $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
-
-
+   if($_SESSION['tipo']==1){
+   $usuarios=allarrayusuarios($bd);
+   }else{
+    $usuarios=arrayusuarios($bd); 
+   }
 
 }
+
+
     include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="index.css">
@@ -33,56 +39,40 @@ if(isset($_SESSION['usuario'])){
         $cat=$_GET['categoria'] ?? 0;
     switch ($orden) {
         case 0:
-            $orden="likes";
+            $orden="seguidores";
             $ordnum=0;
             break;
         
         case 1:
-            $orden="lecturas";
+            $orden="masobras";
             $ordnum=1;
             break;
 
-        case 2:
-            $orden="terminada";
-            $ordnum=2;
-            break;
-
-        case 3:
-            $orden="id";
-            $ordnum=3;
-            break;
-
         default:
-        $orden="likes";
+        $orden="seguidores";
         break;
     }
 
     if(isset($_GET["buscarpor"])){
         if($cat==0){
-            $obras=obraspalabras($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
-            $total=totalobraspalabras($bd,$desplazamiento,$orden, $_GET["buscarpor"],$ses);
+            $usuarios=filtrarusuariosporpalabras($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
+            
         }
         else{
-            $obras=obraspalabrasconcat($bd, $desplazamiento, $orden, $_GET["buscarpor"], $cat,$ses);
-            $total=totalobraspalabrasconcat($bd, $desplazamiento, $orden, $_GET["buscarpor"], $cat,$ses);
+            
         }
     }
     else{
     if($cat==0){
-        $obras=obras($bd,$desplazamiento,$orden,$ses);
-        $total=totalobras($bd,$ses);
+     
     }else{
-        $obras=filtrarobras1($bd, $desplazamiento, $orden, $cat,$ses);
-        $total=totalobras1($bd, $desplazamiento, $orden, $cat,$ses);
-       
+        
     }
 }
 
     }else{
-    $obras=obras($bd,$desplazamiento,$orden,$ses);
-    $total=totalobras($bd,$ses);
+   $total=totalusuarios($bd, $ses);
     }
-    $usuarios=arrayusuariosporid($bd);
     ?>
     <div class="jumbotron jumbotron-fluid bg-dark">
   
@@ -112,7 +102,7 @@ if(isset($_SESSION['usuario'])){
  
 </div>
     <div>
-    <h1 class="display-3 text-center mb-5">Historias Pulp</h1>
+    <h1 class="display-3 text-center mb-5">Usuarios</h1>
     </div>
  
     <div class="container-fluid mb-3">
@@ -135,10 +125,10 @@ if(isset($_SESSION['usuario'])){
                                         <option value="0" selected>Todas las categorias</option>
                                        <?php 
                                        for ($i=0; $i <count($categorias) ; $i++) { 
-                                           if(isset($_GET["categoria"]) && $categorias[$i]->getid()==$cat){
-                                            echo "<option selected value='{$categorias[$i]->getid()}'>{$categorias[$i]->getnombre()}</option>";
+                                           if(isset($_GET["categoria"]) && $categorias==$_GET["categoria"]){
+                                            echo "<option selected value='{$categorias[$i]}'>{$categorias[$i]}</option>";
                                            }else{
-                                           echo "<option value='{$categorias[$i]->getid()}'>{$categorias[$i]->getnombre()}</option>";
+                                           echo "<option value='{$categorias[$i]}'>{$categorias[$i]}</option>";
                                            }
                                         }
                                        
@@ -187,78 +177,35 @@ if(isset($_SESSION['usuario'])){
     <div class="container-fluid mb-3">
     <div class="row"> 
         <?php for ($i = 0; $i < 12; $i++) {
-            
-        
         ?>
-        <?php if($i<$total-$desplazamiento){
-              $generos=generos($bd, $obras[$i]->getid());
-            ?>
-        <a class="noDecoration" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> >
+        <?php if($i<$total-$desplazamiento){ ?>
+        <a class="noDecoration" <?php echo "href=obra.php?usuario={$usuarios[$i]->getid()}";  ?> >
         
             <div class="card col-md-3 col-xs-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <img style="width: 80%; height: 20rem; display:block;
-margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/".$obras[$i]->getportada(); ?> alt="Card image cap">
+                <img style="width: 50%; height: 10rem; display:block;
+margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usuarios/".$usuarios[$i]->getfoto(); ?> alt="Card image cap">
                 <div  class="card-body">
                     <h5 class="card-title">
                     <?php 
-                    echo $obras[$i]->gettitulo();
+                    echo $usuarios[$i]->getusuario();
                     ?>
                     </h5>
-                    <p class="card-text text-justify">
-                    <?php 
-                    echo $obras[$i]->getsinopsis();
-                    ?>
-                    </p>
-                    <a style="color:blue;"   data-toggle="modal" data-target=<?php echo "#0".$obras[$i]->getid(); ?>  href="#">Leer mas</a>
-                    <div class="modal fade"  id=<?php echo "0".$obras[$i]->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">
-                                    <?php 
-                    echo $obras[$i]->gettitulo();
-                    ?>
-                                    </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                <div style="height: 300px;">
-                                    <img class="rounded mx-auto d-block mh-100"  src=<?php echo "Imagenes/Obras/".$obras[$i]->getportada(); ?>  />
-                                </div>
-                                    <p class="text-justify">
-                                    <?php 
-                    echo $obras[$i]->getsinopsis();
-                    ?>
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                            
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <a  <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?>  class="btn btn-primary">Empezar lectura</a>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
+                    
+                    <a style="color:blue;"   data-toggle="modal" data-target=<?php echo "#0".$usuarios[$i]->getid(); ?>  href="#">Esribir mensaje</a>
+                   
+                  
 
 
                 </div>
-                <p class="text-justify ml-4"><strong>Escrito por: </strong><?php 
-                                echo " <a href='usuario.php?{$obras[$i]->getautor()}' >{$usuarios[$obras[$i]->getautor()]->getusuario()}</a>"; 
-                
-                                ?></p>
+              
                 <div class="card-footer">
-                    <a style="color:white"  <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?>  class="btn btn-primary">Empezar lectura</a>
+                    <a style="color:white"  <?php echo "href=usuarios.php?usuario={$usuarios[$i]->getid()}";  ?>  class="btn btn-primary">Ver Perfil</a>
                 </div>
 
             </div>
             </a>
         <?php }
         else{
-         
             ?>
             <div class="card ml-4" style="border: none;">
             </div>
@@ -320,26 +267,14 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/".$obras[$i]-
     </nav>
     
     <?php  if(isset($_GET['alerta'])) { ?> <script>alert("<?php echo $_GET['alerta']; ?>")</script> <?php } ?> 
-   
-    <!-- Modal -->
     <script>
     $('.dropdown-menu').on('click', function(event) {
   event.stopPropagation();
 });
-        function ellipsis_box(elemento, max_chars) {
-            limite_text = $(elemento).text();
-
-            if (limite_text.length > max_chars) {
-                limite = limite_text.substr(0, max_chars) + " ...";
-                $(elemento).text(limite);
-            }
-        }
-        $(function() {
-
-            ellipsis_box(".card-text", 150);
-        });
+        
        
     </script>
+   
 <?php 
 include("Includes/footer.php")
 ?>

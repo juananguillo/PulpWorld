@@ -10,8 +10,8 @@
     </button>
     <div class="collapse navbar-collapse" id="firstnavbar">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Autores</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.php">Obras</a></li>
+            <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
             <?php if(isset($_SESSION['usuario'])){?>
             <li class="nav-item dropdown notifications-dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

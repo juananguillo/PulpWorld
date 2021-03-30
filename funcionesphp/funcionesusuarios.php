@@ -40,10 +40,29 @@ function comprobarusuario($db, $usu, $contra){
 }
 
 
-function autor($bd, $idautor)
-{
+function totalusuarios($db,$tipo){
+
+    try {
+        if($tipo==0){
+            $sentencia = $db->prepare("SELECT COUNT(*) FROM usuario WHERE estado LIKE 1 AND tipo like 0");
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn(); 
+        }else{
+        $sentencia = $db->prepare("SELECT COUNT(*) FROM usuario");
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn();
+        } 
+        return $total;
+    
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location:error.php?error=Error");
+        exit;
+    }
+    
+    }
    
-}
+
 
 function dardealtausuario($db, $usu, $contra, $email){
     try {
@@ -196,7 +215,7 @@ function arrayusuarios($bd){
     $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
     $array=array();
     while ($usuarios=$sentencia->fetch()) {
-    $array[$usuarios->getid()]=$usuarios;
+    $array[]=$usuarios;
 
 }
     } catch (Exception $e) {
@@ -206,8 +225,32 @@ function arrayusuarios($bd){
 return $array;
 }
 
+function allarrayusuarios($bd){
+    try {
 
-function arrayusuariostodos($bd){
+            $sentencia = $bd->prepare("SELECT * FROM usuario");
+            
+    
+    $sentencia->execute();
+    if($sentencia->rowCount()==0)
+    {
+        throw new Exception();
+        
+    }
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
+function arrayusuariosporid($bd){
     try {
 
             $sentencia = $bd->prepare("SELECT * FROM usuario 
@@ -232,5 +275,45 @@ function arrayusuariostodos($bd){
     }
 return $array;
 }
+
+
+
+
+function filtrarusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE u.estado LIKE 1 u.tipo LIKE 0 (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY o.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY o.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+    if($sentencia->rowCount()==0)
+    {
+        throw new Exception();
+        
+    }
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
 
 ?>

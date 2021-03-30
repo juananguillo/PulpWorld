@@ -16,13 +16,25 @@ if(isset($_GET["cap"])){
     $capitulo=obteneruncapitulo($bd,$_GET["cap"]);
 	$obra=obtenerunaobra($bd,$capitulo->getid_obra());
 	$usuarios=arrayusuariostodos($bd);
-	$capitulos= capitulos($bd, $capitulo->getid_obra());
+    if(!isset($_SESSION["usuario"])){
+		$capitulos= capitulos($bd, $capitulo->getid_obra());
+	}
+	if(isset($_SESSION["usuario"])){
+		if($_SESSION["usuario"]==$obra->getautor() || $_SESSION["tipo"]==1){
+			$capitulos= allcapitulos($bd, $capitulo->getid_obra());
+		}
+		else{
+			$capitulos= capitulos($bd, $capitulo->getid_obra());
+		}
+	}
+
+
+	
     $anterior;
     $siguiente;
     for ($i=0; $i < count($capitulos); $i++) { 
         if($capitulos[$i]->getid()==$capitulo->getid()){
             $anterior=$i==0 ? false : $capitulos[$i-1]->getid();
-            if($capitulos[$i]->getpublico())
             $siguiente=$i+1>=count($capitulos)? false : $capitulos[$i+1]->getid();
             break;
             
@@ -64,11 +76,9 @@ include("Includes/header.php");
       <li class="nav-item">
 	  <a class="nav-link active" href="#contenido" data-toggle="tab">Contenido</a>
 	  </li>
-	  <li class="nav-item">
-	  <a class="nav-link" href="#capitulos" data-toggle="tab">Capitulos</a>
-	  </li>
+	  
       <li class="nav-item">
-	  <a class="nav-link"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
+	  <a class="nav-link btn btn-primary ml-1"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
 	  </li>
 	 
     </ul>
@@ -79,30 +89,7 @@ include("Includes/header.php");
         <?php echo $capitulo->getcontenido(); ?>
              
         </div>
-        <div class="tab-pane fade" id="capitulos">
-        <h3 class="text-center">Listado de Capitulos</h3>
-		<ul class="list-group">
-		<?php for($i=0; $i<count($capitulos); $i++) {?>
-                    
-                        <li class="list-group-item">
-                            
-						<a <?php echo "href=capitulo.php?cap={$capitulos[$i]->getid()}"  ?>>
-						<?php echo $capitulos[$i]->gettitulo(); ?>
-						</a>
-                             
-                                  
-                            
-                           <div class="pull-right action-buttons">
-						   <a style="float: right;" <?php echo "href=capitulo.php?cap={$capitulos[$i]->getid()}"  ?> class="">Leer</a>
-						   <?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$obra->getid() || $_SESSION["tipo"]==1)) {?>
-                                <a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-pencil"></span>Editar</a>
-                                <a href="http://www.jquery2dotnet.com" class="trash"><span class="glyphicon glyphicon-trash"></span>Borrar</a>
-                               <?php } ?>
-                            </div>
-                        </li>
-                       <?php } ?>
-                    </ul>
-        </div>
+       
     </div>
     </div>
     

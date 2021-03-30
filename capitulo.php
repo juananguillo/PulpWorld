@@ -15,7 +15,7 @@ include("funcionesphp/funcionescomentarios.php");
 if(isset($_GET["cap"])){
     $capitulo=obteneruncapitulo($bd,$_GET["cap"]);
 	$obra=obtenerunaobra($bd,$capitulo->getid_obra());
-	$usuarios=arrayusuariostodos($bd);
+	$usuarios=arrayusuarios($bd);
     if(!isset($_SESSION["usuario"])){
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
 	}

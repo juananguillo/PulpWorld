@@ -28,10 +28,11 @@ $obra=obtenerunaobra($bd,$_GET["obra"]);
     ?>
     <body>
     <div class="text-center container mb-5">
-   <input type="hidden" id="idcap" value="<?php echo $cap->getid(); ?>">
-    <input type="text" size="80" maxlength="200" id="titulocap" class="text-center mb-5 mt-5" value="<?php echo $cap->gettitulo();?>" width="208">
-    <div class="text-left">
-    <div class="text-right">Ultimo guardado automatico<p id="gauto"></p></div>
+   <input type="hidden" id="idcap" class="input-lg" value="<?php echo $cap->getid(); ?>">
+   <div class="form-group">
+    <input type="text" size="80" maxlength="200" id="titulocap" class="text-center mb-5 mt-5 form-control" value="<?php echo $cap->gettitulo();?>">
+    </div>
+  
     <ul class="nav nav-tabs">
       <li class="nav-item">
       <input  class="btn btn-primary " type="submit" id="guardar" value="Guardado manual">
@@ -42,8 +43,13 @@ $obra=obtenerunaobra($bd,$_GET["obra"]);
     <li class="nav-item">
 	  <a class="nav-link"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
 	  </li>
+    <ul class="navbar-nav  ml-auto">
+    <li class="nav-item">
+    <div>Ultimo guardado automatico<p id="gauto"></p></div>
+            </li>
+    </ul>
    </ul>
-    </div>
+   
       <textarea  id="textarea" rows="30" name="textarea">
       <?php echo $cap->getcontenido(); ?>
       </textarea>

@@ -29,7 +29,6 @@ $(document).on("ready", function () {
                 var dt = new Date();
                 var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
                 $("#gauto").text(time);
-                alert(data);
 
             });
 

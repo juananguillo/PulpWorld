@@ -21,7 +21,7 @@ include('funcionescomentarios.php');
     insertarcomentario($bd, $id_usuario, $mensaje, $id_obra, $res);
 $obra=obtenerunaobra($bd,$id_obra);
 $comentarios=obtenercoments($bd, $id_obra);
-$usuarios=arrayusuariostodos($bd);
+$usuarios=arrayusuariosporid($bd);
 
  for($i=0; $i<count($comentarios); $i++) {
     $respuestas=obtenerespuestas($bd, $comentarios[$i]->getid());

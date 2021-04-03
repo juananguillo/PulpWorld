@@ -79,6 +79,37 @@ function obras($bd,$desc,$orden,$tipo){
 
 }
 
+function obrasautor($bd,$tipo,$autor){
+    try {
+        if($tipo=="autor"){
+            $sentencia = $bd->prepare("SELECT * FROM obras WHERE estado like 1 AND autor like $autor ORDER BY id DESC
+            ");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT * FROM obras WHERE autor like $autor AND estado like 1 AND publico like 1 ORDER BY id DESC
+            ");
+        }
+       
+        $sentencia->execute();
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+        $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
+        $array=array();
+            while ($obras=$sentencia->fetch()) {
+            $array[]=$obras;
+        
+        }
+
+        return $array;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+
+}
 
 
 function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat,$tipo){

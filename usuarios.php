@@ -179,7 +179,7 @@ if(isset($_SESSION['usuario'])){
         <?php for ($i = 0; $i < 12; $i++) {
         ?>
         <?php if($i<$total-$desplazamiento){ ?>
-        <a class="noDecoration" <?php echo "href=obra.php?usuario={$usuarios[$i]->getid()}";  ?> >
+        <a class="noDecoration" <?php echo "href=usuario.php?user={$usuarios[$i]->getid()}";  ?> >
         
             <div class="card col-md-3 col-xs-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                 <img style="width: 50%; height: 10rem; display:block;
@@ -192,14 +192,46 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
                     </h5>
                     
                     <a style="color:blue;"   data-toggle="modal" data-target=<?php echo "#0".$usuarios[$i]->getid(); ?>  href="#">Esribir mensaje</a>
-                   
+                    <div class="modal fade" id=<?php echo "0" . $usuarios[$i]->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="comentLabel">Enviar mensaje a:  <?php echo $usuarios[$i]->getusuario();  ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+                            <div class="form-group">
+
+							<div class="form-group shadow-textarea">
+  <span id="commentarionew"></span>
+  <textarea id="mn" class="form-control z-depth-1" rows="4" ></textarea>
+</div>
+
+                                
+                            </div>
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="enviarcoment" class="btn btn-primary" id="botonsesion" disabled>Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
                   
 
 
                 </div>
               
                 <div class="card-footer">
-                    <a style="color:white"  <?php echo "href=usuarios.php?usuario={$usuarios[$i]->getid()}";  ?>  class="btn btn-primary">Ver Perfil</a>
+                    <a style="color:white"  <?php echo "href=usuario.php?user={$usuarios[$i]->getid()}";  ?>  class="btn btn-primary">Ver Perfil</a>
                 </div>
 
             </div>

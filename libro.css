@@ -1,9 +1,9 @@
 .input-group-btn {display: block;}
 
-html,body {
-    height: 100%;
+.img-thumbnail{
+width: 40%; 
+height: 25rem;
 }
-
 
 form button { margin: 5px 0px; 
 	margin-left: 5px;
@@ -11,18 +11,37 @@ form button { margin: 5px 0px;
 textarea { display: block; margin-bottom: 10px; }
 /*post*/
 
+#obracont{
+	padding-right: 0%;
+	padding-left: 0%;
+	margin:auto;
+	word-wrap: break-word;
+}
 
 @media (max-width: 480px) { 
-	html,body { 
-		height: auto;
+	img.img-thumbnail { 
+		width: 70%; 
+height: 20rem;
+		
 	} 
+
+	#obracont{
+		padding-right: auto;
+		padding-left: auto;
+	}
 } 
   
 /* Media Query for low resolution  Tablets, Ipads */ 
 @media (min-width: 481px) and (max-width: 767px) { 
-	body { 
-		height: auto;
+	img.img-thumbnail { 
+		width: 70%; 
+height: 20rem;
+	
 	} 
+	#obracont{
+		padding-right: auto;
+		padding-left: auto;
+	}
 } 
 
  #comments-wrapper li{ display:none;

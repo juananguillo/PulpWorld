@@ -238,7 +238,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
                                 </div>
                                 <p class="text-justify ml-4"><strong>Escrito por: </strong><?php
-                                                                                            echo " <a href='usuario.php?{$obras[$i]->getautor()}' >{$usuarios[$obras[$i]->getautor()]->getusuario()}</a>";
+                                                                                            echo " <a href='usuario.php?user={$obras[$i]->getautor()}' >{$usuarios[$obras[$i]->getautor()]->getusuario()}</a>";
 
                                                                                             ?></p>
                                 <div class="card-footer">
@@ -318,14 +318,14 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
         });
 
         $(document).on("ready", function() {
-            $(".card-text").each(function () { 
-            max_chars=280;
-            limite_text = $(this).html();
-            if (limite_text.length > max_chars) {
-                limite = limite_text.substr(0, max_chars) + " ...";
-                $(this).text(limite);
-            }
-        });
+            $(".card-text").each(function() {
+                max_chars = 280;
+                limite_text = $(this).html();
+                if (limite_text.length > max_chars) {
+                    limite = limite_text.substr(0, max_chars) + " ...";
+                    $(this).text(limite);
+                }
+            });
         });
     </script>
     <?php

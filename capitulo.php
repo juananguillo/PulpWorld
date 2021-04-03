@@ -84,10 +84,10 @@ include("Includes/header.php");
     </ul>
     
     <div class="row flex-fill h-100" style="min-height:0">
-        <div class="col-12 border mh-100 tab-content" style="overflow-y: scroll;">
+        <div class="col-12 border mh-100 tab-content">
         <div class="tab-pane active in" id="contenido">
-        <?php echo $capitulo->getcontenido(); ?>
-             
+       <textarea readonly style="resize: none;" class="form-control" rows="25"><?php echo $capitulo->getcontenido(); ?>
+       </textarea> 
         </div>
        
     </div>

@@ -66,39 +66,15 @@ $marcapaginas=count($capitulos)>0 ? $capitulos[0]->getid():0;
    
 
 	
-    <div class="container h-100 mt-5 mb-5 d-flex flex-column">
+    <div class="container mt-5 mb-5 d-flex flex-column">
 	<h1 class="text-center">
 	<?php echo $obra->gettitulo(); ?>
 	<input type="hidden" id="obraid" value="<?php echo $obra->getid(); ?>">
 	
 	</h1>
-	<ul class="nav nav-tabs">
-      <li class="nav-item">
-	  <a class="nav-link active redi" id="navcapi" href="#obra" data-toggle="tab">Capitulos</a>
-	  </li>
-	  <li class="nav-item">
-	  <a class="nav-link redi" id="navdet" href="#sinopsis" data-toggle="tab">Detalles</a>
-	  </li>
-	  <li class="nav-item">
-	  <a class="nav-link redi" id="navcom" href="#comentarios"  data-toggle="tab">Comentarios</a>
-	  </li>
-	  <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
-		<ul class="navbar-nav  ml-auto">
-            <li class="nav-item">
-			<a class="btn btn-primary"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Guardar</a>
-            </li>
-			</ul>
-       
-	  <?php } ?>
-	  </ul>
-	 
-    
-	
-
-	
-    <div class="row flex-fill h-100" style="min-height:0">
-	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 border mh-100" style="overflow-y: scroll;">
-	<img style="width: 80%; height: 20rem; display:block;
+	<div class="row flex-fill h-100" style="min-height:0">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<img style=" display:block;
 margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class="img-thumbnail"  alt="" />
 	<br>
 	<div class="text-center">
@@ -118,9 +94,34 @@ for ($i=0; $i < count($generos); $i++) {
 <a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$marcapaginas}";?>>Empezar Lectura</a>
 </div>
 	</div>
+	
+	 
+    
+	
 
-        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 border mh-100 tab-content" style="overflow-y: scroll; word-wrap: break-word">
+	
+   
 
+        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-9 border mt-3 tab-content" id="obracont">
+		<ul class="nav nav-tabs">
+      <li class="nav-item">
+	  <a class="nav-link active redi" id="navcapi" href="#obra" data-toggle="tab">Capitulos</a>
+	  </li>
+	  <li class="nav-item">
+	  <a class="nav-link redi" id="navdet" href="#sinopsis" data-toggle="tab">Detalles</a>
+	  </li>
+	  <li class="nav-item">
+	  <a class="nav-link redi" id="navcom" href="#comentarios"  data-toggle="tab">Comentarios</a>
+	  </li>
+	  <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
+		<ul class="navbar-nav  ml-auto">
+            <li class="nav-item">
+			<a class="btn btn-primary"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Guardar</a>
+            </li>
+			</ul>
+       
+	  <?php } ?>
+	  </ul>
 		<div class="tab-pane active in" id="obra"><br>
 		<h3 class="text-center">Listado de Capitulos</h3>
 		<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$obra->getautor())){
@@ -297,8 +298,8 @@ for ($i=0; $i < count($generos); $i++) {
 				
 					?>
 					</ul>
-					<div id="loadMore">Load more</div>
-<div id="showLess">Show less</div>
+					<div id="loadMore"><button class="btn btn-link">Cargar mas</button></div>
+<div id="showLess"><button class="btn btn-link">Ocultar</button></div>
 					</div>
 			</div>
 			<!-- // comments wrapper -->

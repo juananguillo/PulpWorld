@@ -28,6 +28,9 @@ if(isset($_GET["cap"])){
 		}
 	}
 
+    if($obra->getautor()!=$_SESSION["usuario"] &&   $_SESSION["tipo"]==0){
+        header("Location: index.php");
+    }
 
 	
     $anterior;
@@ -84,10 +87,10 @@ include("Includes/header.php");
     </ul>
     
     <div class="row flex-fill h-100" style="min-height:0">
-        <div class="col-12 border mh-100 tab-content">
+        <div class="col-12 tab-content">
         <div class="tab-pane active in" id="contenido">
-       <textarea readonly style="resize: none;" class="form-control" rows="25"><?php echo $capitulo->getcontenido(); ?>
-       </textarea> 
+       <div  class="form-control" id="capcontent"><?php echo $capitulo->getcontenido(); ?>
+</div> 
         </div>
        
     </div>

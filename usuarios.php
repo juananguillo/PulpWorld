@@ -34,9 +34,14 @@ if(isset($_SESSION['usuario'])){
     $ordnum=0;
     $num_filas=20;
     $pagina=$_GET['pag'] ?? 1;
-
+    $buscarpor= $_GET['buscarpor'] ?? "";
+    if(isset($_GET["buscarpor"])){
+        $buscarpor=urlencode($buscarpor);
+    }
+    $inputbuscapor=urldecode($buscarpor);
+    $cat=$_GET['categoria'] ?? -1;
     if(isset($_GET["orden"])){
-        $cat=$_GET['categoria'] ?? 0;
+       
     switch ($orden) {
         case 0:
             $orden="seguidores";
@@ -44,9 +49,15 @@ if(isset($_SESSION['usuario'])){
             break;
         
         case 1:
-            $orden="masobras";
+            $orden="obras";
             $ordnum=1;
             break;
+
+
+            case 2:
+                $orden="id";
+                $ordnum=2;
+                break;
 
         default:
         $orden="seguidores";
@@ -54,19 +65,34 @@ if(isset($_SESSION['usuario'])){
     }
 
     if(isset($_GET["buscarpor"])){
-        if($cat==0){
+        if($cat=="Autores"){
             $usuarios=filtrarusuariosporpalabras($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
-            
+            $total=totalusuariosporpalabras($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
+        }
+        elseif ($cat==-1) {
+            $usuarios=filtrarusuariosporpalabrastodos($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
+            $total=totalusuariosporpalabrastodos($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
         }
         else{
+            $usuarios=filtrarusuariosporpalabrasuser($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
+            $total=totalusuariosporpalabrasuser($bd, $desplazamiento, $orden, $_GET["buscarpor"],$ses);
             
         }
     }
     else{
-    if($cat==0){
+    if($cat=="Autores"){
+        $usuarios=filtrarusuarios1($bd, $desplazamiento, $orden, $ses);
+        $total=totalusuarios1($bd, $desplazamiento, $orden, $ses);
      
-    }else{
-        
+    }
+    elseif ($cat==-1) {
+        $usuarios=filtrarusuarios3($bd, $desplazamiento, $orden, $ses);
+        $total=totalusuarios3($bd, $desplazamiento, $orden, $ses);
+    }
+    else{
+        $usuarios=filtrarusuarios2($bd, $desplazamiento, $orden, $ses);
+        $total=totalusuarios2($bd, $desplazamiento, $orden, $ses);
+       
     }
 }
 
@@ -122,10 +148,10 @@ if(isset($_SESSION['usuario'])){
                                 <div class="form-group">
                                     <label for="filter">Categorias</label>
                                     <select class="form-control" id="categorias" name="categoria">
-                                        <option value="0" selected>Todas las categorias</option>
+                                        <option value="-1" selected>Todas las categorias</option>
                                        <?php 
-                                       for ($i=0; $i <count($categorias) ; $i++) { 
-                                           if(isset($_GET["categoria"]) && $categorias==$_GET["categoria"]){
+                                       for ($i=0; $i <=count($categorias) ; $i++) { 
+                                           if(isset($_GET["categoria"]) && $categorias[$i]==$_GET["categoria"]){
                                             echo "<option selected value='{$categorias[$i]}'>{$categorias[$i]}</option>";
                                            }else{
                                            echo "<option value='{$categorias[$i]}'>{$categorias[$i]}</option>";
@@ -141,7 +167,7 @@ if(isset($_SESSION['usuario'])){
                                     <label for="filter">Ordenar por</label>
                                     <select class="form-control" id="orden" name="orden">
                                     <?php 
-                                    $arrayord=["Likes","Mas leidos", "Terminados", "Recientes"];
+                                    $arrayord=["Mas seguidores","Mas obras", "Recientes"];
                                     for ($i=0; $i <count($arrayord) ; $i++) { 
                                         if(isset($_GET["orden"]) && $i==$ordnum){
                                             echo "<option selected value=$i>{$arrayord[$i]}</option>";
@@ -155,11 +181,11 @@ if(isset($_SESSION['usuario'])){
                                     </select>
                                   </div>
                                   
-                                  <input type="submit" id="busqueda" name="busqueda" class="btn btn-primary busqueda" value="Buscar"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></input>
+                                  <input type="submit" id="busqueda" name="busquedausu" class="btn btn-primary busqueda" value="Buscar"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></input>
                                
                             </div>
                         </div>
-                        <input type="submit" id="busqueda1" name="busqueda1" class="btn btn-primary busqueda" value="Buscar"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></input>
+                        <input type="submit" id="busqueda1" name="busquedausu1" class="btn btn-primary busqueda" value="Buscar"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></input>
                         
                     </div>
                 </div>
@@ -177,8 +203,9 @@ if(isset($_SESSION['usuario'])){
     <div class="container-fluid mb-3">
     <div class="row"> 
         <?php for ($i = 0; $i < 12; $i++) {
+            
         ?>
-        <?php if($i<$total-$desplazamiento){ ?>
+        <?php if($i< $total- $desplazamiento){ ?>
         <a class="noDecoration" <?php echo "href=usuario.php?user={$usuarios[$i]->getid()}";  ?> >
         
             <div class="card col-md-3 col-xs-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -272,7 +299,7 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
             $o=0;
               for ($i=0; $i < $total; $i+=12) { 
                   $o++;
-                $url = $_SERVER["PHP_SELF"] . "?orden=$orden&&desplazamiento=$i&pag=$o";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&&desplazamiento=$i&pag=$o&buscarpor=$buscarpor";
                 if($pagina==$o){
                  echo "<li class='page-item active'>
                 <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
@@ -284,7 +311,7 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
 
               if ($total > ($desplazamiento + 12)) {
                 $prox = $desplazamiento + 12;
-                $url = $_SERVER["PHP_SELF"] . "?orden=$orden&desplazamiento=$prox";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
               }

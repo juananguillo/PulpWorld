@@ -151,7 +151,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
 		<input type="hidden" value=<?php echo 10; ?>>
 		<?php 
 		if($obras!=""){
-		for($i=0; $i<10; $i++) {
+		for($i=0; $i<count($obras); $i++) {
 			if(count($obras)<=$i) break;
 			?>
                     
@@ -172,7 +172,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
                             </div>
                         </li>
                        <?php }
-					echo "<button id='vermas' class='btn btn-link'>Ver mas</button>";
+					
 					} ?>
                     </ul>
       </div>

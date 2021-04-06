@@ -102,7 +102,7 @@ for ($i=0; $i < count($generos); $i++) {
 	
    
 
-        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-9 border mt-3 tab-content" id="obracont">
+        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-9  mt-3 tab-content" id="obracont">
 		<ul class="nav nav-tabs">
       <li class="nav-item">
 	  <a class="nav-link active redi" id="navcapi" href="#obra" data-toggle="tab">Capitulos</a>
@@ -122,7 +122,7 @@ for ($i=0; $i < count($generos); $i++) {
        
 	  <?php } ?>
 	  </ul>
-		<div class="tab-pane active in" id="obra"><br>
+		<div class="tab-pane active in border obra" id="obra" ><br>
 		<h3 class="text-center">Listado de Capitulos</h3>
 		<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$obra->getautor())){
 			?>
@@ -154,7 +154,7 @@ for ($i=0; $i < count($generos); $i++) {
                     </ul>
       </div>
 
-	  <div class="tab-pane fade" id="sinopsis">
+	  <div class="tab-pane fade border obra" id="sinopsis">
 	  <br>
 	  <label for="titulo">Titulo:</label><br>
   <input class="form-control" type="text" id="titobra" name="titulo" <?php echo $readonly ?> value="<?php echo $obra->gettitulo(); ?>"><br><br>
@@ -186,7 +186,7 @@ for ($i=0; $i < count($generos); $i++) {
  }
  ?>
   <label for="sinopsis">Sinopsis:</label>
-  <textarea <?php echo $readonly ?>  style="resize: none;" class="form-control" id="sinopsisobra"  rows="22">
+  <textarea <?php echo $readonly ?>  style="resize: none;" class="form-control text-justify" id="sinopsisobra"  rows="22">
 	<?php echo $obra->getsinopsis();
 	 ?>
 	</textarea>
@@ -216,7 +216,7 @@ for ($i=0; $i < count($generos); $i++) {
 
 
 
-		<div class="col-md-12 col-md-offset-3 comments-section tab-pane fade" id="comentarios">
+		<div class="col-md-12 col-md-offset-3 comments-section tab-pane fade border obra" id="comentarios">
 			<!-- comment form -->
 		
 				

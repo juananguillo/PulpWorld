@@ -283,25 +283,21 @@ function filtrarusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 u.tipo LIKE 0 (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY o.$orden DESC
+            ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
         else{
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
             WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY o.$orden DESC
+            ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }   
     
     $sentencia->execute();
-    if($sentencia->rowCount()==0)
-    {
-        throw new Exception();
-        
-    }
+   
     $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
     $array=array();
     while ($usuarios=$sentencia->fetch()) {
@@ -313,6 +309,330 @@ function filtrarusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
         //header("Location: error.php?error=Error al cargar el array de clientes ");
     }
 return $array;
+}
+
+function totalusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn(); 
+        return $total;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+}
+
+
+function filtrarusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
+
+function totalusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+            WHERE  (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn(); 
+        return $total;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+
+}
+
+
+function filtrarusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
+
+function totalusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn(); 
+        return $total;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+
+}
+
+
+
+function filtrarusuarios3($bd,$desc,$orden,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
+
+function totalusuarios3($bd,$desc,$orden,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $total=$sentencia->fetchColumn(); 
+        return $total;
+
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+
+}
+
+
+
+function filtrarusuarios2($bd,$desc,$orden,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE  (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
+
+function totalusuarios2($bd,$desc,$orden,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $total=$sentencia->fetchColumn(); 
+        return $total;
+
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+
+}
+
+function filtrarusuarios1($bd,$desc,$orden,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $sentencia->setFetchMode(PDO::FETCH_CLASS, "usuario");
+    $array=array();
+    while ($usuarios=$sentencia->fetch()) {
+    $array[]=$usuarios;
+
+}
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+return $array;
+}
+
+function totalusuarios1($bd,$desc,$orden,$tipo){
+    try {
+        if($tipo==0){
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }
+        else{
+            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0
+            ORDER BY u.$orden DESC
+        LIMIT $desc, 20000000");
+        }   
+    
+    $sentencia->execute();
+   
+    $total=$sentencia->fetchColumn(); 
+        return $total;
+
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+
 }
 
 

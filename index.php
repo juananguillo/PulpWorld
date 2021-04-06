@@ -26,9 +26,13 @@ include("Includes/header.php");
     $ordnum = 0;
     $num_filas = 20;
     $pagina = $_GET['pag'] ?? 1;
-
+    $buscarpor= $_GET['buscarpor'] ?? "";
+    if(isset($_GET["buscarpor"])){
+        $buscarpor=urlencode($buscarpor);
+    }
+    $inputbuscapor=urldecode($buscarpor);
+    $cat = $_GET['categoria'] ?? 0;
     if (isset($_GET["orden"])) {
-        $cat = $_GET['categoria'] ?? 0;
         switch ($orden) {
             case 0:
                 $orden = "likes";
@@ -114,7 +118,7 @@ include("Includes/header.php");
                 <form action="./funcionesphp/filtrar.php" method="POST" class="form-horizontal" role="form">
                     <div class="input-group" id="adv-search">
 
-                        <input type="text" class="form-control" id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada" <?php if (isset($_GET["buscarpor"])) echo "value={$_GET['buscarpor']}"; ?>>
+                        <input type="text" class="form-control"  id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada" value="<?php  echo "{$inputbuscapor}"; ?>">
                         <div class="input-group-btn">
                             <div class="btn-group" role="group">
                                 <div class="dropdown dropdown-lg">
@@ -282,7 +286,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             $o = 0;
             for ($i = 0; $i < $total; $i += 12) {
                 $o++;
-                $url = $_SERVER["PHP_SELF"] . "?orden=$orden&&desplazamiento=$i&pag=$o";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor";
                 if ($pagina == $o) {
                     echo "<li class='page-item active'>
                 <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
@@ -294,7 +298,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
             if ($total > ($desplazamiento + 12)) {
                 $prox = $desplazamiento + 12;
-                $url = $_SERVER["PHP_SELF"] . "?orden=$orden&desplazamiento=$prox";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
             } else {

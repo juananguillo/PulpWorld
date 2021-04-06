@@ -11,10 +11,24 @@ if(isset($_POST["busqueda"]) || isset($_POST["busqueda1"])){
     header("Location: ../index.php?orden=$orden&categoria=$categoria");   
     }
     else{
-        $palabras=$_POST["textobusqueda"];
+        $palabras=trim($_POST["textobusqueda"]);
         header("Location: ../index.php?buscarpor=$palabras&orden=$orden&categoria=$categoria");   
     }
 
 }
+
+if(isset($_POST["busquedausu"]) || isset($_POST["busquedausu1"])){
+    $orden=$_POST["orden"];
+    $categoria=$_POST["categoria"];
+    if($_POST["textobusqueda"]==""){
+    header("Location: ../usuarios.php?orden=$orden&categoria=$categoria");   
+    }
+    else{
+        $palabras=trim($_POST["textobusqueda"]);
+        header("Location: ../usuarios.php?buscarpor=$palabras&orden=$orden&categoria=$categoria");   
+    }
+
+}
+
 
 ?>

@@ -636,4 +636,68 @@ function totalusuarios1($bd,$desc,$orden,$tipo){
 }
 
 
+function seguir($bd, $id_seguido, $id_seguidor)
+{
+    try {
+       
+        $sentencia = $bd->prepare("Insert INTO seguidor(id_seguido,id_seguidor)
+    VALUES(:id_seguido,:id_seguidor)");
+        $sentencia->execute(array(
+            ':id_seguido' => $id_seguido, ':id_seguidor' => $id_seguidor)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+
+function dejardeseguir($bd, $id_seguido, $id_seguidor)
+{
+    try {
+       
+        $sentencia = $bd->prepare("DELETE FROM seguidor WHERE id_seguido like :id_seguido AND id_seguidor LIKE :id_seguidor");
+        $sentencia->execute(array(
+            ':id_seguido' => $id_seguido, ':id_seguidor' => $id_seguidor)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+function verseguidor($bd, $id_seguido, $id_seguidor)
+{
+    try {
+       
+        $sentencia = $bd->prepare("SELECT COUNT(*) FROM seguidor WHERE id_seguido LIKE :id_seguido AND
+        id_seguidor LIKE :id_seguidor");
+        $sentencia->execute(array(
+            ':id_seguido' => $id_seguido, ':id_seguidor' => $id_seguidor)
+            
+        );
+       
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn();
+        return $total;
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+
 ?>

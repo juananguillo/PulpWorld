@@ -21,13 +21,15 @@ if(isset($_GET["user"])){
 		$obras= obrasautor($bd,"n",$_GET["user"]);
 	}
 	else{
+		$seguidor=verseguidor($bd, $usuario->getid(), $_SESSION["usuario"]);
+		$textomegusta=$seguidor==0 ? "Seguir" : "Dejar de seguir";
+		$seguidor=$seguidor==0 ? "dar" : "quitar";
 		if($_SESSION["usuario"]==$_GET["user"] || $_SESSION["tipo"]==1){
 			$readonly="readonly";
 			$obras= obrasautor($bd,"autor",$_GET["user"]);
-			$seguidor=0;
+			
 		}
 		else{
-			$seguidor=0;
 			$obras= obrasautor($bd,"n",$_GET["user"]);
 		}
 	}
@@ -44,6 +46,7 @@ else{
     ?>
     <link rel="stylesheet" href="libro.css">
 	<script src="js/obra.js"></script>
+	<script src="js/darquitar.js"></script>
     </head>
 	<body>
     <?php 
@@ -68,16 +71,15 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
 	
 	</h1>
 	<div class="text-center">
-	<?php if($seguidor==0){ ?>
-	<button id="seguir" class="btn btn-primary">Seguir</button>
-	<?php }
-	else{
-		?>
-		<button id="dejardeseguir" class="btn btn-primary">Dejar de Seguir</button>
-		<?php  
-	}
-	?>
+	<strong>Seguidores</strong> <i class="fas fa-users text-danger"> <?php echo $usuario->getseguidores(); ?></i>
+	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $usuario->getobras(); ?></i><br>
+</div>
+	<div class="text-center">
+	<?php if(isset($_SESSION["usuario"])){ ?>
+	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $usuario->getid(); ?>>
+	<button class="btn btn-danger mr-1" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
 	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$usuario->getid(); ?>  href="#">Esribir mensaje</a>
+	<?php } ?>
 	</div><div class="modal fade" id=<?php echo "0" . $usuario->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -118,7 +120,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
 	
    
 
-        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-9 border mt-3 tab-content" id="obracont" style="margin:auto" style="word-wrap: break-word">
+        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-9 mt-3 tab-content" id="obracont">
 		
 		
 		<ul class="nav nav-tabs">
@@ -140,7 +142,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
        
 	  <?php } ?>
 	  </ul>
-		<div class="tab-pane active in" id="obra"><br>
+		<div class="tab-pane active in usucontent border" id="obra"><br>
 		<h3 class="text-center">Listado de Obras</h3>
 		<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$_GET["user"])){
 			?>
@@ -177,7 +179,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
                     </ul>
       </div>
 
-	  <div class="tab-pane fade" id="sinopsis">
+	  <div class="tab-pane fade usucontent border" id="sinopsis">
 	  <br>
 	  <label for="titulo">Titulo:</label><br>
  
@@ -207,7 +209,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
 
 
 
-		<div class="col-md-12 col-md-offset-3 comments-section tab-pane fade" id="comentarios">
+		<div class=" tab-pane fade usucontent border">
 			<!-- comment form -->
 		
 				

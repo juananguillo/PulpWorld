@@ -1,7 +1,7 @@
 .input-group-btn {display: block;}
 
 .img-thumbnail{
-width: 40%; 
+width: 35%; 
 height: 25rem;
 }
 
@@ -19,6 +19,12 @@ textarea { display: block; margin-bottom: 10px; }
 	
 }
 .obra{
+	height: 600px;
+	overflow-y: scroll;
+}
+
+.usucontent{
+	word-wrap: break-word;
 	height: 600px;
 	overflow-y: scroll;
 }

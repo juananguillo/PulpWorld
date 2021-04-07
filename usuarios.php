@@ -150,7 +150,7 @@ if(isset($_SESSION['usuario'])){
                                     <select class="form-control" id="categorias" name="categoria">
                                         <option value="-1" selected>Todas las categorias</option>
                                        <?php 
-                                       for ($i=0; $i <=count($categorias) ; $i++) { 
+                                       for ($i=0; $i <count($categorias) ; $i++) { 
                                            if(isset($_GET["categoria"]) && $categorias[$i]==$_GET["categoria"]){
                                             echo "<option selected value='{$categorias[$i]}'>{$categorias[$i]}</option>";
                                            }else{

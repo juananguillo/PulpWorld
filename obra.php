@@ -24,6 +24,10 @@ if(isset($_GET["obra"])){
 		$capitulos= capitulos($bd, $_GET["obra"]);
 	}
 	if(isset($_SESSION["usuario"])){
+		$megusta=vermegusta($bd, $obra->getid(), $_SESSION["usuario"]);
+		$textomegusta=$megusta==0 ? "Dar me gusta" : "Quitar me gusta";
+		$megusta=$megusta==0 ? "dar" : "quitar";
+		
 		if($_SESSION["usuario"]==$obra->getautor() || $_SESSION["tipo"]==1){
 			$capitulos= allcapitulos($bd, $_GET["obra"]);
 		}
@@ -54,6 +58,7 @@ $marcapaginas=count($capitulos)>0 ? $capitulos[0]->getid():0;
     <link rel="stylesheet" href="libro.css">
 	<script src="js/comentarios.js"></script>
 	<script src="js/obra.js"></script>
+	<script src="js/darquitar.js"></script>
     </head>
 	<body>
     <?php 
@@ -78,8 +83,8 @@ $marcapaginas=count($capitulos)>0 ? $capitulos[0]->getid():0;
 margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class="img-thumbnail"  alt="" />
 	<br>
 	<div class="text-center">
-	Likes <a href=""><i class="fas fa-thumbs-up"> <?php echo $obra->getlikes(); ?></a></i>
-	Lecturas <i class="fas fa-eye"> <?php echo $obra->getlecturas(); ?></i><br>
+	<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obra->getlikes(); ?></i>
+	<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obra->getlecturas(); ?></i><br>
 </div>
 <div class="text-center">
 <?php 
@@ -88,10 +93,16 @@ for ($i=0; $i < count($generos); $i++) {
 	echo " <p class='btn btn-primary'>{$generos[$i]->getnombre()}</p>";
 }
 ?>
-	
+</div>
+<div class="text-center">
+	<p>Escrito por: <a class='text-primary' href=<?php echo 'usuario.php?user='.$obra->getautor(); ?>><?php echo $usuarios[$obra->getautor()]->getusuario(); ?></a></p>
 </div>
 <div class="text-center">
 <a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$marcapaginas}";?>>Empezar Lectura</a>
+<?php if(isset($_SESSION["usuario"])){ ?>
+	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $obra->getid(); ?>>
+<button class="btn btn-danger" id=<?php echo $megusta; ?>  ><i class="fas fa-thumbs-up"> <?php echo $textomegusta; ?> </i></button>
+<?php } ?>
 </div>
 	</div>
 	

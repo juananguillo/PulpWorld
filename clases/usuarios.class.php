@@ -10,7 +10,17 @@ class usuario
     private $tipo;
     private $estado;
     private $foto;
+    private $seguidores;
+    private $obras;
     
+
+    public function getseguidores(){
+        return $this->seguidores;
+    }
+
+    public function getobras(){
+        return $this->obras;
+    }
     
     public function setid($id) {
         $this->id = $id;

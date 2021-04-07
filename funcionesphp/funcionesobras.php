@@ -348,5 +348,67 @@ function totalobras($db,$tipo){
     }
     
 
+    function darmegusta($bd, $id_obra, $id_usuario)
+{
+    try {
+       
+        $sentencia = $bd->prepare("Insert INTO megusta(id_obra,id_usuario)
+    VALUES(:id_obra,:id_usuario)");
+        $sentencia->execute(array(
+            ':id_obra' => $id_obra, ':id_usuario' => $id_usuario)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+
+function quitarmegusta($bd, $id_obra, $id_usuario)
+{
+    try {
+       
+        $sentencia = $bd->prepare("DELETE FROM megusta WHERE id_obra like :id_obra AND id_usuario LIKE :id_usuario");
+        $sentencia->execute(array(
+            ':id_obra' => $id_obra, ':id_usuario' => $id_usuario)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+function vermegusta($bd, $id_obra, $id_usuario)
+{
+    try {
+       
+        $sentencia = $bd->prepare("SELECT COUNT(*) FROM megusta WHERE id_obra LIKE :id_obra AND
+        id_usuario LIKE :id_usuario");
+        $sentencia->execute(array(
+            ':id_obra' => $id_obra, ':id_usuario' => $id_usuario)
+            
+        );
+       
+        $sentencia->execute();
+        $total=$sentencia->fetchColumn();
+        return $total;
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
 
 ?>

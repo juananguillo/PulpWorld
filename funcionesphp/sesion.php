@@ -8,7 +8,6 @@ include("funcionesusuarios.php");
 include("../clases/usuarios.class.php");
 $us;
 $campo=filter_var($_POST['usulog'], FILTER_VALIDATE_EMAIL)? "email":"usuario";
-echo $campo;
 if($campo=="email"){ $us=obtenerusuario2($bd, $_POST['usulog']);}
 else{
     $us = unusuario($bd, $_POST['usulog']);

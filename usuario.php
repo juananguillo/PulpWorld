@@ -75,7 +75,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
 	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $usuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">
-	<?php if(isset($_SESSION["usuario"])){ ?>
+	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$usuario->getid()){ ?>
 	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $usuario->getid(); ?>>
 	<button class="btn btn-danger mr-1" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
 	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$usuario->getid(); ?>  href="#">Esribir mensaje</a>

@@ -104,6 +104,12 @@ for ($i=0; $i < count($generos); $i++) {
 	if(isset($_SESSION['usuario'])){
 		$marcapaginas=vermarcapaginas($bd, $_SESSION['usuario'], $obra->getid());
 		if($marcapaginas){
+		if($marcapaginas->getid_capitulo()==$capitulos[count($capitulos)-1]->getid()){
+			borrarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
+			$marcapaginas=false;
+		}
+	}
+		if($marcapaginas){
 			?>
 				<a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$marcapaginas->getid_capitulo()}";?>>Continuar</a>
 			<?php
@@ -115,12 +121,16 @@ for ($i=0; $i < count($generos); $i++) {
 			 
 		}
 	}
+	
 	else{
 	
 	?>
 <a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$capitulos[0]->getid()}";?>>Empezar Lectura</a>
 <?php
 }
+	}
+	if(!isset($marcapaginas)){
+		$marcapaginas=false;
 	}
  if(isset($_SESSION["usuario"])){ ?>
 	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $obra->getid(); ?>>

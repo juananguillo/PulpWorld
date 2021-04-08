@@ -4,8 +4,10 @@ session_start();
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
+include("funcionesphp/funcionesmarcapaginas.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("clases/obras.class.php");
+include("clases/marcapaginas.class.php");
 include("clases/capitulos.class.php");
 include("funcionesphp/funcionesobras.php");
 include("funcionesphp/funcionescapitulos.php");
@@ -52,7 +54,6 @@ if(isset($_SESSION['usuario'])){
 
 
 }
-$marcapaginas=count($capitulos)>0 ? $capitulos[0]->getid():0;
     include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="libro.css">
@@ -98,8 +99,30 @@ for ($i=0; $i < count($generos); $i++) {
 	<p>Escrito por: <a class='text-primary' href=<?php echo 'usuario.php?user='.$obra->getautor(); ?>><?php echo $usuarios[$obra->getautor()]->getusuario(); ?></a></p>
 </div>
 <div class="text-center">
-<a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$marcapaginas}";?>>Empezar Lectura</a>
-<?php if(isset($_SESSION["usuario"])){ ?>
+	<?php 
+	if(count($capitulos)>0){
+	if(isset($_SESSION['usuario'])){
+		$marcapaginas=vermarcapaginas($bd, $_SESSION['usuario'], $obra->getid());
+		if($marcapaginas){
+			?>
+				<a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$marcapaginas->getid_capitulo()}";?>>Continuar</a>
+			<?php
+		}
+		else{
+			?> 
+			<a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$capitulos[0]->getid()}";?>>Empezar Lectura</a>
+			<?php 
+			 
+		}
+	}
+	else{
+	
+	?>
+<a class="btn btn-primary"  <?php echo "href=capitulo.php?cap={$capitulos[0]->getid()}";?>>Empezar Lectura</a>
+<?php
+}
+	}
+ if(isset($_SESSION["usuario"])){ ?>
 	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $obra->getid(); ?>>
 <button class="btn btn-danger" id=<?php echo $megusta; ?>  ><i class="fas fa-thumbs-up"> <?php echo $textomegusta; ?> </i></button>
 <?php } ?>
@@ -148,7 +171,13 @@ for ($i=0; $i < count($generos); $i++) {
                         <li class="list-group-item">
                             
 						<a <?php echo "href=capitulo.php?cap={$capitulos[$i]->getid()}"  ?>>
-						<?php echo $capitulos[$i]->gettitulo(); ?>
+						<?php echo $capitulos[$i]->gettitulo(); 
+						if($marcapaginas){
+						if($marcapaginas->getid_capitulo()==$capitulos[$i]->getid()){
+							echo " <i class='fas fa-bookmark'>Vas por aqui</i>";
+						}
+					}
+						?>
 						</a>
                              
                                   

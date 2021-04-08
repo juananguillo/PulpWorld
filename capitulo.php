@@ -4,6 +4,8 @@ include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
 include("./funcionesphp/funcionesusuarios.php");
+include("clases/marcapaginas.class.php");
+include("funcionesphp/funcionesmarcapaginas.php");
 include("clases/obras.class.php");
 include("clases/capitulos.class.php");
 include("funcionesphp/funcionesobras.php");
@@ -20,6 +22,7 @@ if(isset($_GET["cap"])){
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
 	}
 	if(isset($_SESSION["usuario"])){
+        $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
 		if($_SESSION["usuario"]==$obra->getautor() || $_SESSION["tipo"]==1){
 			$capitulos= allcapitulos($bd, $capitulo->getid_obra());
 		}
@@ -27,8 +30,20 @@ if(isset($_GET["cap"])){
 			$capitulos= capitulos($bd, $capitulo->getid_obra());
 		}
 	}
-
-    if($obra->getautor()!=$_SESSION["usuario"] &&   $_SESSION["tipo"]==0){
+	if(isset($_SESSION["usuario"])){
+    $marcapaginas=vermarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
+        if($marcapaginas){
+            if($marcapaginas->getid_capitulo()==$capitulos[count($capitulos)-2]->getid()){
+                borrarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
+            }
+            else{
+            actualizarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid(), $capitulo->getid());
+            }
+        }else{
+            crearmarcapaginas($bd,$_SESSION["usuario"], $obra->getid(), $capitulo->getid());
+        }
+    }
+    if($obra->getautor()!=$_SESSION["usuario"] && $capitulo->getpublico()==0 &&   $_SESSION["tipo"]==0){
         header("Location: index.php");
     }
 
@@ -49,11 +64,10 @@ else{
 }
 $categorias=categorias($bd);
 
-if(isset($_SESSION['usuario'])){
-   $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
-
-
-
+if($capitulos[count($capitulos)-1]->getid()==$capitulo->getid()){
+    if(verlectura($bd, $_SERVER['REMOTE_ADDR'], $obra->getid())==0){
+   crearlectura($bd, $_SERVER['REMOTE_ADDR'], $obra->getid());
+    }
 }
 include("Includes/header.php");
     ?>

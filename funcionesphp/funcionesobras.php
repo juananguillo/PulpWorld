@@ -411,4 +411,38 @@ function vermegusta($bd, $id_obra, $id_usuario)
     }
 }
 
+function crearlectura($bd, $ip, $id_obra)
+{
+    try {
+        $sentencia = $bd->prepare("INSERT INTO lectura (ip, id_obra)
+          VALUES(:ip, :id_obra)");
+        $sentencia->execute(array(
+            ':ip' => $ip, ':id_obra'=> $id_obra)
+            
+        );
+       
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
+function verlectura($bd, $ip, $id_obra)
+{
+    try {
+        $sentencia = $bd->prepare("SELECT count(*) FROM lectura where ip like :ip AND id_obra like :id_obra");
+        $sentencia->execute(array(
+            ':ip' => $ip, ':id_obra'=> $id_obra)
+            
+        );
+        $total=$sentencia->fetchColumn();
+        return $total;
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
 ?>

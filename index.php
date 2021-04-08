@@ -5,7 +5,9 @@ $bd = conectardb();
 include("./funcionesphp/funcionesusuarios.php");
 include("clases/obras.class.php");
 include("funcionesphp/funcionesobras.php");
+include("funcionesphp/funcionesmarcapaginas.php");
 include("clases/usuarios.class.php");
+include("clases/marcapaginas.class.php");
 include("clases/categorias.class.php");
 include("funcionesphp/funcionescategorias.php");
 $categorias = categorias($bd);
@@ -231,7 +233,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                 <div class="modal-footer">
 
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                    <a <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Empezar lectura</a>
+                                                    <a <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
                                                 </div>
 
                                             </div>
@@ -246,7 +248,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
                                                                                             ?></p>
                                 <div class="card-footer">
-                                    <a style="color:white" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Empezar lectura</a>
+                                    <a style="color:white" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
                                 </div>
 
                             </div>

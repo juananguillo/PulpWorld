@@ -125,7 +125,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  cl
 		
 		<ul class="nav nav-tabs">
       <li class="nav-item">
-	  <a class="nav-link active redi" id="navcapi" href="#obra" data-toggle="tab">Capitulos</a>
+	  <a class="nav-link active redi" id="navcapi" href="#obra" data-toggle="tab">Obras</a>
 	  </li>
 	  <li class="nav-item">
 	  <a class="nav-link redi" id="navdet" href="#sinopsis" data-toggle="tab">Detalles</a>

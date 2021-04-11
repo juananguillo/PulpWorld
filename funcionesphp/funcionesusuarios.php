@@ -699,5 +699,23 @@ function verseguidor($bd, $id_seguido, $id_seguidor)
     }
 }
 
+function idseguidor($bd, $id_seguido)
+{
+    try {
+       
+        $sentencia = $bd->prepare("SELECT id_seguidor FROM seguidor WHERE id_seguido LIKE :id_seguido");
+        $sentencia->execute(array(
+            ':id_seguido' => $id_seguido)
+            
+        );
+       
+       $resultado= $sentencia->fetchAll(\PDO::FETCH_ASSOC);
+        return $resultado;
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
 
 ?>

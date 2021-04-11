@@ -107,7 +107,102 @@ function editcap($bd,$titulo,$contenido,$id){
 }
 
 
+function publicarcapi($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE capitulos SET publico= 1 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
 
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+function despublicarcapi($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE capitulos SET publico= 0 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+function bloquearcapi($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE capitulos SET estado= 0 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+
+function desbloquearcapi($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE capitulos SET estado= 1 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+
+function notificapi($bd, $id_usuario, $tipo, $id_novedad, $mensaje)
+{
+    try {
+       
+        $sentencia = $bd->prepare("Insert INTO notificaciones(id,id_usuario,tipo,id_novedad, mensaje)
+    VALUES(:id, :id_usuario, :tipo, :id_novedad, :mensaje)");
+        $sentencia->execute(array(
+            ':id' => null, ':id_usuario' => $id_usuario , ':tipo' => $tipo,
+             ':id_novedad'=>$id_novedad,':mensaje'=>$mensaje)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+        
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
 
 
 ?>

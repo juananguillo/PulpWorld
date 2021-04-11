@@ -43,7 +43,7 @@ if(isset($_GET["obra"])){
 else{
 	header("Location: index.php");
 }
-if($obra->getpublico()==0 && $_SESSION["usuario"]!=$obra->getautor() && $_SESSION["tipo"]!=1){
+if(($obra->getpublico()==0 || $obra->getestado()==0) && $_SESSION["usuario"]!=$obra->getautor() && $_SESSION["tipo"]!=1){
 	header("Location: index.php");
 }
 $categorias=categorias($bd);
@@ -60,6 +60,7 @@ if(isset($_SESSION['usuario'])){
 	<script src="js/comentarios.js"></script>
 	<script src="js/obra.js"></script>
 	<script src="js/darquitar.js"></script>
+	<script src="js/estado.js"></script>
     </head>
 	<body>
     <?php 
@@ -160,7 +161,31 @@ for ($i=0; $i < count($generos); $i++) {
 	  <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
 		<ul class="navbar-nav  ml-auto">
             <li class="nav-item">
-			<a class="btn btn-primary"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Guardar</a>
+			<button id="guardar" class="btn btn-primary">Guardar</button>
+			<?php
+			
+				if($_SESSION["tipo"]==1 && $obra->getestado()==1){
+					?>
+					<button id="bloquear" class="btn btn-primary">Bloquear</button>
+					<?php
+				}
+				elseif($_SESSION["tipo"]==1 && $obra->getestado()==0){
+					?>
+					<button id="bloquear" class="btn btn-primary">Desbloquear</button>
+					<?php
+				}
+				if(count($capitulos)>0 && $obra->getpublico()==0){
+					?>
+					<button id="publicar" class="btn btn-primary">Publicar</button>
+					<?php
+				}
+				else{
+					?>
+					<button id="despublicar" class="btn btn-primary">Despublicar</button>
+					<?php
+				}
+
+			?>
             </li>
 			</ul>
        

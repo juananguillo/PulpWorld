@@ -17,7 +17,7 @@ include("funcionesphp/funcionescomentarios.php");
 if(isset($_GET["cap"])){
     $capitulo=obteneruncapitulo($bd,$_GET["cap"]);
 	$obra=obtenerunaobra($bd,$capitulo->getid_obra());
-	$usuarios=arrayusuarios($bd);
+	$usuarios=arrayusuariosporid($bd);
     if(!isset($_SESSION["usuario"])){
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
 	}
@@ -32,6 +32,9 @@ if(isset($_GET["cap"])){
 	}
 	if(isset($_SESSION["usuario"])){
     $marcapaginas=vermarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
+    if($obra->getautor()!=$_SESSION["usuario"] &&  $_SESSION["tipo"]==0 && ($capitulo->getpublico()==0 || $obra->getpublico()==0)){
+        header("Location: index.php");
+    }
         if($marcapaginas){
             if($marcapaginas->getid_capitulo()==$capitulos[count($capitulos)-2]->getid()){
                 borrarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
@@ -42,10 +45,9 @@ if(isset($_GET["cap"])){
         }else{
             crearmarcapaginas($bd,$_SESSION["usuario"], $obra->getid(), $capitulo->getid());
         }
+
     }
-    if($obra->getautor()!=$_SESSION["usuario"] && $capitulo->getpublico()==0 &&   $_SESSION["tipo"]==0){
-        header("Location: index.php");
-    }
+   
 
 	
     $anterior;
@@ -72,6 +74,7 @@ if($capitulos[count($capitulos)-1]->getid()==$capitulo->getid()){
 include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="libro.css">
+    <script src="js/estado.js"></script>
     </head>
 <body>
     <?php 
@@ -84,6 +87,7 @@ include("Includes/header.php");
     <h2 class="text-center mb-5">
     <?php echo $obra->gettitulo(); ?>
     </h2>
+    <p id="alert"></p>
     <h3 class="text-center mb-5">
     <?php echo $capitulo->gettitulo(); ?>
     </h3>
@@ -95,10 +99,42 @@ include("Includes/header.php");
 	  </li>
 	  
       <li class="nav-item">
-	  <a class="nav-link btn btn-primary ml-1"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
+	  <a class="nav-link ml-1"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
 	  </li>
 	 
-    </ul>
+      <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
+        <input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $capitulo->getid(); ?>>
+		<ul class="navbar-nav  ml-auto">
+            <li class="nav-item">
+			<?php
+			
+				if($_SESSION["tipo"]==1 && $capitulo->getestado()==1){
+					?>
+					<button id="bloquearcapi" class="btn btn-primary">Bloquear</button>
+					<?php
+				}
+				elseif($_SESSION["tipo"]==1 && $capitulo->getestado()==0){
+					?>
+					<button id="desbloquearcapi" class="btn btn-primary">Desbloquear</button>
+					<?php
+				}
+				if($capitulo->getpublico()==0){
+					?>
+					<button id="publicarcapi" class="btn btn-primary">Publicar</button>
+					<?php
+				}
+				else{
+					?>
+					<button id="despublicarcapi" class="btn btn-primary">Despublicar</button>
+					<?php
+				}
+
+			?>
+            </li>
+			</ul>
+       
+	  <?php } ?>
+	  </ul>
     
     <div class="row flex-fill h-100" style="min-height:0">
         <div class="col-12 tab-content">

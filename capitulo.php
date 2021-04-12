@@ -18,10 +18,17 @@ if(isset($_GET["cap"])){
     $capitulo=obteneruncapitulo($bd,$_GET["cap"]);
 	$obra=obtenerunaobra($bd,$capitulo->getid_obra());
 	$usuarios=arrayusuariosporid($bd);
+    if($capitulo->getestado==0 && $_SESSION["tipo"]==0){}
     if(!isset($_SESSION["usuario"])){
+        if($capitulo->getestado==0){
+            header("Location: index.php");
+        }
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
 	}
 	if(isset($_SESSION["usuario"])){
+        if($capitulo->getestado==0 && $_SESSION["tipo"]==0){
+            header("Location: index.php");
+        }
         $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
 		if($_SESSION["usuario"]==$obra->getautor() || $_SESSION["tipo"]==1){
 			$capitulos= allcapitulos($bd, $capitulo->getid_obra());
@@ -36,7 +43,7 @@ if(isset($_GET["cap"])){
         header("Location: index.php");
     }
         if($marcapaginas){
-            if($marcapaginas->getid_capitulo()==$capitulos[count($capitulos)-2]->getid()){
+            if($marcapaginas->getid_capitulo()==$capitulos[count($capitulos)-1]->getid()){
                 borrarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
             }
             else{
@@ -102,7 +109,7 @@ include("Includes/header.php");
 	  <a class="nav-link ml-1"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
 	  </li>
 	 
-      <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
+      <?php if(isset($_SESSION['usuario']) && ($_SESSION['usuario']==$obra->getautor() | $_SESSION["tipo"]==1)){ ?>
         <input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $capitulo->getid(); ?>>
 		<ul class="navbar-nav  ml-auto">
             <li class="nav-item">

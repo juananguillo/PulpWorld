@@ -5,14 +5,13 @@ $(document).on("ready", function () {
   bloquear();
   desbloquear();
 function publicar() {
-  $("#publicar").on("click", function () {
+  $("#publicar").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_obra: $(".valores").val(),
       user:$(".valores").prop("id"),
       accion: "publicar"
     },
     function (data) {
-      alert(data);
      $("#publicar").html("Despublicar");
      $("#publicar").prop("id", "despublicar");
      despublicar();
@@ -21,7 +20,7 @@ function publicar() {
 }
 
 function despublicar() {
-  $("#despublicar").on("click", function () {
+  $("#despublicar").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_obra: $(".valores").val(),
       user:$(".valores").prop("id"),
@@ -36,10 +35,11 @@ function despublicar() {
 }
 
 function bloquear() {
-  $("#bloquear").on("click", function () {
+  $("#bloquear").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_obra: $(".valores").val(),
-      accion: "bloquear"
+      accion: "bloquear",
+      user:$(".valores").prop("id")
     },
     function (data) {
      $("#bloquear").html("Desbloquear");
@@ -50,10 +50,11 @@ function bloquear() {
 }
 
 function desbloquear() {
-  $("#desbloquear").on("click", function () {
+  $("#desbloquear").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_obra: $(".valores").val(),
-      accion: "desbloquear"
+      accion: "desbloquear",
+      user:$(".valores").prop("id")
     },
     function (data) {
      $("#desbloquear").html("Bloquear");
@@ -69,7 +70,7 @@ function desbloquear() {
     desbloquearcapi();
 
 function publicarcapi() {
-  $("#publicarcapi").on("click", function () {
+  $("#publicarcapi").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_capi: $(".valores").val(),
       user:$(".valores").prop("id"),
@@ -87,14 +88,13 @@ function publicarcapi() {
 }
 
 function despublicarcapi() {
-  $("#despublicarcapi").on("click", function () {
+  $("#despublicarcapi").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_capi: $(".valores").val(),
       user:$(".valores").prop("id"),
       accion: "despublicar"
     },
     function (data) {
-      alert(data);
       $("#alert").text("");
       $("#alert").removeClass("alert alert-success text-center");
      $("#despublicarcapi").html("Publicar");
@@ -105,10 +105,11 @@ function despublicarcapi() {
 }
 
 function bloquearcapi() {
-  $("#bloquearcapi").on("click", function () {
+  $("#bloquearcapi").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_capi: $(".valores").val(),
-      accion: "bloquear"
+      accion: "bloquear",
+      user:$(".valores").prop("id"),
     },
     function (data) {
      $("#bloquearcapi").html("Desbloquear");
@@ -119,10 +120,11 @@ function bloquearcapi() {
 }
 
 function desbloquearcapi() {
-  $("#desbloquearcapi").on("click", function () {
+  $("#desbloquearcapi").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_capi: $(".valores").val(),
-      accion: "desbloquear"
+      accion: "desbloquear",
+      user:$(".valores").prop("id"),
     },
     function (data) {
      $("#desbloquearcapi").html("Bloquear");

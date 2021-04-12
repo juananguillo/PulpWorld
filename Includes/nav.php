@@ -13,38 +13,7 @@
             <li class="nav-item"><a class="nav-link" href="index.php">Obras</a></li>
             <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
             <?php if(isset($_SESSION['usuario'])){?>
-            <li class="nav-item dropdown notifications-dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell"></i>    Novedades    
-			               <span class="badge badge-primary">4</span> </a>
-            
-			                
-			                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				                <div class="dropdown-menu-header">
-					                Novedades
-				                </div>
-                                <?php for($i=0; $i<4; $i++){ ?>
-				                <div class="dropdown-item">
-					                <div class="row">
-						                <div class="col-md-2 profile-img">
-							                <img src="img/3.jpg" />
-						                </div>
-						                <div class="col-md-10">
-							                <a href="">
-							                    <b>Axel</b> commented on your photo.
-							                    <br>
-							                    <small>10 minutes ago</small>
-							                </a>
-						                </div>
-					                </div>
-				                </div>
-                                <?php } ?>
-				                <div class="notifications-dropdown-footer">
-					                <a href="novedades.php">Ver todas las novedades</a>
-				                </div>
-
-			                </div>
-			            </li>
+                <li class="nav-item"><a class="nav-link" href="./notificaciones.php">Notificaciones<span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span></a></li>
             <li class="nav-item"><a class="nav-link" href="#">Mensajes<span class="badge badge-primary">4</span></a></li>
                 <?php } 
                 if(isset($_SESSION["usuario"])){

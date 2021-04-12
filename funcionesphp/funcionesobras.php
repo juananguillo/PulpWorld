@@ -47,6 +47,7 @@ function cambiarfoto($bd,$img, $id){
 }
 
 
+
 function obras($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
@@ -540,5 +541,27 @@ function notifiobras($bd, $id_usuario, $tipo, $id_novedad, $mensaje)
         //header("Location: error.php?error=Errorinsertarcoment");
     }
 }
+
+function quitarnotifi($bd, $id_usuario, $id_novedad, $tipo)
+{
+    try {
+       
+        $sentencia = $bd->prepare("DELETE FROM notificaciones WHERE id_usuario like :id_usuario
+         AND id_novedad LIKE :id_novedad AND tipo like :tipo");
+        $sentencia->execute(array(
+            ':id_novedad' => $id_novedad, ':id_usuario' => $id_usuario, ':tipo'=> $tipo)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
 
 ?>

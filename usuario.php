@@ -15,13 +15,14 @@ include("clases/comentarios.class.php");
 include("funcionesphp/funcionescomentarios.php");
 if(isset($_GET["user"])){
 	$readonly="disabled";
-    $usuario=unusuarioporcodigo($bd, $_GET["user"]);
-    if($usuario->getestado()==0) header("Location: index.php");
+    $thisusuario=unusuarioporcodigo($bd, $_GET["user"]);
+    if($thisusuario->getestado()==0) header("Location: index.php");
 	if(!isset($_SESSION["usuario"])){
 		$obras= obrasautor($bd,"n",$_GET["user"]);
 	}
 	else{
-		$seguidor=verseguidor($bd, $usuario->getid(), $_SESSION["usuario"]);
+		$usuario=unusuarioporcodigo($bd, $_SESSION["usuario"]);
+		$seguidor=verseguidor($bd, $thisusuario->getid(), $_SESSION["usuario"]);
 		$textomegusta=$seguidor==0 ? "Seguir" : "Dejar de seguir";
 		$seguidor=$seguidor==0 ? "dar" : "quitar";
 		if($_SESSION["usuario"]==$_GET["user"] || $_SESSION["tipo"]==1){
@@ -64,27 +65,27 @@ else{
 	<div class="row flex-fill">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<img style="display:block;
-margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$usuario->getfoto()}"; ?>  class="img-thumbnail rounded-circle"  alt="" />
+margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>  class="img-thumbnail rounded-circle"  alt="" />
 	<br>
 	<h1 class="text-center">
-	<?php echo $usuario->getusuario(); ?>
+	<?php echo $thisusuario->getusuario(); ?>
 	
 	</h1>
 	<div class="text-center">
-	<strong>Seguidores</strong> <i class="fas fa-users text-danger"> <?php echo $usuario->getseguidores(); ?></i>
-	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $usuario->getobras(); ?></i><br>
+	<strong>Seguidores</strong> <i class="fas fa-users text-danger"> <?php echo $thisusuario->getseguidores(); ?></i>
+	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $thisusuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">
-	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$usuario->getid()){ ?>
-	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $usuario->getid(); ?>>
+	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
+	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
 	<button class="btn btn-danger mr-1" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
-	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$usuario->getid(); ?>  href="#">Esribir mensaje</a>
+	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Esribir mensaje</a>
 	<?php } ?>
-	</div><div class="modal fade" id=<?php echo "0" . $usuario->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
+	</div><div class="modal fade" id=<?php echo "0" . $thisusuario->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="comentLabel">Enviar mensaje a:  <?php echo $usuario->getusuario();  ?></h5>
+                        <h5 class="modal-title" id="comentLabel">Enviar mensaje a:  <?php echo $thisusuario->getusuario();  ?></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

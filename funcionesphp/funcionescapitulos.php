@@ -43,6 +43,8 @@ function capitulos($bd, $id_obra){
 
 
 
+
+
 function obteneruncapitulo($db, $id){
     try {
     $sentencia = $db->prepare("SELECT * FROM capitulos WHERE id like :id");
@@ -204,5 +206,25 @@ function notificapi($bd, $id_usuario, $tipo, $id_novedad, $mensaje)
     }
 }
 
+function quitarnotificapi($bd, $id_usuario, $id_novedad, $tipo)
+{
+    try {
+       
+        $sentencia = $bd->prepare("DELETE FROM notificaciones WHERE id_usuario like :id_usuario
+         AND id_novedad LIKE :id_novedad AND tipo like :tipo");
+        $sentencia->execute(array(
+            ':id_novedad' => $id_novedad, ':id_usuario' => $id_usuario, ':tipo'=> $tipo)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
 
 ?>

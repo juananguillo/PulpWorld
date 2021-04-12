@@ -26,6 +26,9 @@ if(isset($_GET["obra"])){
 		$capitulos= capitulos($bd, $_GET["obra"]);
 	}
 	if(isset($_SESSION["usuario"])){
+		if($_SESSION["tipo"]!=1 && $obra->getestado()==0){
+			header("Location: index.php");
+		}
 		$megusta=vermegusta($bd, $obra->getid(), $_SESSION["usuario"]);
 		$textomegusta=$megusta==0 ? "Dar me gusta" : "Quitar me gusta";
 		$megusta=$megusta==0 ? "dar" : "quitar";
@@ -158,7 +161,7 @@ for ($i=0; $i < count($generos); $i++) {
 	  <li class="nav-item">
 	  <a class="nav-link redi" id="navcom" href="#comentarios"  data-toggle="tab">Comentarios</a>
 	  </li>
-	  <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){ ?>
+	  <?php if(isset($_SESSION['usuario']) && ($_SESSION['usuario']==$obra->getautor() || $_SESSION["tipo"]==1)){ ?>
 		<ul class="navbar-nav  ml-auto">
             <li class="nav-item">
 			<button id="guardar" class="btn btn-primary">Guardar</button>
@@ -171,10 +174,10 @@ for ($i=0; $i < count($generos); $i++) {
 				}
 				elseif($_SESSION["tipo"]==1 && $obra->getestado()==0){
 					?>
-					<button id="bloquear" class="btn btn-primary">Desbloquear</button>
+					<button id="desbloquear" class="btn btn-primary">Desbloquear</button>
 					<?php
 				}
-				if(count($capitulos)>0 && $obra->getpublico()==0){
+				if($obra->getpublico()==0){
 					?>
 					<button id="publicar" class="btn btn-primary">Publicar</button>
 					<?php

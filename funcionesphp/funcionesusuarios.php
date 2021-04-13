@@ -718,4 +718,40 @@ function idseguidor($bd, $id_seguido)
     }
 }
 
+function bloquearuser($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE usuario SET estado= 0 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+
+function desbloquearuser($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE usuario SET estado= 1 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
 ?>

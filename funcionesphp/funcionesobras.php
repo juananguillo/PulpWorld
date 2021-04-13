@@ -86,6 +86,9 @@ function obrasautor($bd,$tipo,$autor){
             $sentencia = $bd->prepare("SELECT * FROM obras WHERE estado like 1 AND autor like $autor ORDER BY id DESC
             ");
         }
+        elseif($tipo==1){
+            $sentencia = $bd->prepare("SELECT * FROM obras WHERE autor like $autor ORDER BY id DESC");
+        }
         else{
             $sentencia = $bd->prepare("SELECT * FROM obras WHERE autor like $autor AND estado like 1 AND publico like 1 ORDER BY id DESC
             ");

@@ -86,14 +86,13 @@ elseif(isset($_POST["id_capi"])){
     }
 }
 
-elseif(isset($_POST["id_seguido"])){
-    include("funcionesusuarios.php");
-$id_seguido=$_POST["id_seguido"];
-$id_seguidor=$_POST["id_seguidor"];
-    if($_POST["accion"]=="dar"){
-       seguir($bd, $id_seguido, $id_seguidor);
+elseif(isset($_POST["id_user"])){
+    
+$id_user=$_POST["id_user"];
+    if($_POST["accion"]=="bloquear"){
+     bloquearuser($bd,$id_user);
     }else{
-        dejardeseguir($bd, $id_seguido, $id_seguidor);
+      desbloquearuser($bd, $id_user);
     
     } 
 }

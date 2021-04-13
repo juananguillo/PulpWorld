@@ -11,22 +11,30 @@ include("funcionesphp/funcionesobras.php");
 include("funcionesphp/funcionescapitulos.php");
 include("clases/categorias.class.php");
 include("funcionesphp/funcionescategorias.php");
-include("clases/comentarios.class.php");
-include("funcionesphp/funcionescomentarios.php");
+/*
+include("clases/biblioteca.class.php");
+include("funcionesphp/funcionesbiblioteca.php");
+*/
+
 if(isset($_GET["user"])){
 	$readonly="disabled";
     $thisusuario=unusuarioporcodigo($bd, $_GET["user"]);
-    if($thisusuario->getestado()==0) header("Location: index.php");
+    if($thisusuario->getestado()==0 && !isset($_SESSION["usuario"])) header("Location: index.php");
 	if(!isset($_SESSION["usuario"])){
 		$obras= obrasautor($bd,"n",$_GET["user"]);
 	}
 	else{
+		if($thisusuario->getestado()==0 && $_SESSION["tipo"]==0) header("Location: index.php");
+		$readonly=$_SESSION['usuario']!=$_GET["user"] ? "disabled" :"";
+		$readonly=$_SESSION['tipo']==0 ? "disabled" :"";
 		$usuario=unusuarioporcodigo($bd, $_SESSION["usuario"]);
 		$seguidor=verseguidor($bd, $thisusuario->getid(), $_SESSION["usuario"]);
 		$textomegusta=$seguidor==0 ? "Seguir" : "Dejar de seguir";
 		$seguidor=$seguidor==0 ? "dar" : "quitar";
-		if($_SESSION["usuario"]==$_GET["user"] || $_SESSION["tipo"]==1){
-			$readonly="readonly";
+		if($_SESSION["tipo"]==1){
+			$obras= obrasautor($bd,1,$_GET["user"]);
+		}
+		elseif($_SESSION["usuario"]==$_GET["user"]){
 			$obras= obrasautor($bd,"autor",$_GET["user"]);
 			
 		}
@@ -46,8 +54,9 @@ else{
     include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="libro.css">
-	<script src="js/obra.js"></script>
+	<script src="js/usuario.js"></script>
 	<script src="js/darquitar.js"></script>
+	<script src="js/estado.js"></script>
     </head>
 	<body>
     <?php 
@@ -61,7 +70,7 @@ else{
 
 	
     <div class="container mt-5 mb-5 d-flex flex-column">
-	
+	<input id="usuid" type="hidden" value="<?php echo $thisusuario->getid(); ?>">
 	<div class="row flex-fill">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<img style="display:block;
@@ -79,7 +88,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
 	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
 	<button class="btn btn-danger mr-1" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
-	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Esribir mensaje</a>
+	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Escribir mensaje</a>
 	<?php } ?>
 	</div><div class="modal fade" id=<?php echo "0" . $thisusuario->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -129,15 +138,29 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	  <a class="nav-link active redi" id="navcapi" href="#obra" data-toggle="tab">Obras</a>
 	  </li>
 	  <li class="nav-item">
-	  <a class="nav-link redi" id="navdet" href="#sinopsis" data-toggle="tab">Detalles</a>
+	  <a class="nav-link redi" id="navpers" href="#personal" data-toggle="tab">Datos Personales</a>
 	  </li>
 	  <li class="nav-item">
-	  <a class="nav-link redi" id="navcom" href="#comentarios"  data-toggle="tab">Comentarios</a>
+	  <a class="nav-link redi" id="navbi" href="#biblioteca"  data-toggle="tab">Biblioteca</a>
 	  </li>
-	  <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$_GET["user"]){ ?>
+	  <?php if(isset($_SESSION['usuario']) && ($_SESSION['usuario']==$_GET["user"] || $_SESSION["tipo"]==1)){ ?>
 		<ul class="navbar-nav  ml-auto">
             <li class="nav-item">
-			<a class="btn btn-primary"  <?php echo "href=user.php?user={$_GET["user"]}";?>>Guardar</a>
+			<button id="guardar" class="btn btn-primary">Guardar</button>
+			<?php
+			
+				if($_SESSION["tipo"]==1 && $thisusuario->getestado()==1){
+					?>
+					<button id="bloquearuser" class="btn btn-primary">Bloquear</button>
+					<?php
+				}
+				elseif($_SESSION["tipo"]==1 && $thisusuario->getestado()==0){
+					?>
+					<button id="desbloquearuser" class="btn btn-primary">Desbloquear</button>
+					<?php
+				}
+
+			?>
             </li>
 			</ul>
        
@@ -180,11 +203,16 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
                     </ul>
       </div>
 
-	  <div class="tab-pane fade usucontent border" id="sinopsis">
+	  <div class="tab-pane fade usucontent border" id="personal">
 	  <br>
-	  <label for="titulo">Titulo:</label><br>
- 
-      </div>
+	  <label for="Usuario">Usuario</label><br>
+  <input class="form-control" type="text" id="usuario" name="usuario" <?php echo $readonly ?> value="<?php echo $usuario->getusuario(); ?>"><br><br>
+  <label for="email">Email</label><br>
+  <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $usuario->getemail(); ?>"><br><br> 
+  <label for="nomyape">Nombre y apellido</label><br>
+  <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $usuario->getnomyape(); ?>"><br><br>
+  <a  data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Cambiar contraseña</a>      
+</div>
 
 
 

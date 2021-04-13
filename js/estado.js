@@ -63,7 +63,41 @@ function desbloquear() {
     });
   });
 }
-  }else{
+  }else if($("#navcapi").length ){
+    bloquearuser();
+    desbloquearuser();
+
+    function bloquearuser() {
+      $("#bloquearuser").one("click", function () {
+        $.post("./funcionesphp/cambiarestado.php", {
+          id_user: $(".valores").val(),
+          accion: "bloquear",
+        },
+        function (data) {
+          alert(data);
+         $("#bloquearuser").html("Desbloquear");
+         $("#bloquearuser").prop("id", "desbloquearuser");
+         desbloquearuser();
+        });
+      });
+    }
+    
+    function desbloquearuser() {
+      $("#desbloquearuser").one("click", function () {
+        $.post("./funcionesphp/cambiarestado.php", {
+          id_user: $(".valores").val(),
+          accion: "desbloquear",
+        },
+        function (data) {
+         $("#desbloquearuser").html("Bloquear");
+         $("#desbloquearuser").prop("id", "bloquearuser");
+         bloquearuser();
+        });
+      });
+    }
+  }
+
+  else{
     publicarcapi();
     despublicarcapi();
     bloquearcapi();

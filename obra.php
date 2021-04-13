@@ -84,9 +84,19 @@ if(isset($_SESSION['usuario'])){
 	</h1>
 	<div class="row flex-fill h-100" style="min-height:0">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<img style=" display:block;
+	<img id="port" style=" display:block;
 margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class="img-thumbnail"  alt="" />
 	<br>
+	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]==$obra->getautor()) { ?>
+	<form enctype="multipart/form-data" action="#" id="imgform" method="POST">
+<div id="div_file">
+<p id="textoboton">Subir Imagen</p>
+<input name="subidaimg" id="subidaimg" type="file" accept=".png, .jpg, .jpeg" />
+
+</div>
+</form>
+<br>
+<?php } ?>
 	<div class="text-center">
 	<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obra->getlikes(); ?></i>
 	<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obra->getlecturas(); ?></i><br>
@@ -236,7 +246,7 @@ for ($i=0; $i < count($generos); $i++) {
 	  <br>
 	  <label for="titulo">Titulo:</label><br>
   <input class="form-control" type="text" id="titobra" name="titulo" <?php echo $readonly ?> value="<?php echo $obra->gettitulo(); ?>"><br><br>
-  
+  <p id="err"></p>
  <?php 
  if(isset($_SESSION['usuario']) && $_SESSION['usuario']==$obra->getautor()){
 	 ?>
@@ -264,9 +274,7 @@ for ($i=0; $i < count($generos); $i++) {
  }
  ?>
   <label for="sinopsis">Sinopsis:</label>
-  <textarea <?php echo $readonly ?>  style="resize: none;" class="form-control text-justify" id="sinopsisobra"  rows="22">
-	<?php echo $obra->getsinopsis();
-	 ?>
+  <textarea <?php echo $readonly ?>  style="resize: none;" class="form-control text-justify" id="sinopsisobra"  rows="22"><?php echo $obra->getsinopsis();?>
 	</textarea>
       </div>
 

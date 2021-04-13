@@ -18,26 +18,28 @@ $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
 $usuarios=arrayusuariosporid($bd);
 $notificaciones=notificaciones($bd,$_SESSION['usuario'], $desplazamiento);
 $total=totalnoti($bd, $_SESSION['usuario']);
+$pagina = $_GET['pag'] ?? 1;
 
 
 
    
 
     ?>
-
+   <link rel="stylesheet" href="css/notificaciones.css">
     </head>
 <body>
     <?php 
     include("Includes/nav.php");
     ?>
     <body>
-      <h1 class="text-center">Notificaciones</h1>
-    <div id="not" class="container mb-5 text-center">
+      <h1 class="text-center mt-5 mb-5">Notificaciones</h1>
+    <div id="not" class="container mb-5 border">
       <?php 
       for ($i=0; $i < count($notificaciones) ; $i++) { 
         ?>
+        <div id="textnot" class="mt-3 mb-3 border ml-3 mr-3">
 
-        <div class="row">
+       
           <?php 
           $u="<a href='usuario.php?user={$notificaciones[$i]["id_usuario"]}'>{$usuarios[$notificaciones[$i]["id_usuario"]]->getusuario()}</a>";
           switch ($notificaciones[$i]["tipo"]) {
@@ -71,7 +73,8 @@ $total=totalnoti($bd, $_SESSION['usuario']);
           }
           
           ?>
-        </div>
+   </div>
+   <br>
 
         <?php
       }
@@ -81,6 +84,52 @@ $total=totalnoti($bd, $_SESSION['usuario']);
    </div>
    
     </div>
+    
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center mt-5">
+            <?php
+            if ($desplazamiento > 0) {
+                $prev = $desplazamiento - 12;
+                $url = $_SERVER["PHP_SELF"] . "?&desplazamiento=$prev";
+                echo "<li class='page-item active'>";
+                echo  "<a class='page-link mr-4' href=$url tabindex='-1'>Anterior</a>";
+            } else {
+
+                echo "<li class='page-item disabled'>";
+                echo  "<a class='page-link mr-4' href='#' tabindex='-1'>Anterior</a>";
+            }
+
+            ?>
+
+            </li>
+            <?php
+            $o = 0;
+            for ($i = 0; $i < $total; $i += 12) {
+                $o++;
+                $url = $_SERVER["PHP_SELF"] . "?&desplazamiento=$i&pag=$o";
+                if ($pagina == $o) {
+                    echo "<li class='page-item active'>
+                <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
+            </li>";
+                } else {
+                    echo  "<li class='page-item'><a class='page-link' href=$url>$o</a></li>";
+                }
+            }
+
+            if ($total > ($desplazamiento + 12)) {
+                $prox = $desplazamiento + 12;
+                $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prox";
+                echo "<li class='page-item active'>";
+                echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
+            } else {
+                echo "<li class='page-item disabled'>";
+                echo  "<a class='page-link ml-4' href='#' tabindex='-1'>Siguiente</a>";
+            }
+
+            ?>
+            </li>
+        </ul>
+    </nav>
     <?php 
 include("Includes/footer.php")
 ?>

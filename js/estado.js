@@ -77,7 +77,6 @@ function publicarcapi() {
       accion: "publicar"
     },
     function (data) {
-      alert(data);
      $("#publicarcapi").html("Despublicar");
      $("#publicarcapi").prop("id", "despublicarcapi");
      $("#alert").text("El capitulo ha sido publicado, si la obra no es publica nadie lo podra leer!");

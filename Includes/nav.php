@@ -13,7 +13,7 @@
             <li class="nav-item"><a class="nav-link" href="index.php">Obras</a></li>
             <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
             <?php if(isset($_SESSION['usuario'])){?>
-                <li class="nav-item"><a class="nav-link" href="./notificaciones.php">Notificaciones<span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span></a></li>
+                <li class="nav-item"><a class="nav-link" href="./notificaciones.php">Notificaciones <?php $sinver=sinver($bd, $_SESSION["usuario"]);  if($sinver!=0) { ?><span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span> <?php } ?></a></li>
             <li class="nav-item"><a class="nav-link" href="#">Mensajes<span class="badge badge-primary">4</span></a></li>
                 <?php } 
                 if(isset($_SESSION["usuario"])){

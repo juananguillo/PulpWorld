@@ -71,4 +71,23 @@ function addgenero($bd, $id_obra, $id_categoria)
     }
 }
 
+function borrargeneros($bd, $id_obra){
+    try {
+        $sentencia = $bd->prepare("DELETE FROM genero  WHERE id_obra like $id_obra");
+        $sentencia->execute();
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+      
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al devolver la categoria, no existe en la base de datos");
+    }
+
+}
+
+
 ?>

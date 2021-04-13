@@ -1,0 +1,9 @@
+#not{
+	height: 600px;
+	overflow-y: scroll;
+}
+
+#textnot{
+    height: 50px;
+    padding: 1%;
+}

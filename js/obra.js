@@ -59,6 +59,10 @@ $(document).on("ready", function () {
         $(this).remove();
       });
     }
+    else{
+      $("#categorias").val(0);
+    }
+
   });
 
   function readURL(input) {
@@ -76,8 +80,8 @@ $(document).on("ready", function () {
   });
 
   $("#guardar").on("click", function () {
+    $("#err").hide();
     var error = false;
-    if ($("#subidaimg").val() == "")
       if ($("#titobra").val() == "" || $("#titobra").val().length == 0 || /^\s+$/.test($("#titobra").val())) {
         $("#titobra").focus();
         $("#titobra").css("border-color", "red");
@@ -101,7 +105,7 @@ $(document).on("ready", function () {
       data.append("titulo", $("#titobra").val());
       data.append("sinopsis", $("#sinopsisobra").val());
       data.append("sinopsis", $("#sinopsisobra").val());
-      data.append("autor", $("#autor").val());
+      data.append("obra", $(".valores").val());
       var array = [];
 
       $(".sel").each(function () {
@@ -114,7 +118,7 @@ $(document).on("ready", function () {
 
 
       $.ajax({
-        url: "./funcionesphp/crearobra.php",
+        url: "./funcionesphp/actualizarobra.php",
         data: data,
         cache: false,
         contentType: false,
@@ -122,8 +126,7 @@ $(document).on("ready", function () {
         method: 'POST',
         type: 'POST',
         success: function (data) {
-
-          window.location.replace("./obra.php?obra=" + data);
+         alert("Datos guardados con exito");
         }
       });
 

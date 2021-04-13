@@ -30,12 +30,15 @@ $(document).on("ready", function () {
 
     $("#guardar").on("click", function () {
         var error=false;
+        $("#err").hide();
+        $("#titobra").css("border-color", "green");
         if($("#subidaimg").val()=="")
         if($("#titobra").val()=="" || $("#titobra").val().length==0|| /^\s+$/.test($("#titobra").val())){
             $("#titobra").focus();
             $("#titobra").css("border-color", "red");
             $("#err").text("Es necesario añadir un titulo a la obra");
             $("#err").css("color", "red");
+            $("#err").show();
             error=true;
         }
          if($(".sel").length==0){
@@ -75,7 +78,6 @@ $(document).on("ready", function () {
                 method: 'POST',
                 type: 'POST',
                 success: function(data){
-                   
                 window.location.replace("./obra.php?obra="+data);
                 }
             });

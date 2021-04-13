@@ -18,7 +18,7 @@ if(isset($_GET["cap"])){
     $capitulo=obteneruncapitulo($bd,$_GET["cap"]);
 	$obra=obtenerunaobra($bd,$capitulo->getid_obra());
 	$usuarios=arrayusuariosporid($bd);
-    if($capitulo->getestado==0 && $_SESSION["tipo"]==0){}
+    if($capitulo->getestado()==0 && $_SESSION["tipo"]==0){}
     if(!isset($_SESSION["usuario"])){
         if($capitulo->getestado==0){
             header("Location: index.php");
@@ -26,7 +26,7 @@ if(isset($_GET["cap"])){
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
 	}
 	if(isset($_SESSION["usuario"])){
-        if($capitulo->getestado==0 && $_SESSION["tipo"]==0){
+        if($capitulo->getestado()==0 && $_SESSION["tipo"]==0){
             header("Location: index.php");
         }
         $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);

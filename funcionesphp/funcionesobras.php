@@ -563,5 +563,23 @@ function quitarnotifi($bd, $id_usuario, $id_novedad, $tipo)
     }
 }
 
+function cambiarobra($bd,$titulo, $sinopsis, $obra){
+    try {
+        $sentencia = $bd->prepare("UPDATE obras SET titulo= :titulo, sinopsis=:sinopsis WHERE id LIKE :obra ");
+        $sentencia->execute(array(
+           ':titulo'=> $titulo, ':sinopsis'=>$sinopsis, ':obra'=>$obra
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
 
 ?>

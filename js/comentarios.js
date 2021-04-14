@@ -1,8 +1,9 @@
 $(document).on("ready", function() {
-  
+  if($("#comments_count").html()<24){
+     $('#loadMore').hide();
+  }
   function vermas() {
    var total = $("#comments-wrapper li").size();
-   
    x=54;
    $('#showLess').hide();
    $('#comments-wrapper li:lt('+x+')').show();
@@ -12,6 +13,9 @@ $(document).on("ready", function() {
        $('#comments-wrapper li:lt('+x+')').show();
        $('#showLess').show();
       }
+      if(x>total){
+         $('#loadMore').hide();
+      }
 
    });
    $('#showLess').click(function () {
@@ -19,8 +23,16 @@ $(document).on("ready", function() {
       if(x>54){
        x-=54;
        $('#comments-wrapper li').not(':lt('+x+')').hide();
+     if(x==54){
+      $('#showLess').hide();
+  
+
+     }
+     $('#loadMore').show();
        }else{
+    
          $('#showLess').hide();
+         $('#loadMore').show();
        }
    });
   }

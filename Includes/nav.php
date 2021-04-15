@@ -119,7 +119,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <input type="submit" class="btn btn-primary" name="botonregistro" id="botonregistro" value="Enviar"></button>
+                        <input type="submit" class="btn btn-primary" name="botonregistro" id="botonregistro" value="Enviar">
                         </form>
                     </div>
                 </div>

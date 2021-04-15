@@ -73,9 +73,19 @@ else{
 	<input id="usuid" type="hidden" value="<?php echo $thisusuario->getid(); ?>">
 	<div class="row flex-fill">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<img style="display:block;
+	<img id="port" style="display:block;
 margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>  class="img-thumbnail rounded-circle"  alt="" />
 	<br>
+	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]==$_GET["user"]) { ?>
+	<form enctype="multipart/form-data" action="#" id="imgform" method="POST">
+<div id="div_file">
+<p id="textoboton">Cambiar Imagen</p>
+<input name="subidaimg" id="subidaimg" type="file" accept=".png, .jpg, .jpeg" />
+
+</div>
+</form>
+<br>
+<?php } ?>
 	<h1 class="text-center">
 	<?php echo $thisusuario->getusuario(); ?>
 	
@@ -205,13 +215,18 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 
 	  <div class="tab-pane fade usucontent border" id="personal">
 	  <br>
+	  <form id="formusuario">
 	  <label for="Usuario">Usuario</label><br>
+	  <input class="form-control" type="hidden" id="usuariohidden" name="usuariohidden" <?php echo $readonly ?> value="<?php echo $usuario->getusuario(); ?>"><br><br>
   <input class="form-control" type="text" id="usuario" name="usuario" <?php echo $readonly ?> value="<?php echo $usuario->getusuario(); ?>"><br><br>
   <label for="email">Email</label><br>
+  <input class="form-control" type="hidden" id="emailhidden" name="emailhidden" <?php echo $readonly ?> value="<?php echo $usuario->getemail(); ?>"><br><br> 
   <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $usuario->getemail(); ?>"><br><br> 
   <label for="nomyape">Nombre y apellido</label><br>
   <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $usuario->getnomyape(); ?>"><br><br>
   <a  data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Cambiar contraseña</a>      
+  <input type="hidden" class="btn btn-primary" name="cambiousu" id="cambiousu" value="Enviar">  
+</form>
 </div>
 
 

@@ -90,7 +90,7 @@ margin:auto; "  <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?>  class
 	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]==$obra->getautor()) { ?>
 	<form enctype="multipart/form-data" action="#" id="imgform" method="POST">
 <div id="div_file">
-<p id="textoboton">Subir Imagen</p>
+<p id="textoboton">Cambiar Imagen</p>
 <input name="subidaimg" id="subidaimg" type="file" accept=".png, .jpg, .jpeg" />
 
 </div>

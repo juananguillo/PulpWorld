@@ -1,5 +1,24 @@
 $(document).on("ready", function () {
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $(".redi").on("click", function () {
       var href = $(this).attr('href');
       var usuario = $("#usuid").val();
@@ -54,21 +73,99 @@ $(document).on("ready", function () {
     });
   
     $("#guardar").on("click", function () {
-      $("#err").hide();
-      var error = false;
-        if ($("#titobra").val() == "" || $("#titobra").val().length == 0 || /^\s+$/.test($("#titobra").val())) {
-          $("#titobra").focus();
-          $("#titobra").css("border-color", "red");
-          $("#err").text("Es necesario añadir un titulo a la obra");
-          $("#err").css("color", "red");
-          error = true;
-        }
-      if ($(".sel").length == 0) {
-        $("#err2").show();
-        $("#err2").text("Es necesario añadir una categoria");
-        $("#err2").css("color", "red");
-        error = true;
+      let error=false;
+     $("#formusuario").submit();
+    });
+     $.validator.addMethod('usuarioexiste', function(value, element) {
+      var ret = false;
+      if(value==$("#usuariohidden").val()){
+        return true;
       }
+      $.ajax({url:"./funcionesphp/comprobar.php", data: {usuario: value}, type:"POST"
+        ,async: false, dataType: "text", success: function(data) { ret= data; }
+          }
+    
+          );  
+          if(ret==true) return true;  
+                                                
+      },"El usuario existe, prueba otro");
+
+      $.validator.addMethod('emailexiste', function(value, element) {
+        var ret = false;
+
+        if(value==$("#emailhidden").val()){
+          return true;
+        }
+
+        $.ajax({url:"./funcionesphp/comprobar.php", data: {email: value}, type:"POST"
+          ,async: false, dataType: "text", success: function(data) { ret= data; }
+            }
+      
+            );  
+            if(ret==true) return true;                                            
+        },"Este email ya esta registrado");
+
+
+     $("#formusuario").validate({
+      rules: {
+  
+          usuario: {
+              required: true,
+              nowhitespace: true,
+              usuarioexiste:true,
+              minlength:6,
+              maxlength:15
+          },
+        email: {
+          required: true,
+          email: true,
+          emailexiste: true
+        },
+        contrareg: {
+          required: true,
+          strongPassword: true
+        },
+        contrareg2: {
+          required: true,
+          comparar: true
+         
+        },
+      
+       
+      },
+      messages: {
+        email: {
+          required: 'El campo es obligatorio',
+          email: 'No es un <em>valid</em> email correcto',
+          
+        },
+        usuario: { required: "El campo es obligatorio", minlength: "El usuario debe tener minimo 6 caracteres",maxlength: "El usuario debe tener minimo 15 caracteres"
+      }
+      },
+      submitHandler: function(form) {
+        // your ajax would go here
+        alert('simulated ajax submit');
+        return false;  // blocks regular submit since you have ajax
+    }
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       if (!error) {
         var f = document.getElementById("subidaimg");
         var img = f.files[0];
@@ -109,6 +206,6 @@ $(document).on("ready", function () {
   
   
   
-    });
+    
   
   });

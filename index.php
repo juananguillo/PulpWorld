@@ -10,10 +10,13 @@ include("clases/usuarios.class.php");
 include("clases/marcapaginas.class.php");
 include("clases/categorias.class.php");
 include("funcionesphp/funcionescategorias.php");
+include("funcionesphp/funcionesbiblioteca.php");
 $categorias = categorias($bd);
 $ses = isset($_SESSION['tipo']) ? $_SESSION['tipo'] : 0;
 if (isset($_SESSION['usuario'])) {
     $usuario = unusuarioporcodigo($bd, $_SESSION['usuario']);
+    $biblioteca= tubiblioteca($bd,  $_SESSION['usuario']);
+    $obras_guardadas=obrasguardadasporid($bd, $biblioteca);
 }
 include("Includes/header.php");
 ?>
@@ -112,6 +115,13 @@ include("Includes/header.php");
     </div>
     <div>
         <h1 class="display-3 text-center mb-5">Historias Pulp</h1>
+        <?php 
+         foreach ($obras_guardadas as $key => $value) {
+           echo $key;
+         }
+         echo count($obras_guardadas);
+        
+         ?>
     </div>
 
     <div class="container-fluid mb-3">
@@ -234,6 +244,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                     <a <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
+                                            
                                                 </div>
 
                                             </div>
@@ -249,6 +260,27 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                                                             ?></p>
                                 <div class="card-footer">
                                     <a style="color:white" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
+                                    <?php  if(isset($_SESSION["usuario"])){ ?>
+                                                        <input type="hidden" id="biblioteca" value="<?php echo $biblioteca?>">
+                                                    <?php 
+                                                        if(count($obras_guardadas)>0){
+                                                            if(array_key_exists($obras[$i]->getid(), $obras_guardadas)){
+                                                                ?>
+                                                                
+                                                                 <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-primary quitarobra">Quitar</button>
+                                                                <?php 
+                                                            }
+                                                            else{
+                                                                ?>
+                                                                     <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-primary guardarobra">Guardar</button>
+                                                                <?php
+
+                                                            }
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-primary guardarobra">Guardar</button>
+                                                    <?php }} ?>
                                 </div>
 
                             </div>

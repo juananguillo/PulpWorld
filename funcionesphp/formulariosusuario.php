@@ -2,11 +2,15 @@
 include("conexionbd.php");
 $bd = conectardb();
 include("funcionesusuarios.php");
+include("funcionesbiblioteca.php");
 include("../clases/usuarios.class.php");
 if(isset($_POST['botonregistro'])){
 
    
     dardealtausuario($bd, $_POST['usureg'], $_POST['contrareg'], $_POST['emailreg']);
+    $id = $bd->lastInsertId();
+    crearbiblioteca($bd, $id);
+    
     header("Location: ../index.php?alerta=Mira el correo para activar el usuario");
     exit;
 

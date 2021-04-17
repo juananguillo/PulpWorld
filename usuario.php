@@ -95,8 +95,8 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $thisusuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">
-	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
 	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
+	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
 	<button class="btn btn-danger mr-1" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
 	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Escribir mensaje</a>
 	<?php } ?>
@@ -224,7 +224,10 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
   <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $usuario->getemail(); ?>"><br><br> 
   <label for="nomyape">Nombre y apellido</label><br>
   <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $usuario->getnomyape(); ?>"><br><br>
-  <a  data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Cambiar contraseña</a>      
+  <label for="contra">Contraseña</label><br>
+<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$usuario->getid()) || $_SESSION["tipo"]==1){ ?>
+  <input class="form-control" type="password" id="contra" name="contra" value="<?php echo $usuario->getcontra(); ?>"><br><br>
+ <?php } ?> 
   <input type="hidden" class="btn btn-primary" name="cambiousu" id="cambiousu" value="Enviar">  
 </form>
 </div>

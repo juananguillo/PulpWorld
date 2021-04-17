@@ -55,19 +55,18 @@ $(document).on("ready", function () {
         required: true,
         strongPassword: true
       },
-      contrareg2: {
-        required: true,
-        comparar: true
-       
-      },
       
      
     },
     messages: {
-      email: {
+      emailreg: {
         required: 'El campo es obligatorio',
-        email: 'No es un <em>valid</em> email correcto',
+        email: 'No es un email correcto',
         
+      },
+
+      contrareg:{
+        required: 'El campo es obligatorio',
       },
       usureg: { required: "El campo es obligatorio", minlength: "El usuario debe tener minimo 6 caracteres",maxlength: "El usuario debe tener minimo 15 caracteres"
     }

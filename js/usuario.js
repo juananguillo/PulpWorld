@@ -105,6 +105,12 @@ $(document).on("ready", function () {
             if(ret==true) return true;                                            
         },"Este email ya esta registrado");
 
+        $.validator.addMethod('strongPassword', function(value, element) {
+          return this.optional(element) 
+            || value.length >= 6
+            && /\d/.test(value)
+            && /[a-z]/i.test(value);
+        }, 'La contraseña es debil, tiene que tener seis letras, un numero al menos y un caracter\'.')
 
      $("#formusuario").validate({
       rules: {
@@ -121,15 +127,11 @@ $(document).on("ready", function () {
           email: true,
           emailexiste: true
         },
-        contrareg: {
+        contra: {
           required: true,
           strongPassword: true
         },
-        contrareg2: {
-          required: true,
-          comparar: true
-         
-        },
+        
       
        
       },
@@ -139,13 +141,42 @@ $(document).on("ready", function () {
           email: 'No es un <em>valid</em> email correcto',
           
         },
+
+        contra:{
+          required: 'El campo es obligatorio',
+        
+        },
         usuario: { required: "El campo es obligatorio", minlength: "El usuario debe tener minimo 6 caracteres",maxlength: "El usuario debe tener minimo 15 caracteres"
       }
       },
       submitHandler: function(form) {
-        // your ajax would go here
-        alert('simulated ajax submit');
-        return false;  // blocks regular submit since you have ajax
+        
+        var f = document.getElementById("subidaimg");
+        var img = f.files[0];
+        var data = new FormData();
+  
+        data.append('file', img);
+        data.append("img", $("#subidaimg").val());
+        data.append("username", $("#usuario").val());
+        data.append("email", $("#email").val());
+        data.append("nomyape", $("#nomyape").val());
+        data.append("usuario", $(".valores").val());
+        data.append("contra", $("#contra").val());
+
+        $.ajax({
+          url: "./funcionesphp/actualizaruser.php",
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          type: 'POST',
+          success: function (data) {
+           alert("Datos guardados con exito");
+          }
+        });
+
+        return false;  
     }
     });
 

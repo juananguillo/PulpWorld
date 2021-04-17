@@ -741,7 +741,7 @@ function desbloquearuser($bd,$id){
     try {
         $sentencia = $bd->prepare("UPDATE usuario SET estado= 1 WHERE id LIKE :id ");
         $sentencia->execute(array(
-           'id'=> $id
+           ':id'=> $id
         ));
         if($sentencia->rowCount()==0)
         {
@@ -754,4 +754,44 @@ function desbloquearuser($bd,$id){
        
     }
 }
+
+
+function actualizaruser($bd,$id, $username, $email, $nomyape, $contra){
+    try {
+        $sentencia = $bd->prepare("UPDATE usuario SET usuario= :username, email=:email,
+        nomyape=:nomyape, contra=:contra
+         WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           ':id'=> $id, ':username'=>$username, ':email'=>$email, ':nomyape'=>$nomyape, ':contra'=>$contra
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+function cambiarfotouser($bd,$img, $id){
+    try {
+        $sentencia = $bd->prepare("UPDATE usuario SET foto= :foto WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           ':foto' => $img,':id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
 ?>

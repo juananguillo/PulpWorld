@@ -111,10 +111,6 @@
                                 <label for="message-text" class="col-form-label">Contraseña</label>
                                 <input type="password" class="form-control" name="contrareg" id="contrareg">
                             </div>
-                            <div class="form-group">
-                                <label for="message-text" class="col-form-label">Repetir Contraseña</label>
-                                <input type="password" class="form-control" name="contrareg2" id="contrareg2">
-                            </div>
                         
                     </div>
                     <div class="modal-footer">

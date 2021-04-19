@@ -33,7 +33,7 @@ $(document).on("ready", function () {
         $("#navpers").click();
   
         break;
-      case "biblioteca":
+      case "biblio":
         $("#navbi").click();
   
         break;

@@ -111,7 +111,7 @@ include("Includes/header.php");
 	 
       <?php if(isset($_SESSION['usuario']) && ($_SESSION['usuario']==$obra->getautor() | $_SESSION["tipo"]==1)){ ?>
         <input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $capitulo->getid(); ?>>
-		<ul class="navbar-nav  ml-auto">
+		<ul id="submenu" class="navbar-nav  ml-auto">
             <li class="nav-item">
 			<?php
 			

@@ -11,6 +11,8 @@ $(document).on("ready", function () {
         },
         function (data) {
          $("#dar").html("<i class='fas fa-thumbs-up'> Quitar me gusta</i>");
+         $("#dar").removeClass("btn-success");
+         $("#dar").addClass("btn-danger");
          $("#dar").prop("id", "quitar");
           dislike();
         });
@@ -25,6 +27,8 @@ $(document).on("ready", function () {
           },
           function (data) {
            $("#quitar").html("<i class='fas fa-thumbs-up'> Dar me gusta</i>");
+           $("#quitar").removeClass("btn-danger");
+           $("#quitar").addClass("btn-success");
            $("#quitar").prop("id", "dar");
             like();
           });
@@ -43,6 +47,8 @@ else{
             },
             function (data) {
              $("#dar").html("<i class='fas fa-users'> Dejar de seguir</i>");
+             $("#dar").removeClass("btn-success");
+             $("#dar").addClass("btn-danger");
              $("#dar").prop("id", "quitar");
               unfollow();
             });
@@ -58,6 +64,8 @@ else{
             },
             function (data) {
              $("#quitar").html("<i class='fas fa-users'> Seguir</i>");
+             $("#quitar").removeClass("btn-danger");
+             $("#quitar").addClass("btn-success");
              $("#quitar").prop("id", "dar");
               follow();
             });

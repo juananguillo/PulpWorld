@@ -85,4 +85,50 @@ function obrasguardadasporid($bd, $id){
 
 }
 
+
+
+function unaobraguardadaporid($bd, $id, $id_obra){
+    try {
+
+            $sentencia = $bd->prepare("SELECT id_obra FROM obras_guardadas WHERE id_biblioteca like :id AND id_obra like :id_obra ");
+            
+    
+            $sentencia->execute(array(
+                ':id' => $id, ':id_obra'=> $id_obra)
+                
+            );
+           
+   
+    $resultado= $sentencia->fetchColumn();
+   return $resultado;
+  
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Error al cargar el array de clientes ");
+    }
+
+}
+
+function borrarobra_guardada($bd, $id_biblioteca, $id_obra)
+{
+    try {
+       
+        $sentencia = $bd->prepare("DELETE FROM obras_guardadas WHERE id_biblioteca LIKE :id_biblioteca AND
+        id_obra LIKE :id_obra");
+        $sentencia->execute(array(
+            ':id_biblioteca' => $id_biblioteca, ':id_obra' => $id_obra)
+            
+        );
+       
+        if ($sentencia->rowCount() == 0) {
+            throw new Exception();
+        }
+
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        //header("Location: error.php?error=Errorinsertarcoment");
+    }
+}
+
 ?>

@@ -47,6 +47,31 @@ function cambiarfoto($bd,$img, $id){
 }
 
 
+function obrasguardadasbiblio($bd, $id){
+    try {
+            $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o, obras_guardadas og
+            WHERE og.id_biblioteca like $id AND og.id_obra like o.id");
+              $sentencia->execute();
+       
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+        $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
+        $array=array();
+            while ($obras=$sentencia->fetch()) {
+            $array[]=$obras;
+        
+        }
+
+        return $array;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+
+}
 
 function obras($bd,$desc,$orden,$tipo){
     try {

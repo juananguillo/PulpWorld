@@ -63,3 +63,12 @@ form, input {
       height: 600px;
 
     }
+
+    @media (min-width: 481px) and (max-width: 767px) { 
+     
+      #submenu{
+        margin: auto;
+        justify-content: center;
+      }
+    } 
+    

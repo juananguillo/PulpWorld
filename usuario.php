@@ -11,10 +11,8 @@ include("funcionesphp/funcionesobras.php");
 include("funcionesphp/funcionescapitulos.php");
 include("clases/categorias.class.php");
 include("funcionesphp/funcionescategorias.php");
-/*
-include("clases/biblioteca.class.php");
 include("funcionesphp/funcionesbiblioteca.php");
-*/
+
 
 if(isset($_GET["user"])){
 	$readonly="disabled";
@@ -30,6 +28,7 @@ if(isset($_GET["user"])){
 		$usuario=unusuarioporcodigo($bd, $_SESSION["usuario"]);
 		$seguidor=verseguidor($bd, $thisusuario->getid(), $_SESSION["usuario"]);
 		$textomegusta=$seguidor==0 ? "Seguir" : "Dejar de seguir";
+		$buttoncolor=$seguidor==0 ? "btn-success": "btn-danger";
 		$seguidor=$seguidor==0 ? "dar" : "quitar";
 		if($_SESSION["tipo"]==1){
 			$obras= obrasautor($bd,1,$_GET["user"]);
@@ -43,7 +42,8 @@ if(isset($_GET["user"])){
 		}
 	}
 	
-
+	$biblioteca= tubiblioteca($bd,  $thisusuario->getid());
+	$obras_biblioteca=obrasguardadasbiblio($bd, $biblioteca);
 	
 }
 else{
@@ -76,7 +76,7 @@ else{
 	<img id="port" style="display:block;
 margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>  class="img-thumbnail rounded-circle"  alt="" />
 	<br>
-	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]==$_GET["user"]) { ?>
+	<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$_GET["user"] || $_SESSION["tipo"]==1)) { ?>
 	<form enctype="multipart/form-data" action="#" id="imgform" method="POST">
 <div id="div_file">
 <p id="textoboton">Cambiar Imagen</p>
@@ -95,9 +95,10 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $thisusuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">
-	<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
+
 	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
-	<button class="btn btn-danger mr-1" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
+		<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
+	<button class="btn mr-1 <?php echo $buttoncolor ?>" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
 	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Escribir mensaje</a>
 	<?php } ?>
 	</div><div class="modal fade" id=<?php echo "0" . $thisusuario->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
@@ -151,10 +152,10 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	  <a class="nav-link redi" id="navpers" href="#personal" data-toggle="tab">Datos Personales</a>
 	  </li>
 	  <li class="nav-item">
-	  <a class="nav-link redi" id="navbi" href="#biblioteca"  data-toggle="tab">Biblioteca</a>
+	  <a class="nav-link redi" id="navbi" href="#biblio"  data-toggle="tab">Biblioteca</a>
 	  </li>
 	  <?php if(isset($_SESSION['usuario']) && ($_SESSION['usuario']==$_GET["user"] || $_SESSION["tipo"]==1)){ ?>
-		<ul class="navbar-nav  ml-auto">
+		<ul id="submenu" class="navbar-nav  ml-auto">
             <li class="nav-item">
 			<button id="guardar" class="btn btn-primary">Guardar</button>
 			<?php
@@ -199,13 +200,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
                              
                                   
                             
-                           <div class="pull-right action-buttons">
-						   <a style="float: right;" <?php echo "href=obra.php?obras={$obras[$i]->getid()}"  ?> class="">Ver</a>
-						   <?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$_GET["user"] || $_SESSION["tipo"]==1)) {?>
-                                <a href="edicion.php?cap=<?php echo $obras[$i]->getid();?>&obra=<?php echo $obras[$i]->getid();?>"><span class="glyphicon glyphicon-pencil"></span>Editar</a>
-                                <a href="http://www.jquery2dotnet.com" class="trash"><span class="glyphicon glyphicon-trash"></span>Borrar</a>
-                               <?php } ?>
-                            </div>
+                          
                         </li>
                        <?php }
 					
@@ -217,16 +212,16 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	  <br>
 	  <form id="formusuario">
 	  <label for="Usuario">Usuario</label><br>
-	  <input class="form-control" type="hidden" id="usuariohidden" name="usuariohidden" <?php echo $readonly ?> value="<?php echo $usuario->getusuario(); ?>"><br><br>
-  <input class="form-control" type="text" id="usuario" name="usuario" <?php echo $readonly ?> value="<?php echo $usuario->getusuario(); ?>"><br><br>
+	  <input class="form-control" type="hidden" id="usuariohidden" name="usuariohidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getusuario(); ?>"><br><br>
+  <input class="form-control" type="text" id="usuario" name="usuario" <?php echo $readonly ?> value="<?php echo $thisusuario->getusuario(); ?>"><br><br>
   <label for="email">Email</label><br>
-  <input class="form-control" type="hidden" id="emailhidden" name="emailhidden" <?php echo $readonly ?> value="<?php echo $usuario->getemail(); ?>"><br><br> 
-  <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $usuario->getemail(); ?>"><br><br> 
+  <input class="form-control" type="hidden" id="emailhidden" name="emailhidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"><br><br> 
+  <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"><br><br> 
   <label for="nomyape">Nombre y apellido</label><br>
-  <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $usuario->getnomyape(); ?>"><br><br>
+  <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $thisusuario->getnomyape(); ?>"><br><br>
   <label for="contra">Contraseña</label><br>
-<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$usuario->getid()) || $_SESSION["tipo"]==1){ ?>
-  <input class="form-control" type="password" id="contra" name="contra" value="<?php echo $usuario->getcontra(); ?>"><br><br>
+<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$thisusuario->getid()) || $_SESSION["tipo"]==1){ ?>
+  <input class="form-control" type="password" id="contra" name="contra" value="<?php echo $thisusuario->getcontra(); ?>"><br><br>
  <?php } ?> 
   <input type="hidden" class="btn btn-primary" name="cambiousu" id="cambiousu" value="Enviar">  
 </form>
@@ -256,8 +251,25 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 
 
 
-		<div class=" tab-pane fade usucontent border">
-			<!-- comment form -->
+		<div class=" tab-pane fade usucontent border" id="biblio">
+		<ul class="list-group mt-3">
+		<h3 class="text-center">Biblioteca Personal</h3>
+		<?php 
+	
+		for($i=0; $i<count($obras_biblioteca); $i++) {
+			?>
+                    
+                        <li class="list-group-item">
+						<input type="hidden" id="biblioteca" value="<?php echo $biblioteca ?>">
+						<a <?php echo "href=obra.php?obra={$obras_biblioteca[$i]->getid()}"  ?>>
+						<?php echo $obras_biblioteca[$i]->gettitulo(); ?>
+						</a>
+						
+                        </li>
+                       <?php }
+					
+					 ?>
+                    </ul>
 		
 				
         </div>

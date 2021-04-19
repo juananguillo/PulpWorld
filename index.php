@@ -95,17 +95,20 @@ include("Includes/header.php");
 
         <div class="container text-white">
 
-            <h1 class="display-5">Bienvenido a pulp world!</h1>
-            <p class="lead">Esta plataforma tiene el proposito de que la gente pueda leer, escribir y públicar relatos de una forma sencilla</p>
+            <h1 class="display-5">Bienvenido a Pulp World!</h1>
+            <p class="lead">Pulp World es una plataforma online de lectura y escritura que nace con el proposito de que la gente pueda leer, escribir y públicar relatos de una forma sencilla</p>
             <hr class="my-4">
-            <p>El nombre Pulp word hace referencia a las revistas pulp muy famosas durante los años</p>
-            <a class="btn btn-primary btn-lg" href="#" role="button">Saber más</a>
             <?php if (!isset($_SESSION['usuario'])) {
             ?>
+            <p>Si no estas registrado podras leer todas las obras que quieras,
+            pero para poder comentar, escribir obras, seguir usuarios y dar me gustas tendrás que registrarte
+            </p>
                 <a class="btn btn-primary btn-lg" href="#" role="button">¿No estas registrado? Hazlo!</a>
             <?php } else {
             ?>
-                <a class="btn btn-primary btn-lg" href="#" role="button">Crear nueva obra</a>
+             <p>No seas timido, lee lo que quieras, da me gusta, comenta, sigue a los usuarios que quieras que te avise si publican una nueva obra y en general disfruta de esta plataforma
+            </p>
+                <a class="btn btn-primary btn-lg" href="new.php" role="button">Crear nueva obra</a>
             <?php } ?>
 
         </div>
@@ -115,13 +118,6 @@ include("Includes/header.php");
     </div>
     <div>
         <h1 class="display-3 text-center mb-5">Historias Pulp</h1>
-        <?php 
-         foreach ($obras_guardadas as $key => $value) {
-           echo $key;
-         }
-         echo count($obras_guardadas);
-        
-         ?>
     </div>
 
     <div class="container-fluid mb-3">
@@ -267,19 +263,19 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                             if(array_key_exists($obras[$i]->getid(), $obras_guardadas)){
                                                                 ?>
                                                                 
-                                                                 <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-primary quitarobra">Quitar</button>
+                                                                 <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-danger quitarobra"><i class="fas fa-book-open"> Quitar</i></button>
                                                                 <?php 
                                                             }
                                                             else{
                                                                 ?>
-                                                                     <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-primary guardarobra">Guardar</button>
+                                                                     <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-success guardarobra"><i class="fas fa-book-open"> Guardar</i></button>
                                                                 <?php
 
                                                             }
                                                         }
                                                         else{
                                                     ?>
-                                                    <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-primary guardarobra">Guardar</button>
+                                                    <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-success guardarobra"><i class="fas fa-book-open text-primary"> Guardar</i></button>
                                                     <?php }} ?>
                                 </div>
 

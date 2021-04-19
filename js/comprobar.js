@@ -2,6 +2,7 @@
 $(document).on("ready", function () {
     var valor=false;
 
+    
 
   $.validator.addMethod('strongPassword', function(value, element) {
     return this.optional(element) 
@@ -115,7 +116,7 @@ $(document).on("ready", function () {
   });
 
 
-
+ 
 
 
 

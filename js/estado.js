@@ -4,6 +4,66 @@ $(document).on("ready", function () {
   despublicar();
   bloquear();
   desbloquear();
+  terminar();
+  desterminar();
+  eliminar();
+
+  function eliminar() {
+  
+    $("#eliminar").one("click", function () {
+      if(confirm("Si borra la obra, ya no se podra recuperar, seguro que desea borrarla?")){
+        $.post("./funcionesphp/cambiarestado.php", {
+          id_obra: $(".valores").val(),
+          user:$(".valores").prop("id"),
+          accion: "eliminar"
+        },
+        function (data) {
+          window.location = 'usuario.php?user=' + $(".valores").prop("id");
+        });
+      
+      }
+      eliminar();
+    });
+   
+  }
+
+  function terminar() {
+    $("#terminar").one("click", function () {
+      $.post("./funcionesphp/cambiarestado.php", {
+        id_obra: $(".valores").val(),
+        user:$(".valores").prop("id"),
+        accion: "terminar"
+      },
+      function (data) {
+       $("#terminar").html("Desfinalizar");
+       $("#terminar").prop("id", "desterminar");
+       $("#estadoobra").html("Estado: <strong>Terminada</strong>");
+       desterminar();
+      });
+    });
+  }
+  
+
+  
+  function desterminar() {
+    $("#desterminar").one("click", function () {
+      $.post("./funcionesphp/cambiarestado.php", {
+        id_obra: $(".valores").val(),
+        user:$(".valores").prop("id"),
+        accion: "desterminar"
+      },
+      function (data) {
+       $("#desterminar").html("Finalizar");
+       $("#desterminar").prop("id", "terminar");
+       $("#estadoobra").html("Estado: <strong>Sin terminar</strong>");
+       terminar();
+      });
+    });
+  }
+
+
+
+
 function publicar() {
   $("#publicar").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
@@ -12,6 +72,7 @@ function publicar() {
       accion: "publicar"
     },
     function (data) {
+      alert(data);
      $("#publicar").html("Despublicar");
      $("#publicar").prop("id", "despublicar");
      despublicar();
@@ -66,6 +127,26 @@ function desbloquear() {
   }else if($("#navcapi").length ){
     bloquearuser();
     desbloquearuser();
+    eliminar();
+
+
+    function eliminar() {
+  
+      $("#eliminar").one("click", function () {
+        if(confirm("Si borra el usuario, perdera todo su información, obras y capitulos, desea?")){
+          $.post("./funcionesphp/cambiarestado.php", {
+            id_user: $(".valores").val(),
+            accion: "eliminar"
+          },
+          function (data) {
+            window.location = './funcionesphp/sesion.php?logout=yes&index=yes'
+          });
+        
+        }
+        eliminar();
+      });
+     
+    }
 
     function bloquearuser() {
       $("#bloquearuser").one("click", function () {
@@ -74,7 +155,6 @@ function desbloquear() {
           accion: "bloquear",
         },
         function (data) {
-          alert(data);
          $("#bloquearuser").html("Desbloquear");
          $("#bloquearuser").prop("id", "desbloquearuser");
          desbloquearuser();
@@ -102,6 +182,28 @@ function desbloquear() {
     despublicarcapi();
     bloquearcapi();
     desbloquearcapi();
+    eliminar();
+
+
+    function eliminar() {
+  
+      $("#eliminar").one("click", function () {
+        if(confirm("Si borra el capitulo, ya no se podra recuperar, seguro que desea borrarlo?")){
+          $.post("./funcionesphp/cambiarestado.php", {
+            id_capi: $(".valores").val(),
+            user:$(".valores").prop("id"),
+            obra_capi:$("obracapi").val(),
+            accion: "eliminar"
+          },
+          function (data) {
+            window.location = 'obra.php?obra=' + $("#obracapi").val();
+          });
+        
+        }
+        eliminar();
+      });
+     
+    }
 
 function publicarcapi() {
   $("#publicarcapi").one("click", function () {

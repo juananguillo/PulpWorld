@@ -11,6 +11,7 @@ class obras
     private $estado;
     private $likes;
     private $portada;
+    private $terminada;
     
     
     public function setid($id) {
@@ -21,6 +22,10 @@ class obras
         return $this->id;
     }
 
+
+    public function getterminada(){
+        return $this->terminada;
+    }
 
 
     public function setautor($autor) {

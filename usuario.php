@@ -24,13 +24,13 @@ if(isset($_GET["user"])){
 	else{
 		if($thisusuario->getestado()==0 && $_SESSION["tipo"]==0) header("Location: index.php");
 		$readonly=$_SESSION['usuario']!=$_GET["user"] ? "disabled" :"";
-		$readonly=$_SESSION['tipo']==0 ? "disabled" :"";
 		$usuario=unusuarioporcodigo($bd, $_SESSION["usuario"]);
 		$seguidor=verseguidor($bd, $thisusuario->getid(), $_SESSION["usuario"]);
 		$textomegusta=$seguidor==0 ? "Seguir" : "Dejar de seguir";
 		$buttoncolor=$seguidor==0 ? "btn-success": "btn-danger";
 		$seguidor=$seguidor==0 ? "dar" : "quitar";
 		if($_SESSION["tipo"]==1){
+			$readonly=$_SESSION['tipo']==0 ? "disabled" :"";
 			$obras= obrasautor($bd,1,$_GET["user"]);
 		}
 		elseif($_SESSION["usuario"]==$_GET["user"]){
@@ -63,8 +63,6 @@ else{
     include("Includes/nav.php");
 
 
-
-
     ?>
    
 
@@ -95,9 +93,13 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $thisusuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">
-
-	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
+	<?php if(isset($_SESSION["usuario"])) {
+		?>
+		
 		<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
+	<?php 
+	} ?>
+	<?php if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]!=$thisusuario->getid()){ ?>
 	<button class="btn mr-1 <?php echo $buttoncolor ?>" id=<?php echo $seguidor; ?>  ><i class="fas fa-users"> <?php echo $textomegusta; ?> </i></button>
 	<a class="btn btn-primary "   data-toggle="modal" data-target=<?php echo "#0".$thisusuario->getid(); ?>  href="#">Escribir mensaje</a>
 	<?php } ?>
@@ -172,6 +174,9 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 				}
 
 			?>
+			   <?php if($thisusuario->getid()==$_SESSION["usuario"]){ ?>
+            <button id="eliminar" class="btn btn-dark">Eliminar</button>
+            <?php } ?>
             </li>
 			</ul>
        
@@ -212,15 +217,15 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	  <br>
 	  <form id="formusuario">
 	  <label for="Usuario">Usuario</label><br>
-	  <input class="form-control" type="hidden" id="usuariohidden" name="usuariohidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getusuario(); ?>"><br><br>
+	  <input class="form-control" type="hidden" id="usuariohidden" name="usuariohidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getusuario(); ?>">
   <input class="form-control" type="text" id="usuario" name="usuario" <?php echo $readonly ?> value="<?php echo $thisusuario->getusuario(); ?>"><br><br>
   <label for="email">Email</label><br>
-  <input class="form-control" type="hidden" id="emailhidden" name="emailhidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"><br><br> 
+  <input class="form-control" type="hidden" id="emailhidden" name="emailhidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"> 
   <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"><br><br> 
   <label for="nomyape">Nombre y apellido</label><br>
   <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $thisusuario->getnomyape(); ?>"><br><br>
-  <label for="contra">Contraseña</label><br>
-<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$thisusuario->getid()) || $_SESSION["tipo"]==1){ ?>
+<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$thisusuario->getid()) || isset($_SESSION["tipo"]) && $_SESSION["tipo"]==1){ ?>
+	<label for="contra">Contraseña</label><br>
   <input class="form-control" type="password" id="contra" name="contra" value="<?php echo $thisusuario->getcontra(); ?>"><br><br>
  <?php } ?> 
   <input type="hidden" class="btn btn-primary" name="cambiousu" id="cambiousu" value="Enviar">  
@@ -255,7 +260,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 		<ul class="list-group mt-3">
 		<h3 class="text-center">Biblioteca Personal</h3>
 		<?php 
-	
+		if($obras_biblioteca!=0){
 		for($i=0; $i<count($obras_biblioteca); $i++) {
 			?>
                     
@@ -267,7 +272,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 						
                         </li>
                        <?php }
-					
+		}
 					 ?>
                     </ul>
 		

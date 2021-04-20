@@ -20,7 +20,7 @@ if(isset($_GET["cap"])){
 	$usuarios=arrayusuariosporid($bd);
     if($capitulo->getestado()==0 && $_SESSION["tipo"]==0){}
     if(!isset($_SESSION["usuario"])){
-        if($capitulo->getestado==0){
+        if($capitulo->getestado()==0 || $capitulo->getpublico()==0){
             header("Location: index.php");
         }
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
@@ -108,11 +108,13 @@ include("Includes/header.php");
       <li class="nav-item">
 	  <a class="nav-link ml-1"  <?php echo "href=obra.php?obra={$obra->getid()}";?>>Volver a obra</a>
 	  </li>
-	 
+      <input type="hidden" id="obracapi" value="<?php echo $capitulo->getid_obra(); ?>">
       <?php if(isset($_SESSION['usuario']) && ($_SESSION['usuario']==$obra->getautor() | $_SESSION["tipo"]==1)){ ?>
-        <input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $capitulo->getid(); ?>>
-		<ul id="submenu" class="navbar-nav  ml-auto">
+         <input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $capitulo->getid(); ?>>
+		
+        <ul id="submenu" class="navbar-nav  ml-auto">
             <li class="nav-item">
+
 			<?php
 			
 				if($_SESSION["tipo"]==1 && $capitulo->getestado()==1){
@@ -135,8 +137,11 @@ include("Includes/header.php");
 					<button id="despublicarcapi" class="btn btn-primary">Despublicar</button>
 					<?php
 				}
-
+                
 			?>
+            <?php if($obra->getautor()==$_SESSION["usuario"]){ ?>
+            <button id="eliminar" class="btn btn-dark">Eliminar</button>
+            <?php } ?>
             </li>
 			</ul>
        

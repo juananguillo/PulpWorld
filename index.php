@@ -103,7 +103,7 @@ include("Includes/header.php");
             <p>Si no estas registrado podras leer todas las obras que quieras,
             pero para poder comentar, escribir obras, seguir usuarios y dar me gustas tendrás que registrarte
             </p>
-                <a class="btn btn-primary btn-lg" href="#" role="button">¿No estas registrado? Hazlo!</a>
+                <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#registro" href="#" role="button">¿No estas registrado? Hazlo!</a>
             <?php } else {
             ?>
              <p>No seas timido, lee lo que quieras, da me gusta, comenta, sigue a los usuarios que quieras que te avise si publican una nueva obra y en general disfruta de esta plataforma
@@ -275,7 +275,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                         }
                                                         else{
                                                     ?>
-                                                    <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-success guardarobra"><i class="fas fa-book-open text-primary"> Guardar</i></button>
+                                                   <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-success guardarobra"><i class="fas fa-book-open"> Guardar</i></button>
                                                     <?php }} ?>
                                 </div>
 

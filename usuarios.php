@@ -100,29 +100,35 @@ if(isset($_SESSION['usuario'])){
    $total=totalusuarios($bd, $ses);
     }
     ?>
-    <div class="jumbotron jumbotron-fluid bg-dark">
-  
-  <div class="jumbotron-background">
+   <div class="jumbotron jumbotron-fluid bg-dark">
+
+<div class="jumbotron-background">
     <img src="pulp.jpg" class="blur ">
-  </div>
+</div>
 
-  <div class="container text-white">
+<div class="container text-white">
 
-    <h1 class="display-5">Bienvenido a pulp world!</h1>
-    <p class="lead">Esta plataforma tiene el proposito de que la gente pueda leer, escribir y públicar relatos de una forma sencilla</p>
+    <h1 class="display-5">Bienvenido a Pulp World!</h1>
+    <p class="lead">Pulp World es una plataforma online de lectura y escritura que nace con el proposito de que la gente pueda leer, escribir y públicar relatos de una forma sencilla</p>
     <hr class="my-4">
-    <p>El nombre Pulp word hace referencia a las revistas pulp muy famosas durante los años</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Saber más</a>
-    <?php if(!isset($_SESSION['usuario'])){
-            ?>
-             <a class="btn btn-primary btn-lg" href="#" role="button">¿No estas registrado? Hazlo!</a>
-             <?php }
-             else {
-             ?>
-              <a class="btn btn-primary btn-lg" href="#" role="button">Crear nueva obra</a>
-              <?php } ?>
+    <?php if (!isset($_SESSION['usuario'])) {
+    ?>
+    <p>Si no estas registrado podras leer todas las obras que quieras,
+    pero para poder comentar, escribir obras, seguir usuarios y dar me gustas tendrás que registrarte
+    </p>
+        <a class="btn btn-primary btn-lg"  data-toggle="modal" data-target="#registro" href="#" role="button">¿No estas registrado? Hazlo!</a>
+    <?php } else {
+    ?>
+     <p>No seas timido, lee lo que quieras, da me gusta, comenta, sigue a los usuarios que quieras que te avise si publican una nueva obra y en general disfruta de esta plataforma
+    </p>
+        <a class="btn btn-primary btn-lg" href="new.php" role="button">Crear nueva obra</a>
+    <?php } ?>
 
-  </div>
+</div>
+<!-- /.container -->
+
+
+</div>
   <!-- /.container -->
   
  

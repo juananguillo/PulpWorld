@@ -44,7 +44,7 @@ function totalusuarios($db,$tipo){
 
     try {
         if($tipo==0){
-            $sentencia = $db->prepare("SELECT COUNT(*) FROM usuario WHERE estado LIKE 1 AND tipo like 0");
+            $sentencia = $db->prepare("SELECT COUNT(*) FROM usuario WHERE estado LIKE 1");
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
         }else{
@@ -203,7 +203,7 @@ function arrayusuarios($bd){
     try {
 
             $sentencia = $bd->prepare("SELECT * FROM usuario 
-            WHERE tipo LIKE 0 AND estado like 1");
+            WHERE estado like 1");
             
     
     $sentencia->execute();
@@ -253,8 +253,7 @@ return $array;
 function arrayusuariosporid($bd){
     try {
 
-            $sentencia = $bd->prepare("SELECT * FROM usuario 
-            WHERE estado like 1");
+            $sentencia = $bd->prepare("SELECT * FROM usuario");
             
     
     $sentencia->execute();
@@ -283,7 +282,7 @@ function filtrarusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like 1 AND o.publico like 1 )>0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
@@ -315,7 +314,7 @@ function totalusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like 1 AND o.publico like 1 )>0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
@@ -342,7 +341,7 @@ function filtrarusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (
+            WHERE u.estado LIKE 1 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
@@ -375,7 +374,7 @@ function totalusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (
+            WHERE u.estado LIKE 1  AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
@@ -402,7 +401,7 @@ function filtrarusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like u.id AND o.publico like u.id  )=0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
@@ -435,7 +434,7 @@ function totalusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like u.id AND o.publico like u.id)=0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
@@ -463,7 +462,7 @@ function filtrarusuarios3($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0
+            WHERE u.estado LIKE 1
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
@@ -493,7 +492,7 @@ function totalusuarios3($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 
+            WHERE u.estado LIKE 1 
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
@@ -522,7 +521,7 @@ function filtrarusuarios2($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0
+            WHERE u.estado LIKE 1 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like 1 AND o.publico like 1 )=0
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
@@ -553,7 +552,7 @@ function totalusuarios2($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0
+            WHERE u.estado LIKE 1 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like 1 AND o.publico like 1 )=0
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
@@ -581,7 +580,7 @@ function filtrarusuarios1($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0
+            WHERE u.estado LIKE 1  AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like 1 AND o.publico like 1 )>0
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
@@ -611,7 +610,7 @@ function totalusuarios1($bd,$desc,$orden,$tipo){
     try {
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
-            WHERE u.estado LIKE 1 AND u.tipo LIKE 0 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0
+            WHERE u.estado LIKE 1 AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id AND o.estado like 1 AND o.publico like 1 )>0
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
@@ -794,4 +793,22 @@ function cambiarfotouser($bd,$img, $id){
     }
 }
 
+
+function eliminarusuario($bd,$id){
+    try {
+        $sentencia = $bd->prepare("DELETE from usuario WHERE id LIKE :id");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
 ?>

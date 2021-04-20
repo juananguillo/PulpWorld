@@ -55,7 +55,7 @@ function obrasguardadasbiblio($bd, $id){
        
         if($sentencia->rowCount()==0)
         {
-            throw new Exception();
+            return 0;
             
         }
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
@@ -477,6 +477,60 @@ function verlectura($bd, $ip, $id_obra)
 function publicar($bd,$id){
     try {
         $sentencia = $bd->prepare("UPDATE obras SET publico= 1 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+function terminar($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE obras SET terminada= 1 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+function desterminar($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE obras SET terminada= 0 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
+function eliminarobra($bd,$id){
+    try {
+        $sentencia = $bd->prepare("DELETE from obras WHERE id LIKE :id ");
         $sentencia->execute(array(
            'id'=> $id
         ));

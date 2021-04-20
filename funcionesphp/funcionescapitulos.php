@@ -227,4 +227,23 @@ function quitarnotificapi($bd, $id_usuario, $id_novedad, $tipo)
     }
 }
 
+
+function eliminarcapi($bd,$id){
+    try {
+        $sentencia = $bd->prepare("DELETE from capitulos WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+       
+    }
+}
+
 ?>

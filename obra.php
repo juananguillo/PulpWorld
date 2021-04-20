@@ -112,6 +112,16 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					<p>Escrito por: <a class='text-primary' href=<?php echo 'usuario.php?user=' . $obra->getautor(); ?>><?php echo $usuarios[$obra->getautor()]->getusuario(); ?></a></p>
 				</div>
 				<div class="text-center">
+					<p id="estadoobra">Estado: <strong><?php 
+					if($obra->getterminada()==0){
+						echo "Sin terminar";
+					}
+					else{
+						echo "Terminada";
+					}
+					?></strong></p>
+				</div>
+				<div class="text-center">
 					<?php
 					if (count($capitulos) > 0) {
 						if (isset($_SESSION['usuario'])) {
@@ -215,8 +225,19 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 								<?php
 								}
 								if($_SESSION["usuario"]==$obra->getautor()){
-								?>
-								<button onclick="confirm('Si elimina la obra, los datos se perderan para siempre, desea continuar?')" id="eliminar" class="btn btn-dark">Eliminar</button>
+							
+								if ($obra->getterminada() == 0) {
+								?>	
+				
+									<button id="terminar" class="btn btn-secondary">Finalizar</button>
+									<?php 
+								}else{
+									?>
+									<button id="desterminar" class="btn btn-secondary">Desfinalizar</button>
+									<?php 
+								}
+									?>
+								<button id="eliminar" class="btn btn-dark">Eliminar</button>
 								
 							<?php } ?>
 							</li>

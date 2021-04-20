@@ -13,6 +13,10 @@ $obra=obtenerunaobra($bd,$id_obra);
 $seguidores= idseguidor($bd, $obra->getautor());
 $o=obtenerunaobra($bd, $id_obra);
 switch ($_POST["accion"]) {
+    case 'eliminar':{
+        eliminarobra($bd,$id_obra);
+    }
+
     case 'publicar':
         publicar($bd, $id_obra);
       
@@ -28,14 +32,29 @@ switch ($_POST["accion"]) {
 
         
         for ($i=0; $i < count($seguidores); $i++) { 
-            quitarnotifi($bd, $seguidores[$i]["id_seguidor"], $id_obra, 0);
+            quitarnotifi($bd, $seguidores[$i]["id_seguido"], $id_obra, 0);
         }
 
         break;
 
+        case 'terminar':
+            terminar($bd, $id_obra);
+        
+    
+            break;
+        
+        case 'desterminar':
+            
+            desterminar($bd, $id_obra);
+    
+            break;
+
+
         case 'bloquear':
             bloquear($bd, $id_obra);
-            notifiobras($bd, $o->getautor(), -1, $id_obra, "ha sido bloqueada, para mas info contacte con soporte!");
+            notifiobras($bd, $o->getautor(), -1, $id_obra, "ha sido bloqueada, para mas informacion
+            envie un email a pulpworldinfo@gmail.com con la incidencia");
+
             break;
 
             case 'desbloquear':
@@ -54,6 +73,11 @@ elseif(isset($_POST["id_capi"])){
     $obra=obtenerunaobra($bd,$capitulo->getid_obra());
     $seguidores= idseguidor($bd, $obra->getautor());
     switch ($_POST["accion"]) {
+
+        case 'eliminar':
+            eliminarcapi($bd, $id_capi);
+            break;
+
         case 'publicar':
             publicarcapi($bd, $id_capi);
            if($obra->getpublico()==1){
@@ -66,7 +90,7 @@ elseif(isset($_POST["id_capi"])){
         case 'despublicar':
             despublicarcapi($bd, $id_capi);
             for ($i=0; $i < count($seguidores); $i++) { 
-                quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $id_capi, 1);
+                quitarnotificapi($bd, $seguidores[$i]["id_seguido"], $id_capi, 1);
             }
             break;
     
@@ -74,7 +98,7 @@ elseif(isset($_POST["id_capi"])){
                 echo "block";
                 bloquearcapi($bd, $id_capi);
                 notificapi($bd, $obra->getautor(), -2, $id_capi, "ha sido bloqueado!, para mas informacion
-                contacte con soporte");
+                envie un email a pulpworldinfo@gmail.com con la incidencia");
                 break;
     
                 case 'desbloquear':
@@ -89,10 +113,23 @@ elseif(isset($_POST["id_capi"])){
 elseif(isset($_POST["id_user"])){
     
 $id_user=$_POST["id_user"];
-    if($_POST["accion"]=="bloquear"){
-     bloquearuser($bd,$id_user);
-    }else{
-      desbloquearuser($bd, $id_user);
+
+switch ($_POST["accion"]) {
+    case 'bloquear':
+        bloquearuser($bd,$id_user);
+        $obras= obrasautor($bd,1,$id_user);
+        foreach ($obras as $key => $value) {
+            bloquear($bd, $value->getid());
+        }
+        break;
     
-    } 
+    case 'desbloquear':
+        desbloquearuser($bd, $id_user);
+        break;
+
+    case 'eliminar':
+        eliminarusuario($bd, $id_user);
+        break;
+}
+   
 }

@@ -22,6 +22,10 @@
                 <?php } ?>
         </ul>
         <?php if(isset($_SESSION['usuario'])){
+            if($usuario->getestado()==0){
+                header("Location: ./funcionesphp/sesion.php?logout=yes&index=yes");
+                exit;
+            }
             ?>
 
 
@@ -30,7 +34,6 @@
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user"></i> Hola! <?php echo $usuario->getusuario(); ?><b class="caret"></b>  <span class="badge badge-primary">4</span></a>
                         <ul class="dropdown-menu">
                             <li><a href=<?php echo "usuario.php?user={$_SESSION['usuario']}";?> ><i class="icon-cog"></i> Perfil</a></li>
-                            <li><a href="/help/support"><i class="icon-envelope"></i> Contact Support</a></li>
                             <li class="divider"></li>
                             <li><a href="./funcionesphp/sesion.php?logout=yes"><i class="icon-off"></i> Cerrar Sesion</a></li>
                         </ul>

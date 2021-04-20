@@ -44,6 +44,9 @@ $pagina = $_GET['pag'] ?? 1;
           $u="<a href='usuario.php?user={$notificaciones[$i]["id_usuario"]}'>{$usuarios[$notificaciones[$i]["id_usuario"]]->getusuario()}</a>";
           switch ($notificaciones[$i]["tipo"]) {
             case 0:
+              $o= obtenerunaobra($bd, $notificaciones[$i]["id_novedad"]);
+              $thisusuario=unusuarioporcodigo($bd, $o->getautor());
+              $u="<a href='usuario.php?user={$o->getautor()}'>{$thisusuario->getusuario()}</a>";
               $ver=$notificaciones[$i]["id_novedad"];
               $a="<a href='obra.php?obra={$ver}'>Ver mas</a>";
               echo "El usuario ".$u." ".$notificaciones[$i]["mensaje"]." ".$a;

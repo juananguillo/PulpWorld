@@ -26,7 +26,12 @@ header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
 if(isset($_GET['logout'])){
     session_destroy();
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    if($_GET['index']){
+        header("Location: ../index.php");
+    }else{
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+  
 }
 
 ?>

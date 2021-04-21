@@ -27,8 +27,8 @@ function comprobarusuario($db, $usu, $contra){
          
        
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
     function anyadirusuario($db){
@@ -55,8 +55,7 @@ function totalusuarios($db,$tipo){
         return $total;
     
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location:error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
         exit;
     }
     
@@ -79,7 +78,7 @@ function dardealtausuario($db, $usu, $contra, $email){
             throw new Exception();
 
         }
-/*
+
         $to      = $email; 
 $subject = 'Activar cuenta en PulpWorld'; 
 $message = '
@@ -99,9 +98,10 @@ http://www.yourwebsite.com/verify.php?email='.$email.'&hash='.$hash.'
                      
 $headers = 'From:pulpworld@gmail.com' . "\r\n"; // Set from headers
 mail($to, $subject, $message, $headers); // Send our email
-        */
+    
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 }
 
@@ -117,7 +117,8 @@ function obtenerusuario($db, $email){
 
 } catch (Exception $e) {
         
-    header("Location: error.php?error=Error");
+    header("Location: error.php?error=Ha habido un problema con los usuarios");
+    exit;
 }
     
 }
@@ -133,7 +134,8 @@ function obtenerusuario2($db, $email){
 
 } catch (Exception $e) {
         
-    header("Location: error.php?error=Error");
+    header("Location: error.php?error=Ha habido un problema con los usuarios");
+    exit;
 }
     
 }
@@ -153,8 +155,8 @@ function unusuario($bd, $usuario){
         }
        return $usuario;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al devolver el cliente, no existe en la base de datos");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
 
@@ -169,8 +171,8 @@ function comprobartipo($db, $usu){
         return $tipo; 
     
     } catch (Exception $e) {
-        echo $e->getMessage();
-        ///header("Location: error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
         
 
@@ -191,8 +193,8 @@ function unusuarioporcodigo($bd, $id){
         }
        return $usuario;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al devolver el cliente, no existe en la base de datos");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        die;
     }
 
 
@@ -219,8 +221,8 @@ function arrayusuarios($bd){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -244,8 +246,8 @@ function allarrayusuarios($bd){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -269,8 +271,8 @@ function arrayusuariosporid($bd){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -304,8 +306,8 @@ function filtrarusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -331,8 +333,8 @@ function totalusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
         $total=$sentencia->fetchColumn(); 
         return $total;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 }
 
@@ -363,8 +365,8 @@ function filtrarusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -390,8 +392,8 @@ function totalusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
         $total=$sentencia->fetchColumn(); 
         return $total;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
 }
@@ -423,8 +425,8 @@ function filtrarusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -450,8 +452,8 @@ function totalusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
         $total=$sentencia->fetchColumn(); 
         return $total;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
 }
@@ -481,8 +483,8 @@ function filtrarusuarios3($bd,$desc,$orden,$tipo){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -509,8 +511,8 @@ function totalusuarios3($bd,$desc,$orden,$tipo){
 
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
 }
@@ -541,8 +543,8 @@ function filtrarusuarios2($bd,$desc,$orden,$tipo){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -570,8 +572,8 @@ function totalusuarios2($bd,$desc,$orden,$tipo){
 
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
 }
@@ -600,8 +602,8 @@ function filtrarusuarios1($bd,$desc,$orden,$tipo){
 
 }
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 return $array;
 }
@@ -628,8 +630,8 @@ function totalusuarios1($bd,$desc,$orden,$tipo){
 
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 
 }
@@ -651,8 +653,8 @@ function seguir($bd, $id_seguido, $id_seguidor)
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 }
 
@@ -672,8 +674,8 @@ function dejardeseguir($bd, $id_seguido, $id_seguidor)
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 }
 
@@ -693,8 +695,8 @@ function verseguidor($bd, $id_seguido, $id_seguidor)
         return $total;
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 }
 
@@ -712,8 +714,8 @@ function idseguidor($bd, $id_seguido)
         return $resultado;
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
     }
 }
 
@@ -730,7 +732,8 @@ function bloquearuser($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
        
     }
 }
@@ -749,7 +752,8 @@ function desbloquearuser($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
        
     }
 }
@@ -770,7 +774,8 @@ function actualizaruser($bd,$id, $username, $email, $nomyape, $contra){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
        
     }
 }
@@ -788,7 +793,8 @@ function cambiarfotouser($bd,$img, $id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
        
     }
 }
@@ -807,7 +813,8 @@ function eliminarusuario($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
        
     }
 }

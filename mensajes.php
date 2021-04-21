@@ -1,112 +1,56 @@
 <?php 
-    include("Includes/header.php");
+session_start();
+
+include("./funcionesphp/conexionbd.php");
+$bd = conectardb();
+include("clases/usuarios.class.php");
+include("./funcionesphp/funcionesusuarios.php");
+include("./funcionesphp/funcionesobras.php");
+include("clases/obras.class.php");
+include('clases/capitulos.class.php');
+include('./funcionesphp/funcionescapitulos.php');
+include("Includes/header.php");
+if(isset($_SESSION["usuario"])){
+    $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+}
+else{
+  header("Location: index.php");
+}
+
+
     ?>
-    <link rel="stylesheet" href="mensajes.css">
-    <script src="js/mensajes.js"></script>
+   <link rel="stylesheet" href="css/mensajes.css">
     </head>
 <body>
-<?php 
+    <?php 
     include("Includes/nav.php");
     ?>
-<div class="container">
-<h3 class=" text-center">Messaging</h3>
-<div class="messaging">
-      <div class="inbox_msg">
-        <div class="inbox_people">
-          <div class="headind_srch">
-            <div class="recent_heading">
-              <h4>Recent</h4>
-            </div>
-            <div class="srch_bar">
-              <div class="stylish-input-group">
-                <input type="text" class="search-bar"  placeholder="Search" >
-                <span class="input-group-addon">
-                <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                </span> </div>
-            </div>
-          </div>
-          <div class="inbox_chat">
-            <div class="chat_list active_chat">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mesgs">
-          <div class="msg_history" id="mensajes">
-          <?php   
-   try {
-    $conn = new PDO('mysql:host=localhost;dbname=bda', 'BDA1', 'jefazo');
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   
-} catch (\Throwable $th) {
-    echo $th->getMessage();
-}
-   
-   $sentencia = $conn->prepare("SELECT mensaje FROM mensajes WHERE id_emisor like 1 AND id_receptor like 2");
-    $sentencia->execute();
-    $array= array();
-    $i=0;
-    while($datos = $sentencia->fetch() ){
-    ?>
-     <div class="incoming_msg">
-              <div class="incoming_msg_img"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p><?php echo $datos[0]; ?></p>
-                  <span class="time_date"> 11:01 AM    |    June 9</span></div>
-              </div>
-            </div>
-            <?php  
-        
-    }
-    ?>
+    <body>
+    <h1 class="text-center mt-3">
+			Mensajes
 
+		</h1>
+    <div id="cont" class="container mb-5 mt-5">
+    <div class="row  border">
+         <div class="col-md-3 col-xs-12 col-sm-12 col-md-4 col-lg-4  border classcol">
 
-           
-            <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>Test which is a new approach to have all
-                  solutions</p>
-                <span class="time_date"> 11:01 AM    |    June 9</span> </div>
-            </div>
-            
-          </div>
-          <div class="type_msg">
-            <div class="input_msg_write">
-              <input type="text" class="write_msg" placeholder="Type a message" />
-              <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      
-     
-      
-    </div></div>
-    </body>
+         </div>
+         <div class="col-md-3 col-xs-12 col-sm-12 col-md-8 col-lg-8 contenido">
+           <div class="col-md-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 cajam">
+         
+           </div>
+           <div class="col-md-12 col-xs-12 col-sm-12 col-md-12 col-lg-12  msn  ">
+  <textarea class="form-control" rows="2" cols="60"></textarea>
+  <div class="text-right mt-1"><button class="btn btn-primary">Enviar</button></div>
+</div>
+           </div>
 
- <?php 
+         </div>
+    </div>
+    </div>
+    <?php 
 include("Includes/footer.php")
 ?>
 </body>
-
 
 </html>

@@ -15,7 +15,8 @@ function obtenercoments($db, $id){
 
 return $array;
 } catch (Exception $e) {
-   // header("Location: error.php?error=Error al devolver essl cliente, no existe en la base de datos");
+    header("Location: error.php?error=Ha habido un problema con los comentarios");
+        exit;
 }
     
 }
@@ -36,7 +37,8 @@ function obtenerespuestas($db, $id){
 
 return $array;
 } catch (Exception $e) {
-    header("Location: error.php?error=Errorres");
+    header("Location: error.php?error=Ha habido un problema con los comentarios");
+        exit;
 }
     
 }
@@ -51,7 +53,7 @@ function totalcoments($db, $obra){
         return $total;
     
     } catch (Exception $e) {
-        header("Location:error.php?error=Errortotalcoments");
+        header("Location: error.php?error=Ha habido un problema con los comentarios");
         exit;
     }
     
@@ -76,8 +78,8 @@ function insertarcomentario($db, $id_usuario, $mensaje, $id_obra, $res){
         }
         
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con los comentarios");
+        exit;
     }
 }
 

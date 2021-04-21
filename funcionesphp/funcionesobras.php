@@ -23,8 +23,8 @@ function nuevaobra($bd, $titulo, $sinopsis, $autor)
         return $id;
         
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -41,7 +41,8 @@ function cambiarfoto($bd,$img, $id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -67,7 +68,8 @@ function obrasguardadasbiblio($bd, $id){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 
@@ -85,11 +87,7 @@ function obras($bd,$desc,$orden,$tipo){
         }
        
         $sentencia->execute();
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+       
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
         $array=array();
             while ($obras=$sentencia->fetch()) {
@@ -99,7 +97,8 @@ function obras($bd,$desc,$orden,$tipo){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 
@@ -120,11 +119,7 @@ function obrasautor($bd,$tipo,$autor){
         }
        
         $sentencia->execute();
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+       
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
         $array=array();
             while ($obras=$sentencia->fetch()) {
@@ -134,7 +129,8 @@ function obrasautor($bd,$tipo,$autor){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 
@@ -173,7 +169,8 @@ function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat,$tipo){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 
@@ -201,7 +198,7 @@ function totalobraspalabrasconcat($db,$desc, $orden,$palabra,$cat,$tipo){
         return $total;
     
     } catch (Exception $e) {
-        header("Location:error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
     }
     
@@ -238,7 +235,8 @@ function obraspalabras($bd,$desc,$orden,$palabra,$tipo){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 
@@ -264,7 +262,7 @@ function totalobraspalabras($db,$desc, $orden,$palabra,$tipo){
         return $total;
     
     } catch (Exception $e) {
-        header("Location:error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
     }
     
@@ -284,11 +282,7 @@ function filtrarobras1($bd,$desc,$orden,$cat,$tipo){
             LIMIT $desc, 200000");
         }
         $sentencia->execute();
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+       
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
         $array=array();
             while ($obras=$sentencia->fetch()) {
@@ -298,7 +292,8 @@ function filtrarobras1($bd,$desc,$orden,$cat,$tipo){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 
@@ -324,8 +319,7 @@ function totalobras1($db,$desc, $orden, $cat,$tipo){
         }
     
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location:error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
     }
     
@@ -348,8 +342,7 @@ function totalobras($db,$tipo){
         return $total;
     
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location:error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
     }
     
@@ -370,8 +363,8 @@ function totalobras($db,$tipo){
         }
        return $obra;
     } catch (Exception $e) {
-        echo $e->getMessage();
-       // header("Location: error.php?error=Error al devolver el cliente, no existe en la base de datos");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
         
     }
@@ -393,8 +386,8 @@ function totalobras($db,$tipo){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -414,8 +407,8 @@ function quitarmegusta($bd, $id_obra, $id_usuario)
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -435,8 +428,8 @@ function vermegusta($bd, $id_obra, $id_usuario)
         return $total;
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -452,8 +445,8 @@ function crearlectura($bd, $ip, $id_obra)
        
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -469,8 +462,8 @@ function verlectura($bd, $ip, $id_obra)
         return $total;
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -487,7 +480,8 @@ function publicar($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -505,7 +499,8 @@ function terminar($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -523,7 +518,8 @@ function desterminar($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -541,7 +537,8 @@ function eliminarobra($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -559,7 +556,8 @@ function despublicar($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -577,7 +575,8 @@ function bloquear($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -596,7 +595,8 @@ function desbloquear($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }
@@ -619,8 +619,8 @@ function notifiobras($bd, $id_usuario, $tipo, $id_novedad, $mensaje)
 
         
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -640,8 +640,8 @@ function quitarnotifi($bd, $id_usuario, $id_novedad, $tipo)
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
     }
 }
 
@@ -658,7 +658,8 @@ function cambiarobra($bd,$titulo, $sinopsis, $obra){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
        
     }
 }

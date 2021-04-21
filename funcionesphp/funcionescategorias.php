@@ -18,8 +18,8 @@ function categorias($bd){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al devolver la categoria, no existe en la base de datos");
+        header("Location: error.php?error=Ha habido un problema con las categorias");
+        exit;
     }
 
 }
@@ -44,8 +44,8 @@ function generos($bd, $id_obra){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al devolver la categoria, no existe en la base de datos");
+        header("Location: error.php?error=Ha habido un problema con las categorias");
+        exit;
     }
 
 }
@@ -66,8 +66,8 @@ function addgenero($bd, $id_obra, $id_categoria)
         }
         
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con las categorias");
+        exit;
     }
 }
 
@@ -83,8 +83,8 @@ function borrargeneros($bd, $id_obra){
 
       
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al devolver la categoria, no existe en la base de datos");
+        header("Location: error.php?error=Ha habido un problema con las categorias");
+        exit;
     }
 
 }

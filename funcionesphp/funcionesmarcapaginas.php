@@ -18,8 +18,8 @@ function vermarcapaginas($bd, $id_usuario, $id_obra)
         return $marcapaginas;
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con el marcapaginas");
+        exit;
     }
 }
 
@@ -36,8 +36,8 @@ function actualizarmarcapaginas($bd, $id_usuario, $id_obra, $id_capitulo)
        
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con el marcapaginas");
+        exit;
     }
 }
 
@@ -58,8 +58,8 @@ function borrarmarcapaginas($bd, $id_usuario, $id_obra)
 
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con el marcapaginas");
+        exit;
     }
 }
 
@@ -76,8 +76,8 @@ function crearmarcapaginas($bd, $id_usuario, $id_obra, $id_capitulo)
        
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con el marcapaginas");
+        exit;
     }
 }
 

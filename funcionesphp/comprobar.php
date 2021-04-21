@@ -35,7 +35,7 @@ echo false;
             }
     
 } catch (Exception $e) {
-    header("Location:formulario.php?error=Error");
+    header("Location: error.php?error=Error al comprobar usuarios");
     exit;
 }
 

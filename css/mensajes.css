@@ -1,0 +1,42 @@
+
+
+#cont{
+	height: 600px;
+    overflow-y:hidden;
+
+}
+
+.classcol{
+    height: 598px;
+    overflow-y: scroll; 
+}
+
+#contenido{
+   height: 598px; 
+}
+
+.msn{
+    height: 100px; 
+    
+}
+
+.cajam{
+    height: 470px; 
+    overflow-y: scroll; 
+}
+
+
+    
+textarea {
+    resize: none;
+  }
+
+  @media only screen and (max-width: 600px) {
+  
+    #cont{
+        overflow-y: scroll;
+    }
+     
+   }
+
+ 

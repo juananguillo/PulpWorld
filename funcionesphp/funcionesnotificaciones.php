@@ -10,8 +10,7 @@ function sinver($db, $id_usuario){
         return $total;
     
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location:error.php?error=Error");
+        header("Location: error.php?error=Ha habido un problema con las notificaciones");
         exit;
     }
     
@@ -28,9 +27,8 @@ function sinver($db, $id_usuario){
             return $total;
         
         } catch (Exception $e) {
-            echo $e->getMessage();
-            //header("Location:error.php?error=Error");
-            exit;
+            header("Location: error.php?error=Ha habido un problema con las notificaciones");
+                    exit;
         }
         
         }
@@ -51,8 +49,7 @@ function sinver($db, $id_usuario){
             return $resultado;
         
         } catch (Exception $e) {
-            echo $e->getMessage();
-            //header("Location:error.php?error=Error");
+            header("Location: error.php?error=Ha habido un problema con las notificaciones");
             exit;
         }
         
@@ -65,14 +62,11 @@ function sinver($db, $id_usuario){
                     $sentencia->execute(array(
                        'id'=> $value["id"]
                     ));
-                    if($sentencia->rowCount()==0)
-                    {
-                        throw new Exception();
-                        
-                    }
+                   
             
                 } catch (Exception $e) {
-                    echo $e->getMessage();
+                    header("Location: error.php?error=Ha habido un problema con las notificaciones");
+                    exit;
                    
                 }
             }

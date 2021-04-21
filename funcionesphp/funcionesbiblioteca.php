@@ -15,7 +15,8 @@ function crearbiblioteca($db, $usu){
 
         }
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con la biblioteca");
+        exit;
     }
 }
 
@@ -33,8 +34,8 @@ function tubiblioteca($bd, $id)
         return $resultado;
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con la biblioteca");
+        exit;
     }
 }
 
@@ -53,7 +54,8 @@ function guardarobra($db, $id, $id_obra){
 
         }
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha habido un problema con la biblioteca");
+        exit;
     }
 }
 
@@ -79,8 +81,8 @@ function obrasguardadasporid($bd, $id){
     return $array;
   
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con la biblioteca");
+        exit;
     }
 
 }
@@ -103,8 +105,8 @@ function unaobraguardadaporid($bd, $id, $id_obra){
    return $resultado;
   
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Error al cargar el array de clientes ");
+        header("Location: error.php?error=Ha habido un problema con la biblioteca");
+        exit;
     }
 
 }
@@ -126,8 +128,8 @@ function borrarobra_guardada($bd, $id_biblioteca, $id_obra)
 
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha habido un problema con la biblioteca");
+        exit;
     }
 }
 

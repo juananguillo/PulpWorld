@@ -14,7 +14,8 @@ function allcapitulos($bd, $id_obra){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+      header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
        
     }
 
@@ -35,7 +36,9 @@ function capitulos($bd, $id_obra){
 
         return $array;
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
+       
        
     }
 
@@ -59,8 +62,8 @@ function obteneruncapitulo($db, $id){
     }
    return $capitulo;
 } catch (Exception $e) {
-    echo $e->getMessage();
-   // header("Location: error.php?error=Error al devolver el cliente, no existe en la base de datos");
+    header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+    exit;
 }
     
 }
@@ -85,8 +88,8 @@ function nuevocapitulo($bd, $id_obra)
         return $id;
         
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
     }
 }
 
@@ -103,7 +106,8 @@ function editcap($bd,$titulo,$contenido,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
        
     }
 }
@@ -122,7 +126,8 @@ function publicarcapi($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+      header("Location: error.php?error=Error al cargar la biblioteca");
+        exit;
        
     }
 }
@@ -140,7 +145,8 @@ function despublicarcapi($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
        
     }
 }
@@ -158,7 +164,8 @@ function bloquearcapi($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
        
     }
 }
@@ -177,7 +184,8 @@ function desbloquearcapi($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
        
     }
 }
@@ -201,8 +209,8 @@ function notificapi($bd, $id_usuario, $tipo, $id_novedad, $mensaje)
 
         
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
     }
 }
 
@@ -222,8 +230,8 @@ function quitarnotificapi($bd, $id_usuario, $id_novedad, $tipo)
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
-        //header("Location: error.php?error=Errorinsertarcoment");
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
     }
 }
 
@@ -241,7 +249,8 @@ function eliminarcapi($bd,$id){
         }
 
     } catch (Exception $e) {
-        echo $e->getMessage();
+        header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
+        exit;
        
     }
 }

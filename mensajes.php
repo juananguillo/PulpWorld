@@ -9,9 +9,12 @@ include("./funcionesphp/funcionesobras.php");
 include("clases/obras.class.php");
 include('clases/capitulos.class.php');
 include('./funcionesphp/funcionescapitulos.php');
+include('./funcionesphp/funcionesmensajes.php');
+include("clases/mensajes.class.php");
 include("Includes/header.php");
 if(isset($_SESSION["usuario"])){
     $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+  $id_chats= emisoresyreceptores($bd, $_SESSION['usuario']);
 }
 else{
   header("Location: index.php");
@@ -33,6 +36,18 @@ else{
     <div id="cont" class="container mb-5 mt-5">
     <div class="row  border">
          <div class="col-md-3 col-xs-12 col-sm-12 col-md-4 col-lg-4  border classcol">
+
+        <?php 
+        foreach ($id_chats as $key => $value) {
+          echo $key."--".$value."<br>";
+        }
+        
+        ?>
+
+
+
+
+
 
          </div>
          <div class="col-md-3 col-xs-12 col-sm-12 col-md-8 col-lg-8 contenido">

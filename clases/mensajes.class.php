@@ -2,13 +2,21 @@
 
 class mensajes
 {
+    private $id;
     private $id_emisor;
     private $id_receptor;
     private $contenido;
     private $leido;
     
     
-    
+    public function setid($id) {
+        $this->id = $id;
+    }
+
+    public function getid(){
+        return $this->id;
+    }
+
     public function setid_emisor($id_emisor) {
         $this->id_emisor = $id_emisor;
     }

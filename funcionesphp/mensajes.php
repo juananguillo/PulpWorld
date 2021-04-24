@@ -12,20 +12,27 @@ include("../clases/mensajes.class.php");
 switch ($accion) {
     case 'listar':
        $array= mensajes($bd, $id1, $id2);
-       echo "<input id='receptor' type='hidden' value='{$id2}'>";
+       $totalm= countmensajes($bd, $id1,  $id2);
+       echo "<input id='receptor' type='hidden' value='{$id2}'>
+       <input id='totalm' type='hidden' value='{$totalm}'>";
        foreach ($array as $key => $value) {
           if($value->getid_emisor()==$id1){
-              echo "<div class='text-right mt-1  border rounded border-primary'><strong class='ml-3 mr-3 text'>".$value->getcontenido()."</strong></div><br>";
-          }
-          else{
-            echo "<div class='text-left mt-1  border rounded border-success'><strong class='ml-3 mr-3 text'>".$value->getcontenido()."</strong></div><br>";
-          }
+            echo "<div class='mt-1  border rounded border-primary mdiv1'><p class='text text-justify'><strong>".$value->getcontenido()."</strong></p></div><br>";
+        }
+        else{
+          echo "<div class='mt-1  border rounded border-success mdiv2'><p class='text text-justify'><strong>".$value->getcontenido()."</strong></p></div><br>";
+        }
        }
 
         break;
        
     case 'insertar':
         crearmensaje($bd, $id1, $id2, $_POST["contenido"]);
+
+        break;
+
+    case 'comprobar':
+      echo countmensajes($bd, $id1, $id2);
 
         break;
 }

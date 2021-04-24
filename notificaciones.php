@@ -37,7 +37,7 @@ $pagina = $_GET['pag'] ?? 1;
       <?php 
       for ($i=0; $i < count($notificaciones) ; $i++) { 
         ?>
-        <div id="textnot" class="mt-3 mb-3 border ml-3 mr-3">
+        <div id="textnot" class="mt-3 mb-3 border border-primary ml-3 mr-3">
 
        
           <?php 

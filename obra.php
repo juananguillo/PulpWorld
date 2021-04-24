@@ -315,7 +315,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					}
 					?>
 					<label for="sinopsis">Sinopsis:</label>
-					<textarea <?php echo $readonly ?> style="resize: none;" class="form-control text-justify" id="sinopsisobra" rows="22"><?php echo $obra->getsinopsis(); ?>
+					<textarea maxlength="800" <?php echo $readonly ?> style="resize: none;" class="form-control text-justify" id="sinopsisobra" rows="22"><?php echo $obra->getsinopsis(); ?>
 	</textarea>
 				</div>
 

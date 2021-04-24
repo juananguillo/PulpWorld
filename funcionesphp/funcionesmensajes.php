@@ -63,6 +63,29 @@ ksort($array);
     
     }
 
+    function countmensajes($bd, $id1, $id2){
+        try {
+                $sentencia = $bd->prepare("SELECT COUNT(*) FROM mensajes WHERE (id_receptor like $id1 OR id_emisor like $id1) 
+                AND (id_receptor like $id2 OR id_emisor like $id2)");
+                  $sentencia->execute();
+           
+            if($sentencia->rowCount()==0)
+            {
+                throw new Exception();
+                
+                
+            }
+            $total=$sentencia->fetchColumn(); 
+        
+            return $total;
+        } catch (Exception $e) {
+            header("Location: error.php?error=Ha habido un problema con los mensajes");
+            exit;
+           
+        }
+    
+    }
+
 
     function crearmensaje($bd, $id1, $id2, $contenido){
         try {

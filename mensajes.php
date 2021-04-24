@@ -9,8 +9,6 @@ include("./funcionesphp/funcionesobras.php");
 include("clases/obras.class.php");
 include('clases/capitulos.class.php');
 include('./funcionesphp/funcionescapitulos.php');
-include('./funcionesphp/funcionesmensajes.php');
-include("clases/mensajes.class.php");
 include("Includes/header.php");
 if(isset($_SESSION["usuario"])){
     $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
@@ -48,7 +46,9 @@ else{
          <input type="hidden" id="usuid" value="<?php echo $_SESSION["usuario"]; ?>">
             <div  id="<?php echo  $chat_user->getid(); ?> " style="cursor: pointer; overflow:hidden;" class="border mt-2 mb-3 chatid">
             <img align="left" class="foto rounded-circle mt-1 mr-2" src="<?php echo "Imagenes/Usuarios/".$chat_user->getfoto(); ?>">
-              <a href=<?php echo 'usuario.php?user='.$value ?>><?php echo  $chat_user->getusuario(); ?> </a>  <span class="badge badge-primary"><?php echo $t ?></span> <p><?php echo  $chat_user->getemail(); ?></p>
+              <a href=<?php echo 'usuario.php?user='.$value ?>><?php echo  $chat_user->getusuario(); ?> </a>
+               <?php if($t>0){?> <span class="badge badge-primary"><?php echo $t ?></span> <?php } ?>
+                <p><?php echo  $chat_user->getemail(); ?></p>
              
             </div>
 
@@ -66,23 +66,25 @@ else{
          <div class="col-md-3 col-xs-12 col-sm-12 col-md-8 col-lg-8 contenido">
            <div id="mencaja" class="col-md-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 cajam">
           <?php 
+         $totalm= countmensajes($bd, $_SESSION["usuario"],  $_GET["chat"]);
           if(isset($_GET["chat"])){
             $array= mensajes($bd, $_SESSION["usuario"], $_GET["chat"]);
-            echo "<input id='receptor' type='hidden' value='{$_GET["chat"]}'>";
+            echo "<input id='receptor' type='hidden' value='{$_GET["chat"]}'>
+            <input id='totalm' type='hidden' value='{$totalm}'>";
             foreach ($array as $key => $value) {
                if($value->getid_emisor()==$_SESSION["usuario"]){
-                echo "<div class='text-right mt-1  border rounded border-primary'><strong class='ml-3 mr-3 text'>".$value->getcontenido()."</strong></div><br>";
+                echo "<div class='mt-1  border rounded border-primary mdiv1'><p class='text text-justify'><strong>".$value->getcontenido()."</strong></p></div><br>";
               }
               else{
-                echo "<div class='text-left mt-1  border rounded border-success'><strong class='ml-3 mr-3 text'>".$value->getcontenido()."</strong></div><br>";
+                echo "<div class='mt-1  border rounded border-success mdiv2'><p class='text text-justify'><strong>".$value->getcontenido()."</strong></p></div><br>";
               }
             }
           }
           
           ?>
            </div>
-           <div class="col-md-12 col-xs-12 col-sm-12 col-md-12 col-lg-12  msn  ">
-  <textarea disabled id="mn" class="form-control" rows="2" cols="60"></textarea>
+           <div class="col-md-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 msn">
+  <textarea maxlength="800" disabled id="mn" class="form-control" rows="2" cols="60"></textarea>
   <div class="text-right mt-1"><button disabled id="enviar" class="btn btn-primary">Enviar</button></div>
 </div>
            </div>

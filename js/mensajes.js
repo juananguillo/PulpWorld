@@ -17,22 +17,25 @@ $(document).on("ready", function () {
     }
      });
 
-    //setInterval(function() {  tiemporeal();    },1000);
-
-    $(".chatid").on("click", function () {  
-        $(".cajam").empty();
-       let us= $(this).prop("id");
+    setInterval(function() { 
         $.post("./funcionesphp/mensajes.php", {
             id1:$("#usuid").val(),
-            id2:us,
-            accion: "listar"
+            id2:$("#receptor").val(),
+            contenido:$("#mn").val(),
+            accion: "comprobar"
           },
           function (data) {
-            $(".cajam").append(data);
-            window.history.pushState({}, '', '?chat='+us);
-            $("#mn").prop('disabled', false);
-            document.getElementById("mencaja").scrollTop = document.getElementById("mencaja").scrollHeight;
+            if(data>$("#totalm").val()){
+                leer($("#receptor").val());
+            }
           });
+            }
+        ,5000);
+
+    $(".chatid").on("click", function () {
+      
+        leer($(this).prop("id"));
+        
           
     });
 
@@ -46,21 +49,31 @@ $(document).on("ready", function () {
         accion: "insertar"
       },
       function (data) {
-          let men="<div class='text-right mt-1 border rounded border-primary'><strong class='ml-3 mr-3 text'>"+$("#mn").val()+"</strong></div><br>";
+          let men="<div class='mt-1  border rounded border-primary mdiv1'><p class='text text-justify'><strong>"+$("#mn").val()+"</strong></p></div><br>";
         $(".cajam").append(men);
+         document.getElementById("mencaja").scrollTop = document.getElementById("mencaja").scrollHeight;
+         $("#mn").val('');
       });
    }); 
 
-   function tiemporeal() {
-    $.get("mensajes.php", function (data) {
-        //var men="";
-        for(var i in data) {
-            men+="<p style=text-align:right>"+data[i]+"</p><br>";
-        }
-        $("#mensajes").append(men);
+  
 
-    });
-   }
+  function leer (us) {  
+    $(".cajam").empty();
+    $.post("./funcionesphp/mensajes.php", {
+        id1:$("#usuid").val(),
+        id2:us,
+        accion: "listar"
+      },
+      function (data) {
+        $(".cajam").append(data);
+        document.getElementById("mencaja").scrollTop = document.getElementById("mencaja").scrollHeight;
+        window.history.pushState({}, '', '?chat='+us);
+        $("#mn").prop('disabled', false);
+     
+      });
+     
+    }
 
 
 });

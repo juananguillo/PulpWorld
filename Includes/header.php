@@ -28,4 +28,6 @@
 
     <?php 
     include("./funcionesphp/funcionesnotificaciones.php");
+    include('./funcionesphp/funcionesmensajes.php');
+    include("./clases/mensajes.class.php");
     ?>

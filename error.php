@@ -25,12 +25,12 @@ if(!isset($_GET["error"])){
     include("Includes/nav.php");
     ?>
     <body>
-    <div id="err" class="container mb-5">
+    <div id="err" class="container mb-5 mt-3">
     <div class="row justify-content-center">
             <div class="col-md-12 text-center">
-                <span class="display-2 d-block mb-5"><?php echo $_GET["error"]; ?></span>
+                <span class="display-3 d-block mb-5"><?php echo $_GET["error"]; ?></span>
                 <div class="mb-4 lead">Lo sentimos ha ocurrido un error, intentalo más tarde o contacte con el siguiente email si el error persiste
-                pulplworldinfo@gmail.com
+                <a href="mailto:pulplworldinfo@gmail.com">pulplworldinfo@gmail.com</a> 
                 </div>
                 <a href="index.php" class="btn btn-link">Volver a Inicio</a>
             </div>

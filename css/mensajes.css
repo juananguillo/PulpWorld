@@ -39,4 +39,11 @@ textarea {
      
    }
 
- 
+ .foto{
+     width: 70px;
+     height: 70px;
+ }
+
+ .text{
+    padding: 1%;
+ }

@@ -48,7 +48,7 @@ $(document).on("ready", function() {
 
 
    $("#mn").on("change keyup keydown paste cut copy", function () {
-      if($("#mn").val()==""){
+      if($("#mn").val().trim()==""){
      
          $("#enviarcoment").prop('disabled', true);
       }else{

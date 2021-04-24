@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="bg-light text-center text-lg-start mt-2 " id="foot">
+<footer class="bg-light text-center text-lg-start mt-4 " id="foot">
   
   <!-- Grid container -->
   <div class="container p-4">

@@ -66,8 +66,8 @@ else{
          <div class="col-md-3 col-xs-12 col-sm-12 col-md-8 col-lg-8 contenido">
            <div id="mencaja" class="col-md-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 cajam">
           <?php 
-         $totalm= countmensajes($bd, $_SESSION["usuario"],  $_GET["chat"]);
           if(isset($_GET["chat"])){
+            $totalm= countmensajes($bd, $_SESSION["usuario"],  $_GET["chat"]);
             $array= mensajes($bd, $_SESSION["usuario"], $_GET["chat"]);
             echo "<input id='receptor' type='hidden' value='{$_GET["chat"]}'>
             <input id='totalm' type='hidden' value='{$totalm}'>";

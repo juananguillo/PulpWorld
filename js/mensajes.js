@@ -17,6 +17,19 @@ $(document).on("ready", function () {
     }
      });
 
+
+     $("#textobusqueda").on("change keyup keydown paste cut copy", function () {
+      if($("#textobusqueda").length){
+      if($("#textobusqueda").val().trim()==""){
+     
+         $("#busqueda").prop('disabled', true);
+      }else{
+     
+         $("#busqueda").prop('disabled', false);
+      }
+  }
+   });
+
     setInterval(function() { 
         $.post("./funcionesphp/mensajes.php", {
             id1:$("#usuid").val(),
@@ -75,5 +88,28 @@ $(document).on("ready", function () {
      
     }
 
+
+    $("#busqueda").on("click", function () {
+      let array=[];
+      $(".chatid").each(function () { 
+        array.push($(this).prop("id"));
+          });
+         
+      $.post("./funcionesphp/mensajes.php", {
+        palabras:$("#textobusqueda").val(),
+        id1:$("#usuid").val(),
+        accion: "filtrar"
+      },
+      function (data) {
+          $("#chats").empty();
+          $("#chats").append(data);
+          $(".chatid").on("click", function () {
+      
+            leer($(this).prop("id"));
+            
+              
+        });
+      });
+    })
 
 });

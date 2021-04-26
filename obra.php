@@ -264,7 +264,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 									<?php echo $capitulos[$i]->gettitulo();
 									if ($marcapaginas) {
 										if ($marcapaginas->getid_capitulo() == $capitulos[$i]->getid()) {
-											echo " <i class='fas fa-bookmark'>Vas por aqui</i>";
+											echo " <i class='fas fa-bookmark text-success'>Vas por aqui</i>";
 										}
 									}
 									?>
@@ -273,10 +273,17 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 
 
 								<div class="pull-right action-buttons">
-									<a style="float: right;" <?php echo "href=capitulo.php?cap={$capitulos[$i]->getid()}"  ?> class="">Leer</a>
+								
 									<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $obra->getautor() || $_SESSION["tipo"] == 1)) { ?>
 										<a href="edicion.php?cap=<?php echo $capitulos[$i]->getid(); ?>&obra=<?php echo $obra->getid(); ?>"><span class="glyphicon glyphicon-pencil"></span>Editar</a>
-										<a href="http://www.jquery2dotnet.com" class="trash"><span class="glyphicon glyphicon-trash"></span>Borrar</a>
+										<?php 
+										if($capitulos[$i]->getpublico()==0){
+											echo "Estado: <strong>Sin publicar</strong>";
+										}
+										else{
+											echo "Estado: <strong>Publico</strong>";
+										}
+										?>
 									<?php } ?>
 								</div>
 							</li>

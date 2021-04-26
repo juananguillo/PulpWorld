@@ -91,7 +91,7 @@ include("Includes/header.php");
     ?>
     <body>
    
-    <h2 class="text-center mb-5">
+    <h2 class="text-center mb-5 mt-3">
     <?php echo $obra->gettitulo(); ?>
     </h2>
     <p id="alert"></p>

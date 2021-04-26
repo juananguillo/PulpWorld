@@ -15,10 +15,12 @@ $o=obtenerunaobra($bd, $id_obra);
 switch ($_POST["accion"]) {
     case 'eliminar':{
         eliminarobra($bd,$id_obra);
+        break;
     }
 
     case 'publicar':
         publicar($bd, $id_obra);
+    
       
         for ($i=0; $i < count($seguidores); $i++) { 
             notifiobras($bd, $seguidores[$i]["id_seguidor"], 0, $id_obra, "ha publicado una nueva obra!");

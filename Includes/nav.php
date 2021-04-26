@@ -13,8 +13,8 @@
             <li class="nav-item"><a class="nav-link" href="index.php">Obras</a></li>
             <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
             <?php if(isset($_SESSION['usuario'])){?>
-                <li class="nav-item"><a class="nav-link" href="./notificaciones.php">Notificaciones <?php $sinver=sinver($bd, $_SESSION["usuario"]);  if($sinver!=0) { ?><span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span> <?php } ?></a></li>
-            <li class="nav-item"><a class="nav-link" href="mensajes.php">Mensajes
+                <li class="nav-item"><a class="nav-link" href="./notificaciones.php"><i class="fas fa-bell"></i> Notificaciones <?php $sinver=sinver($bd, $_SESSION["usuario"]);  if($sinver!=0) { ?><span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span> <?php } ?></a></li>
+                 <li class="nav-item"><a class="nav-link" href="mensajes.php"><i class="fas fa-envelope"></i> Mensajes
             <?php 
             $totalmen=sinleertotal($bd, $_SESSION["usuario"]);
             if($totalmen>0){

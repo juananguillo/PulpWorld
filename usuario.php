@@ -57,6 +57,8 @@ else{
 	<script src="js/usuario.js"></script>
 	<script src="js/darquitar.js"></script>
 	<script src="js/estado.js"></script>
+	<script src="js/comentarios.js"></script>
+	<script src="js/enviarm.js"></script>
     </head>
 	<body>
     <?php 
@@ -117,8 +119,8 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
                             <div class="form-group">
 
 							<div class="form-group shadow-textarea">
-  <span id="commentarionew"></span>
-  <textarea id="mn" class="form-control z-depth-1" rows="4" ></textarea>
+  <span></span>
+  <textarea id="textomn" class="form-control z-depth-1 textomn" rows="4" ></textarea>
 </div>
 
                                 
@@ -128,7 +130,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="button" id="enviarcoment" class="btn btn-primary" id="botonsesion" disabled>Enviar</button>
+                        <button type="button" id="enviarmn" class="btn btn-primary" id="botonsesion" disabled>Enviar</button>
                     </div>
                 </div>
             </div>
@@ -203,7 +205,22 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 						<?php echo $obras[$i]->gettitulo(); ?>
 						</a>
                              
-                                  
+						<div class="pull-right action-buttons">
+								
+								<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $thisusuario->getid() || $_SESSION["tipo"] == 1)) { ?>
+									<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras[$i]->getlikes(); ?></i>
+					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obras[$i]->getlecturas(); ?></i>
+									<?php 
+									if($obras[$i]->getpublico()==0){
+										echo "Estado: <strong>Sin publicar</strong>";
+									}
+									else{
+										echo "Estado: <strong>Publico</strong>";
+									}
+									?> 
+								
+								<?php } ?>
+							</div>       
                             
                           
                         </li>

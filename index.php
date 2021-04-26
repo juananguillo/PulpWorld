@@ -254,7 +254,10 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                                                             echo " <a href='usuario.php?user={$obras[$i]->getautor()}' >{$usuarios[$obras[$i]->getautor()]->getusuario()}</a>";
 
                                                                                             ?></p>
-                                <div class="card-footer">
+                                                                                            <div class="text-justify ml-4">
+                    <strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras[$i]->getlikes(); ?></i>
+					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obras[$i]->getlecturas(); ?></i><br><br>
+                                                                                            </div><div class="card-footer text-center">
                                     <a style="color:white" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
                                     <?php  if(isset($_SESSION["usuario"])){ ?>
                                                         <input type="hidden" id="biblioteca" value="<?php echo $biblioteca?>">

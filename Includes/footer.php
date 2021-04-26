@@ -6,13 +6,14 @@
     <!--Grid row-->
     <div class="row">
       <!--Grid column-->
-      <div class="col-lg-12 col-md-12 mb-4 mb-md-0">
-        <h5 class="text-uppercase">Footer Content</h5>
+      <div class="col-lg-12 col-md-12 mb-4 mb-md-0" style="background-color: rgba(0, 0, 0, 0.2)">
+        <h5 class="text-uppercase">Información adicional</h5>
 
         <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-          molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
-          voluptatem veniam, est atque cumque eum delectus sint!
+          Esta web está basada en las revistas pulp, revistas especializadas en narraciones e historietas de diferentes géneros de la literatura de ficción.
+          El diseño minimalista de esta web esta pensado para recordar ese tipo de revistas, las cuales tenían una encuadernación muy barata.
+          <a href="https://es.wikipedia.org/wiki/Pulp_(literatura)">Saber más</a> 
+        
         </p>
       </div>
       <!--Grid column-->

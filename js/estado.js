@@ -65,6 +65,7 @@ $(document).on("ready", function () {
 
 
 function publicar() {
+  
   $("#publicar").one("click", function () {
     $.post("./funcionesphp/cambiarestado.php", {
       id_obra: $(".valores").val(),
@@ -72,7 +73,6 @@ function publicar() {
       accion: "publicar"
     },
     function (data) {
-      alert(data);
      $("#publicar").html("Despublicar");
      $("#publicar").prop("id", "despublicar");
      despublicar();

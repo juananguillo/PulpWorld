@@ -36,14 +36,17 @@ else{
     <div id="cont" class="container mb-5 mt-5">
     <div class="row  border">
          <div class="col-md-3 col-xs-12 col-sm-12 col-md-4 col-lg-4  border classcol">
-         <input type="text" class="form-control"  id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada">
-         <button id="busqueda" name="busqueda" class="btn btn-primary busqueda" value="Buscar"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>Buscar</button>
-        <?php 
+           <div class="input-group mb-3">
+         <input type="text" class="form-control " id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada">
+         <button disabled id="busqueda" name="busqueda" class="btn btn-primary busqueda"><i class="fas fa-search"></i></button>
+</div>
+<input type="hidden" id="usuid" value="<?php echo $_SESSION["usuario"]; ?>">
+<div id="chats">
+       <?php 
         foreach ($id_chats as $key => $value) {
           $chat_user=$usuarios[$value];
           $t= sinleermen($bd, $_SESSION["usuario"], $chat_user->getid());
           ?>
-         <input type="hidden" id="usuid" value="<?php echo $_SESSION["usuario"]; ?>">
             <div  id="<?php echo  $chat_user->getid(); ?> " style="cursor: pointer; overflow:hidden;" class="border mt-2 mb-3 chatid">
             <img align="left" class="foto rounded-circle mt-1 mr-2" src="<?php echo "Imagenes/Usuarios/".$chat_user->getfoto(); ?>">
               <a href=<?php echo 'usuario.php?user='.$value ?>><?php echo  $chat_user->getusuario(); ?> </a>
@@ -56,7 +59,7 @@ else{
         }
         
         ?>
-
+</div>
 
 
 

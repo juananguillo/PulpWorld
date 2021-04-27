@@ -206,10 +206,10 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 						</a>
                              
 						<div class="pull-right action-buttons">
-								
-								<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $thisusuario->getid() || $_SESSION["tipo"] == 1)) { ?>
-									<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras[$i]->getlikes(); ?></i>
+						<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras[$i]->getlikes(); ?></i>
 					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obras[$i]->getlecturas(); ?></i>
+								<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $thisusuario->getid() || $_SESSION["tipo"] == 1)) { ?>
+									
 									<?php 
 									if($obras[$i]->getpublico()==0){
 										echo "Estado: <strong>Sin publicar</strong>";

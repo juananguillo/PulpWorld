@@ -91,7 +91,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	
 	</h1>
 	<div class="text-center">
-	<strong>Seguidores</strong> <i class="fas fa-users text-danger"> <?php echo $thisusuario->getseguidores(); ?></i>
+	<strong>Seguidores</strong> <i class="fas fa-users text-danger"><span id="thisseguidores"> <?php echo $thisusuario->getseguidores(); ?></span></i>
 	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $thisusuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">

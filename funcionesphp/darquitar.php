@@ -18,9 +18,11 @@ elseif(isset($_POST["id_seguido"])){
 $id_seguido=$_POST["id_seguido"];
 $id_seguidor=$_POST["id_seguidor"];
     if($_POST["accion"]=="dar"){
-       seguir($bd, $id_seguido, $id_seguidor);
+        echo $id_seguido."--".$id_seguidor."--".$_POST["accion"];
+       //seguir($bd, $id_seguido, $id_seguidor);
     }else{
-        dejardeseguir($bd, $id_seguido, $id_seguidor);
+        echo $id_seguido."--".$id_seguidor."--".$_POST["accion"];
+        //dejardeseguir($bd, $id_seguido, $id_seguidor);
     
     } 
 }

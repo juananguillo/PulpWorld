@@ -3,7 +3,7 @@ $(document).on("ready", function () {
     like();
     dislike();
   function like (params) {
-    $("#dar").on("click", function () {
+    $("#dar").one("click", function () {
       $.post("./funcionesphp/darquitar.php", {
           id_obra: $(".valores").val(),
           id_usuario: $(".valores").prop("id"),
@@ -14,12 +14,14 @@ $(document).on("ready", function () {
          $("#dar").removeClass("btn-success");
          $("#dar").addClass("btn-danger");
          $("#dar").prop("id", "quitar");
+         let likes=parseInt($("#thislikes").text());
+         $("#thislikes").text(likes+1);
           dislike();
         });
     });
   }
     function dislike(params) {
-      $("#quitar").on("click", function () {
+      $("#quitar").one("click", function () {
         $.post("./funcionesphp/darquitar.php", {
             id_obra: $(".valores").val(),
             id_usuario: $(".valores").prop("id"),
@@ -30,6 +32,8 @@ $(document).on("ready", function () {
            $("#quitar").removeClass("btn-danger");
            $("#quitar").addClass("btn-success");
            $("#quitar").prop("id", "dar");
+           let likes=parseInt($("#thislikes").text());
+           $("#thislikes").text(likes-1);
             like();
           });
       });
@@ -39,7 +43,7 @@ else{
     follow();
     unfollow();
     function follow (params) {
-        $("#dar").on("click", function () {
+        $("#dar").one("click", function () {
           $.post("./funcionesphp/darquitar.php", {
             id_seguido: $(".valores").val(),
             id_seguidor: $(".valores").prop("id"),
@@ -50,13 +54,15 @@ else{
              $("#dar").removeClass("btn-success");
              $("#dar").addClass("btn-danger");
              $("#dar").prop("id", "quitar");
+             let likes=parseInt($("#thisseguidores").text());
+             $("#thisseguidores").text(likes+1);
               unfollow();
             });
         });
     }
 
     function unfollow(params) {
-        $("#quitar").on("click", function () {
+        $("#quitar").one("click", function () {
           $.post("./funcionesphp/darquitar.php", {
               id_seguido: $(".valores").val(),
               id_seguidor: $(".valores").prop("id"),
@@ -67,6 +73,8 @@ else{
              $("#quitar").removeClass("btn-danger");
              $("#quitar").addClass("btn-success");
              $("#quitar").prop("id", "dar");
+             let likes=parseInt($("#thisseguidores").text());
+             $("#thisseguidores").text(likes-1);
               follow();
             });
         });

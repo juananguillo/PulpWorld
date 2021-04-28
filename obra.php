@@ -97,8 +97,8 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					<br>
 				<?php } ?>
 				<div class="text-center">
-					<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obra->getlikes(); ?></i>
-					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obra->getlecturas(); ?></i><br>
+					<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <span id="thislikes"> <?php echo $obra->getlikes(); ?></span></i>
+					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"><?php echo $obra->getlecturas(); ?></i><br>
 				</div>
 				<div class="text-center">
 					<?php

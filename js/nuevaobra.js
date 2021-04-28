@@ -28,7 +28,7 @@ $(document).on("ready", function () {
         readURL(this);
       });
 
-    $("#guardar").on("click", function () {
+    $("#guardar").one("click", function () {
         var error=false;
         $("#err").hide();
         $("#titobra").css("border-color", "green");

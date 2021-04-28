@@ -80,13 +80,15 @@ $(document).on("ready", function () {
   });
 
   $("#guardar").on("click", function () {
-    $("#err").hide();
+    $("#err1").hide();
+    $("#titobra").css("border-color", "green");
     var error = false;
       if ($("#titobra").val() == "" || $("#titobra").val().length == 0 || /^\s+$/.test($("#titobra").val())) {
         $("#titobra").focus();
         $("#titobra").css("border-color", "red");
-        $("#err").text("Es necesario añadir un titulo a la obra");
-        $("#err").css("color", "red");
+        $("#err1").show();
+        $("#err1").text("Es necesario añadir un titulo a la obra");
+        $("#err1").css("color", "red");
         error = true;
       }
     if ($(".sel").length == 0) {
@@ -126,6 +128,7 @@ $(document).on("ready", function () {
         method: 'POST',
         type: 'POST',
         success: function (data) {
+          console.log(data);
          alert("Datos guardados con exito");
         }
       });

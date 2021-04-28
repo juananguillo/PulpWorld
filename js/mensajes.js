@@ -45,6 +45,36 @@ $(document).on("ready", function () {
             }
         ,5000);
 
+        setInterval(function() { 
+
+          let array=[];
+          $(".chatid").each(function () { 
+            array.push($(this).prop("id"));
+              });
+          $.post("./funcionesphp/mensajes.php", {
+              chats: array,
+              id1:$("#usuid").val(),
+              accion: "actualizar"
+            },
+            function (data) {
+              console.log(data);
+             for (let index = 0; index < data.length; index++) {
+             if(data[index]!=0){
+            
+             }
+             //console.log($("#"+index).prop("id"));
+
+
+             //console.log($(".msinleer")[index].text());
+               
+             }
+            });
+         
+              }
+          ,5000);
+
+    
+
     $(".chatid").on("click", function () {
       
         leer($(this).prop("id"));
@@ -90,10 +120,6 @@ $(document).on("ready", function () {
 
 
     $("#busqueda").on("click", function () {
-      let array=[];
-      $(".chatid").each(function () { 
-        array.push($(this).prop("id"));
-          });
          
       $.post("./funcionesphp/mensajes.php", {
         palabras:$("#textobusqueda").val(),

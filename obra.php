@@ -294,8 +294,10 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 				<div class="tab-pane fade border obra" id="sinopsis">
 					<br>
 					<label for="titulo">Titulo:</label><br>
+					<p id="err1"></p>
 					<input class="form-control" type="text" id="titobra" name="titulo" <?php echo $readonly ?> value="<?php echo $obra->gettitulo(); ?>"><br><br>
-					<p id="err"></p>
+					
+					
 					<?php
 					if (isset($_SESSION['usuario']) && $_SESSION['usuario'] == $obra->getautor()) {
 					?>

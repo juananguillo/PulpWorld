@@ -28,7 +28,9 @@ function nuevaobra($bd, $titulo, $sinopsis, $autor)
     }
 }
 
-function cambiarfoto($bd,$img, $id){
+function cambiarfoto($bd,$img, $id, $old){
+    if($old==$img) return 0;
+
     try {
         $sentencia = $bd->prepare("UPDATE obras SET portada= :portada WHERE id LIKE :id ");
         $sentencia->execute(array(
@@ -651,11 +653,7 @@ function cambiarobra($bd,$titulo, $sinopsis, $obra){
         $sentencia->execute(array(
            ':titulo'=> $titulo, ':sinopsis'=>$sinopsis, ':obra'=>$obra
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+        
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con las obras");

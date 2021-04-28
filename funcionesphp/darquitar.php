@@ -19,10 +19,10 @@ $id_seguido=$_POST["id_seguido"];
 $id_seguidor=$_POST["id_seguidor"];
     if($_POST["accion"]=="dar"){
         echo $id_seguido."--".$id_seguidor."--".$_POST["accion"];
-       //seguir($bd, $id_seguido, $id_seguidor);
+       seguir($bd, $id_seguido, $id_seguidor);
     }else{
         echo $id_seguido."--".$id_seguidor."--".$_POST["accion"];
-        //dejardeseguir($bd, $id_seguido, $id_seguidor);
+        dejardeseguir($bd, $id_seguido, $id_seguidor);
     
     } 
 }

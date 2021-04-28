@@ -767,11 +767,7 @@ function actualizaruser($bd,$id, $username, $email, $nomyape, $contra){
         $sentencia->execute(array(
            ':id'=> $id, ':username'=>$username, ':email'=>$email, ':nomyape'=>$nomyape, ':contra'=>$contra
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+        
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con los usuarios");
@@ -786,11 +782,7 @@ function cambiarfotouser($bd,$img, $id){
         $sentencia->execute(array(
            ':foto' => $img,':id'=> $id
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+        
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con los usuarios");

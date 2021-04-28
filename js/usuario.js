@@ -82,7 +82,8 @@ $(document).on("ready", function () {
         return true;
       }
       $.ajax({url:"./funcionesphp/comprobar.php", data: {usuario: value}, type:"POST"
-        ,async: false, dataType: "text", success: function(data) { ret= data; }
+        ,async: false, dataType: "text", success: function(data) {
+           ret= data; }
           }
     
           );  
@@ -98,7 +99,8 @@ $(document).on("ready", function () {
         }
 
         $.ajax({url:"./funcionesphp/comprobar.php", data: {email: value}, type:"POST"
-          ,async: false, dataType: "text", success: function(data) { ret= data; }
+          ,async: false, dataType: "text", success: function(data) { 
+            ret= data; }
             }
       
             );  

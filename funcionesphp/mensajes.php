@@ -12,6 +12,24 @@ include('funcionesusuarios.php');
 include("../clases/usuarios.class.php");
 
 switch ($accion) {
+
+  case 'actualizar':
+
+    $chats=$_POST["chats"];
+    $nuevos=[];
+    $usuarios= arrayusuariosporid($bd);
+    foreach ($chats as $key => $value) {
+      $chat_user=$usuarios[$value];
+
+   // $t = sinleermen($bd, $id1, $chat_user->getid());
+    echo $chat_user->getid();
+     //array_push($nuevos, $t);
+    }
+    //echo $nuevos;
+    
+    break;
+
+
     case 'listar':
        $array= mensajes($bd, $id1, $id2);
        $totalm= countmensajes($bd, $id1,  $id2);

@@ -14,18 +14,28 @@ include("../clases/usuarios.class.php");
 switch ($accion) {
 
   case 'actualizar':
-
+   if($_POST["chats"]==0){
+break;
+   }
     $chats=$_POST["chats"];
     $nuevos=[];
     $usuarios= arrayusuariosporid($bd);
+    
     foreach ($chats as $key => $value) {
-      $chat_user=$usuarios[$value];
-
-   // $t = sinleermen($bd, $id1, $chat_user->getid());
-    echo $chat_user->getid();
-     //array_push($nuevos, $t);
+      $chat_user=$usuarios[trim($value)];
+      if($chat_user->getestado()==0){
+        continue;
+      }
+      $t= sinleermen($bd, $id1, $chat_user->getid());
+      echo "
+        <div  id='{$chat_user->getid()}' style='cursor: pointer; overflow:hidden;' class='border mt-2 mb-3 chatid'>
+        <img align='left' class='foto rounded-circle mt-1 mr-2' src='Imagenes/Usuarios/{$chat_user->getfoto()} '>
+          <a href='usuario.php?user=$value'>{$chat_user->getusuario()}  </a>";
+         if($t>0){ echo "<span class='badge badge-primary'>$t </span>"; } echo"</span>
+          <p>{$chat_user->getemail()}</p>
+         
+        </div>";
     }
-    //echo $nuevos;
     
     break;
 
@@ -71,16 +81,14 @@ switch ($accion) {
     foreach ($array as $key => $value) {
       $chat_user=$usuarios[$value];
       $t= sinleermen($bd, $id1, $chat_user->getid());
-      echo"
-        <div  id='{$chat_user->getid()}' style='cursor: pointer; overflow:hidden;' class='border mt-2 mb-3 chatid'>
-        <img align='left' class='foto rounded-circle mt-1 mr-2' src='Imagenes/Usuarios/{$chat_user->getfoto()}'>
-          <a href='usuario.php?user='$value>{$chat_user->getusuario()}</a>";
-           if($t>0){
-             echo "<span class='badge badge-primary'><$t</span>";
-            } 
-           echo "<p>{$chat_user->getemail()}</p>
-         
-        </div>";
+      echo "
+      <div  id='{$chat_user->getid()}' style='cursor: pointer; overflow:hidden;' class='border mt-2 mb-3 chatid'>
+      <img align='left' class='foto rounded-circle mt-1 mr-2' src='Imagenes/Usuarios/{$chat_user->getfoto()} '>
+        <a href='usuario.php?user=$value'>{$chat_user->getusuario()}  </a>";
+       if($t>0){ echo "<span class='badge badge-primary'>$t </span>"; } echo"</span>
+        <p>{$chat_user->getemail()}</p>
+       
+      </div>";
 
           }
    

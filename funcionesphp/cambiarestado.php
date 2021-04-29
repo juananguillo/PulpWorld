@@ -31,7 +31,7 @@ switch ($_POST["accion"]) {
     case 'despublicar':
         
         despublicar($bd, $id_obra);
-
+        menosuna($bd, $o->getautor());
         
         for ($i=0; $i < count($seguidores); $i++) { 
             quitarnotifi($bd, $seguidores[$i]["id_seguido"], $id_obra, 0);
@@ -54,6 +54,7 @@ switch ($_POST["accion"]) {
 
         case 'bloquear':
             bloquear($bd, $id_obra);
+            menosuna($bd, $o->getautor());
             notifiobras($bd, $o->getautor(), -1, $id_obra, "ha sido bloqueada, para mas informacion
             envie un email a pulpworldinfo@gmail.com con la incidencia");
 

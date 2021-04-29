@@ -51,23 +51,25 @@ $(document).on("ready", function () {
           $(".chatid").each(function () { 
             array.push($(this).prop("id"));
               });
+              if(array.length==0){
+               array=0;
+              }
           $.post("./funcionesphp/mensajes.php", {
               chats: array,
               id1:$("#usuid").val(),
               accion: "actualizar"
             },
             function (data) {
-              console.log(data);
-             for (let index = 0; index < data.length; index++) {
-             if(data[index]!=0){
-            
-             }
-             //console.log($("#"+index).prop("id"));
-
-
-             //console.log($(".msinleer")[index].text());
-               
-             }
+              
+              $("#chats").empty();
+              $("#chats").append(data);
+              $(".chatid").on("click", function () {
+              leer($(this).prop("id"));
+                
+                  
+            });
+           
+             
             });
          
               }

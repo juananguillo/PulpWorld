@@ -43,7 +43,7 @@ else{
 <input type="hidden" id="usuid" value="<?php echo $_SESSION["usuario"]; ?>">
 <div id="chats">
        <?php 
-       $i=1;
+       
         foreach ($id_chats as $key => $value) {
           $chat_user=$usuarios[$value];
           if($chat_user->getestado()==0){
@@ -54,13 +54,13 @@ else{
             <div  id="<?php echo  $chat_user->getid(); ?> " style="cursor: pointer; overflow:hidden;" class="border mt-2 mb-3 chatid">
             <img align="left" class="foto rounded-circle mt-1 mr-2" src="<?php echo "Imagenes/Usuarios/".$chat_user->getfoto(); ?>">
               <a href=<?php echo 'usuario.php?user='.$value ?>><?php echo  $chat_user->getusuario(); ?> </a>
-               <span id="<?php echo $i; ?>"><?php if($t>0){?> <span class="badge badge-primary"><?php echo $t ?></span> <?php } ?></span>
+               <span class="noti"><?php if($t>0){?> <span class="badge badge-primary"><?php echo $t ?></span> <?php } ?></span>
                 <p><?php echo  $chat_user->getemail(); ?></p>
              
             </div>
 
           <?php  
-          $i++;
+         
         }
         
         ?>

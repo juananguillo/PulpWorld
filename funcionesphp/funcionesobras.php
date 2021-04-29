@@ -663,4 +663,24 @@ function cambiarobra($bd,$titulo, $sinopsis, $obra){
 }
 
 
+function menosuna($bd,$id){
+    try {
+        $sentencia = $bd->prepare("UPDATE usuario SET obras= obras-1 WHERE id LIKE :id ");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        header("Location: error.php?error=Ha habido un problema con las obras");
+        exit;
+       
+    }
+}
+
+
 ?>

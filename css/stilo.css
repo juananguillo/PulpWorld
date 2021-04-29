@@ -22,7 +22,7 @@ form, input {
         rgba(0, 0, 0, 0.438)
       ),
     
-    url('foot1.jpg');
+    url(../Imagenes/foot1.jpg);
   color: white;
    
 }

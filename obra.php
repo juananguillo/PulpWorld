@@ -57,7 +57,7 @@ if (isset($_SESSION['usuario'])) {
 }
 include("Includes/header.php");
 ?>
-<link rel="stylesheet" href="libro.css">
+<link rel="stylesheet" href="css/libro.css">
 <script src="js/comentarios.js"></script>
 <script src="js/obra.js"></script>
 <script src="js/darquitar.js"></script>

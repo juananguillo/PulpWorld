@@ -16,7 +16,7 @@ $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
 $categorias=categorias($bd);
 include("Includes/header.php");
     ?>
-    <link rel="stylesheet" href="libro.css">
+    <link rel="stylesheet" href="css/libro.css">
     <script src="js/nuevaobra.js"></script>
 	
     </head>

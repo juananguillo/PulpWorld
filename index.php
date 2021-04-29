@@ -20,7 +20,7 @@ if (isset($_SESSION['usuario'])) {
 }
 include("Includes/header.php");
 ?>
-<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
@@ -90,7 +90,7 @@ include("Includes/header.php");
     <div class="jumbotron jumbotron-fluid bg-dark">
 
         <div class="jumbotron-background">
-            <img src="pulp.jpg" class="blur ">
+            <img src="imagenes/pulp.jpg" class="blur ">
         </div>
 
         <div class="container text-white">

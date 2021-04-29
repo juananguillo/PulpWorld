@@ -24,7 +24,7 @@ if(isset($_SESSION['usuario'])){
 
     include("Includes/header.php");
     ?>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
     <script src="js/enviarm.js"></script>
     </head>
 <body>
@@ -104,7 +104,7 @@ if(isset($_SESSION['usuario'])){
    <div class="jumbotron jumbotron-fluid bg-dark">
 
 <div class="jumbotron-background">
-    <img src="pulp.jpg" class="blur ">
+    <img src="Imagenes/pulp.jpg" class="blur ">
 </div>
 
 <div class="container text-white">

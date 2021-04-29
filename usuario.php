@@ -53,7 +53,7 @@ else{
 
     include("Includes/header.php");
     ?>
-    <link rel="stylesheet" href="libro.css">
+    <link rel="stylesheet" href="css/libro.css">
 	<script src="js/usuario.js"></script>
 	<script src="js/darquitar.js"></script>
 	<script src="js/estado.js"></script>

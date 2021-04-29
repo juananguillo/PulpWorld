@@ -80,7 +80,7 @@ if($capitulos[count($capitulos)-1]->getid()==$capitulo->getid()){
 }
 include("Includes/header.php");
     ?>
-    <link rel="stylesheet" href="libro.css">
+    <link rel="stylesheet" href="css/libro.css">
     <script src="js/estado.js"></script>
     </head>
 <body>

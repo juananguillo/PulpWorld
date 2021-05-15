@@ -388,28 +388,6 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				<div class="col-md-12 col-md-offset-3 comments-section tab-pane fade border obra" id="comentarios">
 					<!-- comment form -->
 

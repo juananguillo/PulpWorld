@@ -7,10 +7,20 @@ tinymce.init({
         selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img',
         classes: 'full'
     },
+
+    plugins : "paste",
+    paste_retain_style_properties: "font-size font-style text-align",
     //plugins: 'tinymcespellchecker',
     //spellchecker_active: true,
     toolbar: 'spellchecker | undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-    spellchecker_dialog: true
+    spellchecker_dialog: true,
+    setup: function (editor) {
+		editor.on('init', function (e) {
+		   editor.execCommand('JustifyFull', false);
+		});
+	}
+
+    
 });
 
 

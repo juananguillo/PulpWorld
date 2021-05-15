@@ -1,8 +1,10 @@
 <?php
+ob_start();
 session_start();
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("./funcionesphp/funcionesusuarios.php");
+include("./funcionesphp/block.php");
 include("clases/obras.class.php");
 include("funcionesphp/funcionesobras.php");
 include("funcionesphp/funcionesmarcapaginas.php");
@@ -15,8 +17,9 @@ $categorias = categorias($bd);
 $ses = isset($_SESSION['tipo']) ? $_SESSION['tipo'] : 0;
 if (isset($_SESSION['usuario'])) {
     $usuario = unusuarioporcodigo($bd, $_SESSION['usuario']);
-    $biblioteca= tubiblioteca($bd,  $_SESSION['usuario']);
-    $obras_guardadas=obrasguardadasporid($bd, $biblioteca);
+    isblock($usuario->getestado());
+    $biblioteca = tubiblioteca($bd,  $_SESSION['usuario']);
+    $obras_guardadas = obrasguardadasporid($bd, $biblioteca);
 }
 include("Includes/header.php");
 ?>
@@ -31,11 +34,11 @@ include("Includes/header.php");
     $ordnum = 0;
     $num_filas = 20;
     $pagina = $_GET['pag'] ?? 1;
-    $buscarpor= $_GET['buscarpor'] ?? "";
-    if(isset($_GET["buscarpor"])){
-        $buscarpor=urlencode($buscarpor);
+    $buscarpor = $_GET['buscarpor'] ?? "";
+    if (isset($_GET["buscarpor"])) {
+        $buscarpor = urlencode($buscarpor);
     }
-    $inputbuscapor=urldecode($buscarpor);
+    $inputbuscapor = urldecode($buscarpor);
     $cat = $_GET['categoria'] ?? 0;
     if (isset($_GET["orden"])) {
         switch ($orden) {
@@ -86,6 +89,7 @@ include("Includes/header.php");
         $total = totalobras($bd, $ses);
     }
     $usuarios = arrayusuariosporid($bd);
+    
     ?>
     <div class="jumbotron jumbotron-fluid bg-dark">
 
@@ -100,14 +104,14 @@ include("Includes/header.php");
             <hr class="my-4">
             <?php if (!isset($_SESSION['usuario'])) {
             ?>
-            <p>Si no estas registrado podras leer todas las obras que quieras,
-            pero para poder comentar, escribir obras, seguir usuarios y dar me gustas tendrás que registrarte
-            </p>
+                <p>Si no estas registrado podras leer todas las obras que quieras,
+                    pero para poder comentar, escribir obras, seguir usuarios y dar me gustas tendrás que registrarte
+                </p>
                 <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#registro" href="#" role="button">¿No estas registrado? Hazlo!</a>
             <?php } else {
             ?>
-             <p>No seas timido, lee lo que quieras, da me gusta, comenta, sigue a los usuarios que quieras que te avise si publican una nueva obra y en general disfruta de esta plataforma
-            </p>
+                <p>No seas timido, lee lo que quieras, da me gusta, comenta, sigue a los usuarios que quieras que te avise si publican una nueva obra y en general disfruta de esta plataforma
+                </p>
                 <a class="btn btn-primary btn-lg" href="new.php" role="button">Crear nueva obra</a>
             <?php } ?>
 
@@ -126,7 +130,7 @@ include("Includes/header.php");
                 <form action="./funcionesphp/filtrar.php" method="POST" class="form-horizontal" role="form">
                     <div class="input-group" id="adv-search">
 
-                        <input type="text" class="form-control"  id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada" value="<?php  echo "{$inputbuscapor}"; ?>">
+                        <input type="text" class="form-control" id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada" value="<?php echo "{$inputbuscapor}"; ?>">
                         <div class="input-group-btn">
                             <div class="btn-group" role="group">
                                 <div class="dropdown dropdown-lg">
@@ -169,6 +173,8 @@ include("Includes/header.php");
                                             </select>
                                         </div>
 
+                                      
+
                                         <input type="submit" id="busqueda" name="busqueda" class="btn btn-primary busqueda" value="Buscar"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></input>
 
                                     </div>
@@ -196,6 +202,7 @@ include("Includes/header.php");
                 ?>
                     <?php if ($i < $total - $desplazamiento) {
                         $generos = generos($bd, $obras[$i]->getid());
+
                     ?>
                         <a class="noDecoration" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?>>
 
@@ -212,7 +219,11 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                         <?php echo $obras[$i]->getsinopsis();
                                         ?>
                                     </p>
-                                    <a style="color:blue;" data-toggle="modal" data-target=<?php echo "#0" . $obras[$i]->getid(); ?> href="#">Leer mas</a>
+                                    <?php
+                                    if (trim($obras[$i]->getsinopsis()) != '' && strlen(trim($obras[$i]->getsinopsis())) > 203) {
+                                    ?>
+                                        <a style="color:blue;" data-toggle="modal" data-target=<?php echo "#0" . $obras[$i]->getid(); ?> href="#">Leer mas</a>
+                                    <?php } ?>
                                     <div class="modal fade" id=<?php echo "0" . $obras[$i]->getid(); ?> tabindex="-1" role="dialog" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -240,7 +251,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                     <a <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
-                                            
+
                                                 </div>
 
                                             </div>
@@ -254,35 +265,78 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                                                             echo " <a href='usuario.php?user={$obras[$i]->getautor()}' >{$usuarios[$obras[$i]->getautor()]->getusuario()}</a>";
 
                                                                                             ?></p>
-                                                                                            <div class="text-justify ml-4">
-                    <strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras[$i]->getlikes(); ?></i>
-					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obras[$i]->getlecturas(); ?></i><br><br>
-                                                                                            </div><div class="card-footer text-center">
-                                    <a style="color:white" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
-                                    <?php  if(isset($_SESSION["usuario"])){ ?>
-                                                        <input type="hidden" id="biblioteca" value="<?php echo $biblioteca?>">
-                                                    <?php 
-                                                        if(count($obras_guardadas)>0){
-                                                            if(array_key_exists($obras[$i]->getid(), $obras_guardadas)){
-                                                                ?>
-                                                                
-                                                                 <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-danger quitarobra"><i class="fas fa-book-open"> Quitar</i></button>
-                                                                <?php 
-                                                            }
-                                                            else{
-                                                                ?>
-                                                                     <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-success guardarobra"><i class="fas fa-book-open"> Guardar</i></button>
-                                                                <?php
 
-                                                            }
-                                                        }
-                                                        else{
-                                                    ?>
-                                                   <button value="<?php echo $obras[$i]->getid();?>" class="btn btn-success guardarobra"><i class="fas fa-book-open"> Guardar</i></button>
-                                                    <?php }} ?>
+
+                                <div class="text-justify ml-4">
+                                    <strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras[$i]->getlikes(); ?></i>
+                                    <strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obras[$i]->getlecturas(); ?></i><br><br>
                                 </div>
+                                <div class="text-justify ml-4">
+                                    <p id="estadoobra">Estado: <strong><?php
+                                                                        if ($obras[$i]->getterminada() == 0) {
+                                                                            echo "Sin terminar";
+                                                                        } else {
+                                                                            echo "Terminada";
+                                                                        }
+                                                                        ?></strong></p>
+                                </div>
+                                <?php
+                                if (isset($_SESSION["tipo"])) {
+                                    if ($_SESSION["tipo"] == 1) {
+                                ?>
+                                        <div class="text-center mt-2 mb-2"><?php
+                                                                            if ($obras[$i]->getpublico() == 0) {
+                                                                                echo "<strong class='text-danger'>Obra sin publicar</strong>";
+                                                                            } else {
+                                                                                echo "<strong class='text-success'>Obra publicada</strong>";
+                                                                            }
+                                                                            echo "</div>";
 
-                            </div>
+
+                                                                            ?>
+                                            <div id="obrastate" class="text-center mt-2 mb-2 text-danger">
+                                                <?php
+                                                if ($obras[$i]->getestado() == 0) {
+                                                ?>
+
+                                                    <strong>Obra Bloqueada</strong>
+
+                                        <?php }
+                                                echo "</div>";
+                                            }
+                                        } ?>
+                                        <div class="text-center">
+
+                                            <?php
+                                            foreach ($generos as $key => $value) {
+                                                echo " <p class='btn btn-primary'>{$value->getnombre()}</p>";
+                                            }
+                                            ?></div>
+                                        <div class="card-footer text-center">
+                                            <a style="color:white" <?php echo "href=obra.php?obra={$obras[$i]->getid()}";  ?> class="btn btn-primary">Ver Obra</a>
+                                            <?php if (isset($_SESSION["usuario"])) { ?>
+                                                <input type="hidden" id="biblioteca" value="<?php echo $biblioteca ?>">
+                                                <?php
+                                                if (count($obras_guardadas) > 0) {
+                                                    if (array_key_exists($obras[$i]->getid(), $obras_guardadas)) {
+                                                ?>
+
+                                                        <button value="<?php echo $obras[$i]->getid(); ?>" class="btn btn-danger quitarobra"><i class="fas fa-book-open"> Quitar</i></button>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <button value="<?php echo $obras[$i]->getid(); ?>" class="btn btn-success guardarobra"><i class="fas fa-book-open"> Guardar</i></button>
+                                                    <?php
+
+                                                    }
+                                                } else {
+                                                    ?>
+                                                    <button value="<?php echo $obras[$i]->getid(); ?>" class="btn btn-success guardarobra"><i class="fas fa-book-open"> Guardar</i></button>
+                                            <?php }
+                                            } ?>
+                                        </div>
+
+                                            </div>
                         </a>
                     <?php } else {
 
@@ -302,8 +356,9 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
         <ul class="pagination justify-content-center mt-5">
             <?php
             if ($desplazamiento > 0) {
+                $pagant = $pagina - 1;
                 $prev = $desplazamiento - 12;
-                $url = $_SERVER["PHP_SELF"] . "?orden=$orden&desplazamiento=$prev";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link mr-4' href=$url tabindex='-1'>Anterior</a>";
             } else {
@@ -331,7 +386,8 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
             if ($total > ($desplazamiento + 12)) {
                 $prox = $desplazamiento + 12;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor";
+                $pagsec = $pagina + 1;
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
             } else {

@@ -1,9 +1,10 @@
 <?php 
+ob_start();
 session_start();
-
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
+include("./funcionesphp/block.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("./funcionesphp/funcionesobras.php");
 include("clases/obras.class.php");
@@ -11,14 +12,17 @@ include('clases/capitulos.class.php');
 include('./funcionesphp/funcionescapitulos.php');
 if(!isset($_SESSION["usuario"])){
     header("Location: index.php");
+    die();
 }
 
 $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+isblock($usuario->getestado());
 $cap=obteneruncapitulo($bd, $_GET["cap"]);
 $obra=obtenerunaobra($bd,$_GET["obra"]);
 
 if($_SESSION["usuario"]!=$obra->getautor()){
   header("Location: index.php");
+  die();
 }
 
 

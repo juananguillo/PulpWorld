@@ -2,7 +2,21 @@
 $(document).on("ready", function () {
     var valor=false;
 
-    
+    function geturlalert(name, url = window.location.href) {
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    var alerta = geturlalert('alerta');
+    if(alerta!=null){
+      let url = window.location.href;
+      let value = url = url.slice(0, url.indexOf('?') );
+      window.history.pushState({}, '', value);
+    }
 
   $.validator.addMethod('strongPassword', function(value, element) {
     return this.optional(element) 
@@ -11,11 +25,6 @@ $(document).on("ready", function () {
       && /[a-z]/i.test(value);
   }, 'La contraseña es debil, tiene que tener seis letras, un numero al menos y un caracter\'.')
 
-  $.validator.addMethod('comparar', function(value, element) {
-    
-    return this.optional(element) 
-      || value==$("#contrareg").val();
-  }, 'No coincide con la primera contraseña\'.')
 
   $.validator.addMethod('usuarioexiste', function(value, element) {
     var ret = false;
@@ -83,7 +92,8 @@ $(document).on("ready", function () {
   
         );  
        
-        if(ret==true) return true;                                            
+        if(ret==true) return true;  
+        $("#contralog").css("border-color","red");                                          
     },"El usuario o contraseña son incorrectos");
 
 
@@ -101,7 +111,7 @@ $(document).on("ready", function () {
            
         },
       
-      contrareg: {
+      contralog: {
         required: true,
       },
       

@@ -1,6 +1,14 @@
 
 $(document).on("ready", function () {
 
+  function block(params) {
+    console.log(params);
+    if(params=="block"){
+      window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+    }
+  }
+  
+
     document.getElementById("mencaja").scrollTop = document.getElementById("mencaja").scrollHeight;
     if($("#receptor").length){
         $("#mn").prop('disabled', false);
@@ -38,6 +46,7 @@ $(document).on("ready", function () {
             accion: "comprobar"
           },
           function (data) {
+            block(data);
             if(data>$("#totalm").val()){
                 leer($("#receptor").val());
             }
@@ -60,7 +69,7 @@ $(document).on("ready", function () {
               accion: "actualizar"
             },
             function (data) {
-              
+              block(data);
               $("#chats").empty();
               $("#chats").append(data);
               $(".chatid").on("click", function () {
@@ -94,6 +103,7 @@ $(document).on("ready", function () {
         accion: "insertar"
       },
       function (data) {
+        block(data);
           let men="<div class='mt-1  border rounded border-primary mdiv1'><p class='text text-justify'><strong>"+$("#mn").val()+"</strong></p></div><br>";
         $(".cajam").append(men);
          document.getElementById("mencaja").scrollTop = document.getElementById("mencaja").scrollHeight;
@@ -111,6 +121,7 @@ $(document).on("ready", function () {
         accion: "listar"
       },
       function (data) {
+        block(data);
         $(".cajam").append(data);
         document.getElementById("mencaja").scrollTop = document.getElementById("mencaja").scrollHeight;
         window.history.pushState({}, '', '?chat='+us);
@@ -129,6 +140,7 @@ $(document).on("ready", function () {
         accion: "filtrar"
       },
       function (data) {
+        block(data);
           $("#chats").empty();
           $("#chats").append(data);
           $(".chatid").on("click", function () {

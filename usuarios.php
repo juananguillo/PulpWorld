@@ -1,8 +1,10 @@
 <?php 
+ob_start();
 session_start();
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("./funcionesphp/funcionesusuarios.php");
+include("./funcionesphp/block.php");
 include("clases/obras.class.php");
 include("funcionesphp/funcionesobras.php");
 include("clases/usuarios.class.php");
@@ -12,7 +14,9 @@ $categorias=["Autores","Usuarios"];
 $usuarios=arrayusuarios($bd); 
 $ses=isset($_SESSION['tipo'])?$_SESSION['tipo']: 0;
 if(isset($_SESSION['usuario'])){
+
    $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+    isblock($usuario->getestado());
    if($_SESSION['tipo']==1){
    $usuarios=allarrayusuarios($bd);
    }else{
@@ -31,7 +35,7 @@ if(isset($_SESSION['usuario'])){
     <?php 
     include("Includes/nav.php");
     $desplazamiento = $_GET['desplazamiento'] ?? 0;
-    $orden = $_GET['orden'] ?? "likes";
+    $orden = $_GET['orden'] ?? "seguidores";
     $ordnum=0;
     $num_filas=20;
     $pagina=$_GET['pag'] ?? 1;
@@ -228,6 +232,17 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
 	<strong>Seguidores</strong> <i class="fas fa-users text-danger"> <?php echo $usuarios[$i]->getseguidores(); ?></i>
 	<strong>Obras</strong> <i class="fas fa-book-open text-primary"> <?php echo $usuarios[$i]->getobras(); ?></i><br>
 </div>
+ <?php
+if(isset($_SESSION["tipo"])){
+					if($_SESSION["tipo"]==1){
+		?>	<div id="usustate" class="text-center mt-2 mb-2 text-danger"> <?php  
+		if($usuarios[$i]->getestado()==0){
+		?>
+	
+		<strong>Usuario Bloqueado</strong>
+        <?php } ?>
+</div>
+<?php } }  ?>
                 </div>
               
                 <div class="card-footer text-center">
@@ -254,8 +269,9 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
         <ul class="pagination justify-content-center mt-5">
         <?php 
         if ($desplazamiento > 0) {
+            $pagant=$pagina-1;
             $prev = $desplazamiento - 12;
-            $url = $_SERVER["PHP_SELF"] . "?orden=$orden&desplazamiento=$prev";
+            $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant";
             echo "<li class='page-item active'>";
             echo  "<a class='page-link mr-4' href=$url tabindex='-1'>Anterior</a>";
         }
@@ -272,7 +288,7 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
             $o=0;
               for ($i=0; $i < $total; $i+=12) { 
                   $o++;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&&desplazamiento=$i&pag=$o&buscarpor=$buscarpor";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor";
                 if($pagina==$o){
                  echo "<li class='page-item active'>
                 <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
@@ -283,8 +299,9 @@ margin:auto; " class="card-img-top rounded-circle" src=<?php echo "Imagenes/Usua
               }
 
               if ($total > ($desplazamiento + 12)) {
+                $pagsec=$pagina+1;
                 $prox = $desplazamiento + 12;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
               }

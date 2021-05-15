@@ -2,9 +2,8 @@
 
 function conectardb(){
     try {
-        //     $conn = new PDO('mysql:host=db5001953685.hosting-data.io;dbname=dbs1597550', 'dbu746757', 'Jusaxi88-2-452');
-        $conn = new PDO('mysql:host=localhost;dbname=pulpworld', 'pulpad', 'jusaxi88');
-        //$conn = new PDO('mysql:host=sql310.epizy.com;dbname=epiz_27521049_cafeses_db', 'epiz_27521049', '82ZsH3AAUH6rg8');
+            $conn = new PDO('mysql:host=db5001953685.hosting-data.io;dbname=dbs1597550', 'dbu746757', 'Jusaxi88-2-452');
+        //$conn = new PDO('mysql:host=localhost;dbname=pulpworld', 'pulpad', 'jusaxi88');
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
     } catch (\Throwable $th) {

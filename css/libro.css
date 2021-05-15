@@ -3,6 +3,7 @@
 .img-thumbnail{
 width: 28%; 
 height: 20rem;
+border: none;
 }
 
 form button { margin: 5px 0px; 
@@ -39,6 +40,7 @@ textarea { display: block; margin-bottom: 10px; }
 	img.img-thumbnail { 
 		width: 70%; 
 height: 20rem;
+
 		
 	} 
 
@@ -53,11 +55,11 @@ height: 20rem;
 	img.img-thumbnail { 
 		width: 70%; 
 height: 20rem;
-	
-	} 
-	#obracont{
-		padding-right: auto;
-		padding-left: auto;
+	}
+	}
+	@media screen and (max-width: 1200px) { 
+	#submenu{
+		margin: auto;
 	}
 } 
 

@@ -11,7 +11,7 @@ if(isset($_POST['botonregistro'])){
     $id = $bd->lastInsertId();
     crearbiblioteca($bd, $id);
     
-    header("Location: ../index.php?alerta=Mira el correo para activar el usuario");
+    header("Location: ../index.php?alerta=El usuario ha sido creado, inicia sesion");
     exit;
 
 }

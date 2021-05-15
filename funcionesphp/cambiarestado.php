@@ -2,18 +2,30 @@
 
 include("conexionbd.php");
 $bd = conectardb();
+session_start();
 include("funcionesobras.php");
 include("funcionesusuarios.php");
+include("funcionescapitulos.php");
 include("../clases/obras.class.php");
+include("../clases/usuarios.class.php");
 include("../clases/capitulos.class.php");
+$user=$_POST["user"];
+$usublock=unusuarioporcodigo($bd, $_SESSION["usuario"]);
+if($usublock->getestado()!=0){
 if(isset($_POST["id_obra"])){
 $id_obra=$_POST["id_obra"];
-$user=$_POST["user"];
 $obra=obtenerunaobra($bd,$id_obra);
 $seguidores= idseguidor($bd, $obra->getautor());
 $o=obtenerunaobra($bd, $id_obra);
 switch ($_POST["accion"]) {
     case 'eliminar':{
+        $capis=allcapitulos($bd, $id_obra);
+        for ($i=0; $i < count($seguidores); $i++) { 
+            quitarnotifi($bd, $seguidores[$i]["id_seguidor"], $id_obra, 0);
+            for ($e=0; $e < count($capis); $e++) { 
+                quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $capis[$e]->getid(), 1);
+            }
+        }
         eliminarobra($bd,$id_obra);
         break;
     }
@@ -23,7 +35,7 @@ switch ($_POST["accion"]) {
     
       
         for ($i=0; $i < count($seguidores); $i++) { 
-            notifiobras($bd, $seguidores[$i]["id_seguidor"], 0, $id_obra, "ha publicado una nueva obra!");
+            notifiobras($bd, $seguidores[$i]["id_seguidor"], 0, $id_obra, "ha publicado una nueva obra, no te la pierdas!");
         }
 
         break;
@@ -31,16 +43,22 @@ switch ($_POST["accion"]) {
     case 'despublicar':
         
         despublicar($bd, $id_obra);
-        menosuna($bd, $o->getautor());
-        
+        if($o->getestado()==1){
+            menosuna($bd, $o->getautor());
+        }
+        $capis=allcapitulos($bd, $id_obra);
         for ($i=0; $i < count($seguidores); $i++) { 
-            quitarnotifi($bd, $seguidores[$i]["id_seguido"], $id_obra, 0);
+            quitarnotifi($bd, $seguidores[$i]["id_seguidor"], $id_obra, 0);
+            for ($e=0; $e < count($capis); $e++) { 
+                quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $capis[$e]->getid(), 1);
+            }
         }
 
         break;
 
         case 'terminar':
             terminar($bd, $id_obra);
+         
         
     
             break;
@@ -54,9 +72,22 @@ switch ($_POST["accion"]) {
 
         case 'bloquear':
             bloquear($bd, $id_obra);
-            menosuna($bd, $o->getautor());
+            
             notifiobras($bd, $o->getautor(), -1, $id_obra, "ha sido bloqueada, para mas informacion
-            envie un email a pulpworldinfo@gmail.com con la incidencia");
+            mande en la pestaña de contacto un mensaje con el motivo de la incidencia");
+
+        if($o->getestado()==1 && $o->getpublico()==1){
+            menosuna($bd, $o->getautor());
+        }
+        $capis=allcapitulos($bd, $id_obra);
+        for ($i=0; $i < count($seguidores); $i++) { 
+            quitarnotifi($bd, $seguidores[$i]["id_seguidor"], $id_obra, 0);
+            for ($e=0; $e < count($capis); $e++) { 
+                quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $capis[$e]->getid(), 1);
+            }
+           
+        }
+
 
             break;
 
@@ -69,7 +100,6 @@ switch ($_POST["accion"]) {
 }
 
 elseif(isset($_POST["id_capi"])){
-    include("funcionescapitulos.php");
     $id_capi=$_POST["id_capi"];
     $user=$_POST["user"];
     $capitulo=obteneruncapitulo($bd,$id_capi);
@@ -78,6 +108,9 @@ elseif(isset($_POST["id_capi"])){
     switch ($_POST["accion"]) {
 
         case 'eliminar':
+            for ($i=0; $i < count($seguidores); $i++) { 
+                quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $id_capi, 1);
+            }
             eliminarcapi($bd, $id_capi);
             break;
 
@@ -85,7 +118,7 @@ elseif(isset($_POST["id_capi"])){
             publicarcapi($bd, $id_capi);
            if($obra->getpublico()==1){
             for ($i=0; $i < count($seguidores); $i++) { 
-            notificapi($bd, $seguidores[$i]["id_seguidor"], 1, $id_capi, "ha publicado un nuevo capitulo");
+            notificapi($bd, $seguidores[$i]["id_seguidor"], 1, $id_capi, "ha publicado un nuevo capitulo, no te lo pierdas!");
             }
         }
             break;
@@ -93,15 +126,19 @@ elseif(isset($_POST["id_capi"])){
         case 'despublicar':
             despublicarcapi($bd, $id_capi);
             for ($i=0; $i < count($seguidores); $i++) { 
-                quitarnotificapi($bd, $seguidores[$i]["id_seguido"], $id_capi, 1);
+                quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $id_capi, 1);
             }
             break;
     
             case 'bloquear':
-                echo "block";
                 bloquearcapi($bd, $id_capi);
-                notificapi($bd, $obra->getautor(), -2, $id_capi, "ha sido bloqueado!, para mas informacion
-                envie un email a pulpworldinfo@gmail.com con la incidencia");
+                notificapi($bd, $obra->getautor(), -2, $id_capi, "ha sido bloqueado, para mas informacion
+                mande en la pestaña de contacto un mensaje con el motivo de la incidencia");
+
+                for ($i=0; $i < count($seguidores); $i++) { 
+                    quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $id_capi, 1);
+                }
+
                 break;
     
                 case 'desbloquear':
@@ -135,4 +172,10 @@ switch ($_POST["accion"]) {
         break;
 }
    
+}
+
+}
+
+else{
+    echo "block";
 }

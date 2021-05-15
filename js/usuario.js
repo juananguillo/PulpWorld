@@ -1,23 +1,14 @@
 $(document).on("ready", function () {
   
 
+  $("#formusuario :input").change(function() {
+   nosave();
+  });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  function nosave() {
+    $("#alert").text("Existen datos sin guardar");
+    $("#alert").addClass("alert alert-danger text-center");
+    }
 
     $(".redi").on("click", function () {
       var href = $(this).attr('href');
@@ -70,6 +61,7 @@ $(document).on("ready", function () {
   
     $("#subidaimg").on("change", function () {
       readURL(this);
+      nosave();
     });
   
     $("#guardar").on("click", function () {
@@ -107,12 +99,7 @@ $(document).on("ready", function () {
             if(ret==true) return true;                                            
         },"Este email ya esta registrado");
 
-        $.validator.addMethod('strongPassword', function(value, element) {
-          return this.optional(element) 
-            || value.length >= 6
-            && /\d/.test(value)
-            && /[a-z]/i.test(value);
-        }, 'La contraseña es debil, tiene que tener seis letras, un numero al menos y un caracter\'.')
+       
 
      $("#formusuario").validate({
       rules: {
@@ -129,12 +116,6 @@ $(document).on("ready", function () {
           email: true,
           emailexiste: true
         },
-        contra: {
-          required: true,
-          strongPassword: true
-        },
-        
-      
        
       },
       messages: {
@@ -142,11 +123,6 @@ $(document).on("ready", function () {
           required: 'El campo es obligatorio',
           email: 'No es un <em>valid</em> email correcto',
           
-        },
-
-        contra:{
-          required: 'El campo es obligatorio',
-        
         },
         usuario: { required: "El campo es obligatorio", minlength: "El usuario debe tener minimo 6 caracteres",maxlength: "El usuario debe tener minimo 15 caracteres"
       }
@@ -163,7 +139,6 @@ $(document).on("ready", function () {
         data.append("email", $("#email").val());
         data.append("nomyape", $("#nomyape").val());
         data.append("usuario", $(".valores").val());
-        data.append("contra", $("#contra").val());
 
         $.ajax({
           url: "./funcionesphp/actualizaruser.php",
@@ -174,7 +149,15 @@ $(document).on("ready", function () {
           method: 'POST',
           type: 'POST',
           success: function (data) {
+            if(data=="block"){
+              window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+            }else{
+            $("#emailhidden").val($("#email").val());
+            $("#usuariohidden").val($("#usuario").val());
+            $("#alert").text("");
+            $("#alert").removeClass("alert alert-warning text-center");
            alert("Datos guardados con exito");
+            }
           }
         });
 
@@ -182,6 +165,79 @@ $(document).on("ready", function () {
     }
     });
 
+
+    $.validator.addMethod('comparar', function(value, element) {
+    
+      return this.optional(element) 
+        || value==$("#contraold").val();
+    }, 'La contraseña no coincide')
+
+
+   
+
+    
+    $("#cambiarcontra").validate({
+      rules: {
+  
+          contraold: {
+              required: true,
+              strongPassword:true
+              
+              
+          },
+        contranew: {
+          required: true,
+          strongPassword:true,
+          comparar: true
+          
+        },
+       
+      },
+      messages: {
+        contranew: {
+          required: 'El campo es obligatorio', 
+        },
+        contraold: {
+          required: 'El campo es obligatorio', 
+        },
+      },
+      submitHandler: function(form) {
+        
+        var f = document.getElementById("subidaimg");
+        var img = f.files[0];
+        var data = new FormData();
+  
+        data.append('file', img);
+        data.append("img", $("#subidaimg").val());
+        data.append("username", $("#usuario").val());
+        data.append("email", $("#email").val());
+        data.append("nomyape", $("#nomyape").val());
+        data.append("usuario", $(".valores").val());
+        data.append("contra", $("#contranew").val());
+
+        $.ajax({
+          url: "./funcionesphp/actualizaruser.php",
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          type: 'POST',
+          success: function (data) {
+            if(data=="block"){
+              window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+            }else{
+           alert("Contraseña cambiada con exito");
+           $("#contranew").val('');
+           $("#contraold").val('');
+           $("#cerrarmodal").click();
+            }
+          }
+        });
+
+        return false;  
+    }
+    });
 
 
 

@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +19,7 @@
     <script src="https://kit.fontawesome.com/c176cf225e.js" crossorigin="anonymous"></script>
     <script src="https://cdn.tiny.cloud/1/2g05stakvbcct26k40nbbg5lkhsfooqbjgg3ftrg8wlo039g/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     
-    <title>Document</title>
+    <title>Pulp World</title>
 
     <?php 
     include("./funcionesphp/funcionesnotificaciones.php");

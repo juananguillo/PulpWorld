@@ -34,7 +34,7 @@ $usuarios=arrayusuariosporid($bd);
 								echo "	
 							<li class='font-weight-bold'>{$usuarios[$respuestas[$e]->getid_usuario()]->getusuario()}</li>
 							<li>{$respuestas[$e]->getmensaje()}</li>
-							<li><a class='reply-btn resp2' data-toggle='modal' data-target='#coment' href='#' data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}>Responder</a></li>
+							<li><a class='reply-btn resp2' data-toggle='modal' data-target='#coment' href='#' data-value={$usuarios[$respuestas[$e]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}>Responder</a></li>
 							";
              }
              echo "</ul>"; 

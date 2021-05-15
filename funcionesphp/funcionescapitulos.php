@@ -99,11 +99,6 @@ function editcap($bd,$titulo,$contenido,$id){
         $sentencia->execute(array(
            ':titulo' => $titulo,':contenido' => $contenido,'id'=> $id
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha ocurrido un problema con los capitulos");
@@ -225,9 +220,6 @@ function quitarnotificapi($bd, $id_usuario, $id_novedad, $tipo)
             
         );
        
-        if ($sentencia->rowCount() == 0) {
-            throw new Exception();
-        }
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha ocurrido un problema con los capitulos");

@@ -1,4 +1,13 @@
 $(document).on("ready", function () {
+
+function block(params) {
+  console.log(params);
+  if(params=="block"){
+    //window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+  }
+}
+
+
   if ($("#obraid").length ) {
   publicar();
   despublicar();
@@ -18,6 +27,7 @@ $(document).on("ready", function () {
           accion: "eliminar"
         },
         function (data) {
+          block(data);
           window.location = 'usuario.php?user=' + $(".valores").prop("id");
         });
       
@@ -35,6 +45,7 @@ $(document).on("ready", function () {
         accion: "terminar"
       },
       function (data) {
+        block(data);
        $("#terminar").html("Desfinalizar");
        $("#terminar").prop("id", "desterminar");
        $("#estadoobra").html("Estado: <strong>Terminada</strong>");
@@ -53,6 +64,7 @@ $(document).on("ready", function () {
         accion: "desterminar"
       },
       function (data) {
+        block(data);
        $("#desterminar").html("Finalizar");
        $("#desterminar").prop("id", "terminar");
        $("#estadoobra").html("Estado: <strong>Sin terminar</strong>");
@@ -73,8 +85,10 @@ function publicar() {
       accion: "publicar"
     },
     function (data) {
+      block(data);
      $("#publicar").html("Despublicar");
      $("#publicar").prop("id", "despublicar");
+     $("#obrapublic").html("<strong class='text-success'>Obra publicada</strong>");
      despublicar();
     });
   });
@@ -88,8 +102,10 @@ function despublicar() {
       accion: "despublicar"
     },
     function (data) {
+      block(data);
      $("#despublicar").html("Publicar");
      $("#despublicar").prop("id", "publicar");
+     $("#obrapublic").html("<strong class='text-danger'>Obra sin publicar</strong>")
      publicar();
     });
   });
@@ -103,8 +119,11 @@ function bloquear() {
       user:$(".valores").prop("id")
     },
     function (data) {
+      block(data);
+      console.log(data);
      $("#bloquear").html("Desbloquear");
      $("#bloquear").prop("id", "desbloquear");
+     $("#obrastate").html("<strong>Obra Bloqueada</strong>");
      desbloquear();
     });
   });
@@ -118,8 +137,10 @@ function desbloquear() {
       user:$(".valores").prop("id")
     },
     function (data) {
+      block(data);
      $("#desbloquear").html("Bloquear");
      $("#desbloquear").prop("id", "bloquear");
+     $("#obrastate").html("");
      bloquear();
     });
   });
@@ -139,6 +160,7 @@ function desbloquear() {
             accion: "eliminar"
           },
           function (data) {
+            block(data);
             window.location = './funcionesphp/sesion.php?logout=yes&index=yes'
           });
         
@@ -155,8 +177,10 @@ function desbloquear() {
           accion: "bloquear",
         },
         function (data) {
+          block(data);
          $("#bloquearuser").html("Desbloquear");
          $("#bloquearuser").prop("id", "desbloquearuser");
+         $("#usustate").html("<strong>Usuario Bloqueado</strong>");
          desbloquearuser();
         });
       });
@@ -169,8 +193,10 @@ function desbloquear() {
           accion: "desbloquear",
         },
         function (data) {
+          block(data);
          $("#desbloquearuser").html("Bloquear");
          $("#desbloquearuser").prop("id", "bloquearuser");
+         $("#usustate").html("");
          bloquearuser();
         });
       });
@@ -196,6 +222,7 @@ function desbloquear() {
             accion: "eliminar"
           },
           function (data) {
+            block(data);
             window.location = 'obra.php?obra=' + $("#obracapi").val();
           });
         
@@ -213,6 +240,8 @@ function publicarcapi() {
       accion: "publicar"
     },
     function (data) {
+      console.log(data);
+      block(data);
      $("#publicarcapi").html("Despublicar");
      $("#publicarcapi").prop("id", "despublicarcapi");
      $("#alert").text("El capitulo ha sido publicado, si la obra no es publica nadie lo podra leer!");
@@ -230,6 +259,7 @@ function despublicarcapi() {
       accion: "despublicar"
     },
     function (data) {
+      block(data);
       $("#alert").text("");
       $("#alert").removeClass("alert alert-success text-center");
      $("#despublicarcapi").html("Publicar");
@@ -247,6 +277,7 @@ function bloquearcapi() {
       user:$(".valores").prop("id"),
     },
     function (data) {
+      block(data);
      $("#bloquearcapi").html("Desbloquear");
      $("#bloquearcapi").prop("id", "desbloquearcapi");
      desbloquearcapi();
@@ -262,6 +293,7 @@ function desbloquearcapi() {
       user:$(".valores").prop("id"),
     },
     function (data) {
+      block(data);
      $("#desbloquearcapi").html("Bloquear");
      $("#desbloquearcapi").prop("id", "bloquearcapi");
      bloquearcapi();

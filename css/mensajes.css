@@ -50,9 +50,11 @@ textarea {
 
 .mdiv1{
 margin-left: 50%;
+word-wrap:break-word;
 }
 
 .mdiv2{
     margin-right: 50%;
+    word-wrap:break-word;
     }
     

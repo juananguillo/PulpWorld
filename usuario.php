@@ -1,9 +1,10 @@
 <?php 
+ob_start();
 session_start();
-
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
+include("./funcionesphp/block.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("clases/obras.class.php");
 include("clases/capitulos.class.php");
@@ -17,14 +18,20 @@ include("funcionesphp/funcionesbiblioteca.php");
 if(isset($_GET["user"])){
 	$readonly="disabled";
     $thisusuario=unusuarioporcodigo($bd, $_GET["user"]);
-    if($thisusuario->getestado()==0 && !isset($_SESSION["usuario"])) header("Location: index.php");
+    if($thisusuario->getestado()==0 && !isset($_SESSION["usuario"])){
+		header("Location: index.php");
+		die();
+	}
 	if(!isset($_SESSION["usuario"])){
 		$obras= obrasautor($bd,"n",$_GET["user"]);
 	}
 	else{
-		if($thisusuario->getestado()==0 && $_SESSION["tipo"]==0) header("Location: index.php");
+		if($thisusuario->getestado()==0 && $_SESSION["tipo"]==0) {
+		header("Location: index.php");
+		}
 		$readonly=$_SESSION['usuario']!=$_GET["user"] ? "disabled" :"";
 		$usuario=unusuarioporcodigo($bd, $_SESSION["usuario"]);
+		isblock($usuario->getestado());
 		$seguidor=verseguidor($bd, $thisusuario->getid(), $_SESSION["usuario"]);
 		$textomegusta=$seguidor==0 ? "Seguir" : "Dejar de seguir";
 		$buttoncolor=$seguidor==0 ? "btn-success": "btn-danger";
@@ -48,6 +55,7 @@ if(isset($_GET["user"])){
 }
 else{
 	header("Location: index.php");
+	die();
 }
 
 
@@ -90,13 +98,20 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 	<?php echo $thisusuario->getusuario(); ?>
 	
 	</h1>
+
 	<div class="text-center">
 	<strong>Seguidores</strong> <i class="fas fa-users text-danger"><span id="thisseguidores"> <?php echo $thisusuario->getseguidores(); ?></span></i>
 	<strong>Obras publicas</strong> <i class="fas fa-book-open text-primary"> <?php echo $thisusuario->getobras(); ?></i><br>
 </div>
 	<div class="text-center">
 	<?php if(isset($_SESSION["usuario"])) {
+		?>	<div id="usustate" class="text-center mt-2 mb-2 text-danger"> <?php  
+		if($thisusuario->getestado()==0){
 		?>
+	
+		<strong>Usuario Bloqueado</strong>
+
+<?php } echo "</div>"; ?>
 		
 		<input class="valores" type="hidden" id=<?php echo $_SESSION['usuario']; ?> value=<?php echo $thisusuario->getid(); ?>>
 	<?php 
@@ -135,6 +150,7 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
                 </div>
             </div>
         </div>
+		<div style="width: 77%; margin:auto;" class="text-center mt-3"><p id="alert"></p></div>
 </div>
 
 	
@@ -218,8 +234,14 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 										echo "Estado: <strong>Publico</strong>";
 									}
 									?> 
+								<?php if($_SESSION["tipo"]==1) {
+		if($obras[$i]->getestado()==0){
+		?>
+		
+		<strong class="text-danger">Obra Bloqueada</strong>
+
+								<?php } } } ?>
 								
-								<?php } ?>
 							</div>       
                             
                           
@@ -240,13 +262,48 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
   <input class="form-control" type="hidden" id="emailhidden" name="emailhidden" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"> 
   <input class="form-control" type="text" id="email" name="email" <?php echo $readonly ?> value="<?php echo $thisusuario->getemail(); ?>"><br><br> 
   <label for="nomyape">Nombre y apellido</label><br>
-  <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $thisusuario->getnomyape(); ?>"><br><br>
-<?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$thisusuario->getid()) || isset($_SESSION["tipo"]) && $_SESSION["tipo"]==1){ ?>
-	<label for="contra">Contraseña</label><br>
-  <input class="form-control" type="password" id="contra" name="contra" value="<?php echo $thisusuario->getcontra(); ?>"><br><br>
- <?php } ?> 
+  <input class="form-control" type="text" id="nomyape" name="nomyape" <?php echo $readonly ?> value="<?php echo $thisusuario->getnomyape(); ?>"><br>
   <input type="hidden" class="btn btn-primary" name="cambiousu" id="cambiousu" value="Enviar">  
 </form>
+  <?php if(isset($_SESSION["usuario"]) && ($_SESSION["usuario"]==$thisusuario->getid()) || isset($_SESSION["tipo"]) && $_SESSION["tipo"]==1){ ?>
+	<a  data-toggle="modal" data-target="#cambio" href="#">Cambiar contraseña</a>
+	<div class="modal fade" id="cambio" tabindex="-1" role="dialog" aria-labelledby="registroLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registroLabel">Cambiar contraseña</h5>
+                       
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <p id="errores"></p>
+                        <form id="cambiarcontra">
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
+							<label for="message-text" class="col-form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-control" name="contraold" id="contraold">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Repetir Contraseña</label>
+                                <input type="password" class="form-control" name="contranew" id="contranew">
+                            </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cerrarmodal" data-dismiss="modal">Cerrar</button>
+                        <input type="submit" class="btn btn-primary" name="botonregistro" id="botonregistro" value="Enviar">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+ <?php } ?> 
+
 </div>
 
 
@@ -286,7 +343,28 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
 						<a <?php echo "href=obra.php?obra={$obras_biblioteca[$i]->getid()}"  ?>>
 						<?php echo $obras_biblioteca[$i]->gettitulo(); ?>
 						</a>
-						
+						<div class="pull-right action-buttons">
+						<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <?php echo $obras_biblioteca[$i]->getlikes(); ?></i>
+					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"> <?php echo $obras_biblioteca[$i]->getlecturas(); ?></i>
+								<?php if (isset($_SESSION["usuario"]) &&  $_SESSION["tipo"] == 1) { ?>
+									
+									<?php 
+									if($obras_biblioteca[$i]->getpublico()==0){
+										echo "Estado: <strong>Sin publicar</strong>";
+									}
+									else{
+										echo "Estado: <strong>Publico</strong>";
+									}
+									?> 
+								<?php if($_SESSION["tipo"]==1) {
+		if($obras_biblioteca[$i]->getestado()==0){
+		?>
+		
+		<strong class="text-danger">Obra Bloqueada</strong>
+
+								<?php } } } ?>
+								
+							</div>  
                         </li>
                        <?php }
 		}
@@ -298,7 +376,9 @@ margin:auto; "  <?php echo "src=Imagenes/Usuarios/{$thisusuario->getfoto()}"; ?>
         </div>
        
 			</div>
-			
+			<div class="text-center mt-5">
+<a class="btn btn-secondary" href="<?php echo $_SERVER['HTTP_REFERER'] ?>"><i class="fas fa-undo-alt"></i> Volver</a>
+</div>
 </div>
     <?php 
 include("Includes/footer.php")

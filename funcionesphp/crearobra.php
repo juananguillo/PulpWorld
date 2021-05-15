@@ -11,6 +11,10 @@ $bd = conectardb();
 include("funcionesobras.php");
 include("funcionescategorias.php");
 include("../clases/obras.class.php");
+include("funcionesusuarios.php");
+include("../clases/usuarios.class.php");
+$usublock=unusuarioporcodigo($bd, $autor);
+if($usublock->getestado()!=0){
 $array=explode(",", $cat);
 
 
@@ -32,5 +36,8 @@ for ($i=0; $i <count($array) ; $i++) {
 }
 
 echo $id;
-
+}
+else{
+    echo "block";
+}
 ?>

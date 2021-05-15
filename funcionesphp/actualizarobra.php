@@ -1,13 +1,17 @@
 <?php 
-
 $titulo=$_POST["titulo"];
 $sinopsis=$_POST["sinopsis"];
 $img=$_POST["img"];
 $obra=$_POST["obra"];
 $cat=$_POST["cat"];
-
 include("conexionbd.php");
 $bd = conectardb();
+session_start();
+include('funcionesusuarios.php');
+include("../clases/usuarios.class.php");
+$usuario = unusuarioporcodigo($bd, $_POST["usuario"]);
+$usublock=unusuarioporcodigo($bd, $_SESSION["usuario"]);
+if($usublock->getestado()!=0){
 include("funcionesobras.php");
 include("funcionescategorias.php");
 include("../clases/obras.class.php");
@@ -35,6 +39,9 @@ borrargeneros($bd, $obra);
 for ($i=0; $i <count($array) ; $i++) { 
     addgenero($bd,$obra,$array[$i]);
 }
-
+}
+else{
+    echo "block";
+}
 
 ?>

@@ -149,19 +149,35 @@ function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat,$tipo){
         ORDER BY o.$orden DESC
         LIMIT $desc, 20000000");
         }else{
-            $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
-            (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
-            OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
-            AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
-            ORDER BY o.$orden DESC
-            LIMIT $desc, 20000000"); 
-        }
-        $sentencia->execute();
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
+
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+                   o.estado like $estado AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                    OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                    AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
+                    ORDER BY o.$orden DESC
+                    LIMIT $desc, 20000000
+                    ");  
+                }
+            else{
+                $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+                (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
+                ORDER BY o.$orden DESC
+                LIMIT $desc, 20000000"); 
+            }
             
         }
+        $sentencia->execute();
+       
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
         $array=array();
             while ($obras=$sentencia->fetch()) {
@@ -171,7 +187,8 @@ function obraspalabrasconcat($bd,$desc,$orden,$palabra,$cat,$tipo){
 
         return $array;
     } catch (Exception $e) {
-        header("Location: error.php?error=Ha habido un problema con las obras");
+        echo $e->getMessage();
+        //header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
        
     }
@@ -186,21 +203,45 @@ function totalobraspalabrasconcat($db,$desc, $orden,$palabra,$cat,$tipo){
         o.estado like 1 AND publico like 1 AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
-        ORDER BY o.$orden DESC");
+        ORDER BY o.$orden DESC
+        LIMIT $desc, 20000000"
+        );
         }
         else{
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
             $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
-            (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
-            OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
-            AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
-            ORDER BY o.$orden DESC");
+               o.estado like $estado AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
+                ORDER BY o.$orden DESC
+                LIMIT $desc, 20000000
+                ");  
+            }
+            else{
+                $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+                (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                AND  (g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.id LIKE $cat) 
+                ORDER BY o.$orden DESC
+                LIMIT $desc, 20000000
+                ");  
+            }
+           
         }
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
         return $total;
     
     } catch (Exception $e) {
-        header("Location: error.php?error=Ha habido un problema con las obras");
+        echo $e->getMessage();
+        //header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
     }
     
@@ -216,18 +257,45 @@ function obraspalabras($bd,$desc,$orden,$palabra,$tipo){
         ORDER BY o.$orden DESC
         LIMIT $desc, 20000000");
         }else{
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+               
+                $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+               o.estado like $estado AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                ORDER BY o.$orden DESC
+                LIMIT $desc, 20000000");
+            }
+            else if(strpos(strtolower($palabra), 'public') !== false || strpos(strtolower($palabra), 'nopublic') !== false){
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="nopublic"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+                o.publico like $estado AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                 OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                 ORDER BY o.$orden DESC
+                 LIMIT $desc, 20000000");
+            }
+            else{
             $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
         (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         ORDER BY o.$orden DESC
         LIMIT $desc, 20000000");
+            }
         }
         $sentencia->execute();
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+       
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
         $array=array();
             while ($obras=$sentencia->fetch()) {
@@ -237,7 +305,8 @@ function obraspalabras($bd,$desc,$orden,$palabra,$tipo){
 
         return $array;
     } catch (Exception $e) {
-        header("Location: error.php?error=Ha habido un problema con las obras");
+        echo $e->getMessage();
+        //header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
        
     }
@@ -254,17 +323,54 @@ function totalobraspalabras($db,$desc, $orden,$palabra,$tipo){
         OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
         ORDER BY o.$orden DESC");
         }else{
-            $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+           o.estado like $estado AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+            OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+            ORDER BY o.$orden DESC");
+            }
+
+            else if(strpos(strtolower($palabra), 'public') !== false || strpos(strtolower($palabra), 'nopublic') !== false){
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="nopublic"){
+                    $estado=0;
+                }
+
+
+                $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
+                o.publico like $estado AND (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
+                 OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
+                 ORDER BY o.$orden DESC");
+
+            }
+
+                
+
+            else{
+                $sentencia = $db->prepare("SELECT  COUNT(DISTINCT o.id) FROM obras o INNER JOIN usuario u INNER JOIN genero g INNER JOIN categoria c WHERE 
             (titulo LIKE '%$palabra%' OR sinopsis LIKE '%$palabra%'
             OR (o.autor LIKE u.id AND u.usuario like '%$palabra%') OR g.id_obra LIKE o.id AND g.id_categoria LIKE c.id AND c.nombre LIKE '%$palabra%') 
             ORDER BY o.$orden DESC");
+            }
+           
         }
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
         return $total;
     
     } catch (Exception $e) {
-        header("Location: error.php?error=Ha habido un problema con las obras");
+        echo $e->getMessage();
+        //header("Location: error.php?error=Ha habido un problema con las obras");
         exit;
     }
     
@@ -357,12 +463,17 @@ function totalobras($db,$tipo){
         $sentencia->bindParam(":id", $id, PDO::PARAM_STR);
         $sentencia->execute();
         $sentencia->setFetchMode(PDO::FETCH_CLASS, "obras");
-        $obra = $sentencia->fetch();
+
         if($sentencia->rowCount()==0)
         {
             throw new Exception();
             
         }
+        
+        $obra = $sentencia->fetch();
+       
+
+
        return $obra;
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con las obras");
@@ -570,11 +681,7 @@ function bloquear($bd,$id){
         $sentencia->execute(array(
            'id'=> $id
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+      
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con las obras");
@@ -637,9 +744,6 @@ function quitarnotifi($bd, $id_usuario, $id_novedad, $tipo)
             
         );
        
-        if ($sentencia->rowCount() == 0) {
-            throw new Exception();
-        }
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con las obras");
@@ -665,18 +769,14 @@ function cambiarobra($bd,$titulo, $sinopsis, $obra){
 
 function menosuna($bd,$id){
     try {
-        $sentencia = $bd->prepare("UPDATE usuario SET obras= obras-1 WHERE id LIKE :id ");
+        $sentencia = $bd->prepare("UPDATE usuario SET obras= obras-1 WHERE id LIKE :id");
         $sentencia->execute(array(
            'id'=> $id
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
+      
 
     } catch (Exception $e) {
-        header("Location: error.php?error=Ha habido un problema con las obras");
+        header("Location: error.php?error=Ha habido un problema con las obrasJA");
         exit;
        
     }

@@ -66,11 +66,10 @@ function totalusuarios($db,$tipo){
 function dardealtausuario($db, $usu, $contra, $email){
     try {
         $pass_enc = password_hash($contra, PASSWORD_DEFAULT);
-        $hash = md5( rand(0,1000) );
-        $sentencia = $db->prepare("Insert INTO usuario(id, email, usuario, contra, nomyape, estado, foto, tipo, hash)
-    VALUES(:id, :email, :usuario, :contra, :nomyape, :estado, :foto, :tipo, :hash)");
+        $sentencia = $db->prepare("Insert INTO usuario(id, email, usuario, contra, nomyape, estado, foto, tipo)
+    VALUES(:id, :email, :usuario, :contra, :nomyape, :estado, :foto, :tipo)");
         $sentencia->execute(array(
-            ':id' => null, ':usuario' => $usu, ':contra' => $pass_enc, ':nomyape'=>null, ':email' => $email, ':tipo'=>0,  ':estado'=>1, ':foto'=>"default.jpg", ':hash'=>$hash)
+            ':id' => null, ':usuario' => $usu, ':contra' => $pass_enc, ':nomyape'=>null, ':email' => $email, ':tipo'=>0,  ':estado'=>1, ':foto'=>"default.jpg")
             
         );
        
@@ -78,26 +77,6 @@ function dardealtausuario($db, $usu, $contra, $email){
             throw new Exception();
 
         }
-
-        $to      = $email; 
-$subject = 'Activar cuenta en PulpWorld'; 
-$message = '
- 
-Gracias por registrarte!
-Tu cuenta ha sido creada con exito, para activarla haz click en el enlace.
- 
-------------------------
-Usuario: '.$usu.'
-Contraseña: '.$contra.'
-------------------------
- 
-Activar cuenta:
-http://www.yourwebsite.com/verify.php?email='.$email.'&hash='.$hash.'
- 
-'; 
-                     
-$headers = 'From:pulpworld@gmail.com' . "\r\n"; // Set from headers
-mail($to, $subject, $message, $headers); // Send our email
     
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con los usuarios");
@@ -105,6 +84,33 @@ mail($to, $subject, $message, $headers); // Send our email
     }
 }
 
+
+function verify($db,$email,$hash){
+    ;
+    try {
+        $sentencia = $db->prepare("SELECT id FROM usuario WHERE email like '$email' AND hash like '$hash'");
+        $sentencia->execute();
+        $id=$sentencia->fetchAll(\PDO::FETCH_ASSOC);
+        
+
+        if($sentencia->rowCount()==0)
+        {
+            throw new Exception();
+            
+        }
+
+        return $id;
+
+
+    
+    } catch (Exception $e) {
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
+    }
+    
+    }
+
+   
 
 
 function obtenerusuario($db, $email){
@@ -205,7 +211,7 @@ function arrayusuarios($bd){
     try {
 
             $sentencia = $bd->prepare("SELECT * FROM usuario 
-            WHERE estado like 1");
+            WHERE estado like 1 ORDER BY seguidores DESC");
             
     
     $sentencia->execute();
@@ -290,11 +296,27 @@ function filtrarusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
         LIMIT $desc, 20000000");
         }
         else{
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+                WHERE u.estado like $estado AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+            else{
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
             WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
             u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
             ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
+            }
         }   
     
     $sentencia->execute();
@@ -322,11 +344,28 @@ function totalusuariosporpalabras($bd,$desc,$orden, $palabra,$tipo){
         LIMIT $desc, 20000000");
         }
         else{
-            $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
-            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
-            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY u.$orden DESC
-        LIMIT $desc, 20000000");
+
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+                WHERE u.estado like $estado AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            } else{
+                $sentencia = $bd->prepare("SELECT COUNT(*) FROM usuario u
+                WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )>0 AND (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+           
         }   
     
         $sentencia->execute();
@@ -349,11 +388,29 @@ function filtrarusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
         LIMIT $desc, 20000000");
         }
         else{
-            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE (
-            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY u.$orden DESC
-        LIMIT $desc, 20000000");
+
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+                WHERE u.estado like $estado AND (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+            else{
+                $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+                WHERE (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+         
         }   
     
     $sentencia->execute();
@@ -382,10 +439,28 @@ function totalusuariosporpalabrastodos($bd,$desc,$orden, $palabra,$tipo){
         LIMIT $desc, 20000000");
         }
         else{
-            $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
-            WHERE  (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY u.$orden DESC
-        LIMIT $desc, 20000000");
+
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+                WHERE u.estado like $estado AND  (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+            else{
+                $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+                WHERE  (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+
+         
         }   
     
         $sentencia->execute();
@@ -409,11 +484,29 @@ function filtrarusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
         LIMIT $desc, 20000000");
         }
         else{
-            $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
-            u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY u.$orden DESC
-        LIMIT $desc, 20000000");
+
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+                WHERE u.estado like $estado AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+            else{
+                $sentencia = $bd->prepare("SELECT u.* FROM usuario u
+                WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (
+                u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+
         }   
     
     $sentencia->execute();
@@ -442,10 +535,27 @@ function totalusuariosporpalabrasuser($bd,$desc,$orden, $palabra,$tipo){
         LIMIT $desc, 20000000");
         }
         else{
-            $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
-            WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
-            ORDER BY u.$orden DESC
-        LIMIT $desc, 20000000");
+
+            if (strpos(strtolower($palabra), 'block') !== false || strpos(strtolower($palabra), 'noblock') !== false) {
+                $block=$palabra;
+                $partes = explode(" ", $block, 2);
+                $palabra=$partes[1];
+                $estado=1;
+                if(strtolower($partes[0])=="block"){
+                    $estado=0;
+                }
+                $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+                WHERE u.estado like $estado AND (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+            else{
+                $sentencia = $bd->prepare("SELECT count(*) FROM usuario u
+                WHERE (SELECT COUNT(*) FROM obras o WHERE o.autor LIKE u.id )=0 AND (u.id like '%$palabra%' OR u.email LIKE '%$palabra%' OR u.nomyape LIKE '%$palabra%')
+                ORDER BY u.$orden DESC
+            LIMIT $desc, 20000000");
+            }
+         
         }   
     
         $sentencia->execute();
@@ -465,12 +575,12 @@ function filtrarusuarios3($bd,$desc,$orden,$tipo){
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
             WHERE u.estado LIKE 1
-            ORDER BY u.$orden DESC
+            ORDER BY u.$orden ASC
         LIMIT $desc, 20000000");
         }
         else{
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            ORDER BY u.$orden DESC
+            ORDER BY u.$orden ASC
         LIMIT $desc, 20000000");
         }   
     
@@ -709,9 +819,34 @@ function idseguidor($bd, $id_seguido)
             ':id_seguido' => $id_seguido)
             
         );
+        
        
        $resultado= $sentencia->fetchAll(\PDO::FETCH_ASSOC);
         return $resultado;
+
+    } catch (Exception $e) {
+        header("Location: error.php?error=Ha habido un problema con los usuarios");
+        exit;
+    }
+}
+
+function idseguidores($bd, $id_seguido)
+{
+    try {
+       
+        $sentencia = $bd->prepare("SELECT id_seguidor FROM seguidor WHERE id_seguido LIKE :id_seguido");
+        $sentencia->execute(array(
+            ':id_seguido' => $id_seguido)
+            
+        );
+        $resultado= $sentencia->fetchAll(\PDO::FETCH_ASSOC);
+        $array[]=[];
+        foreach ($resultado as $key => $value) {
+            $array[]=$value;
+        } 
+       
+     
+        return $array;
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con los usuarios");
@@ -745,11 +880,6 @@ function desbloquearuser($bd,$id){
         $sentencia->execute(array(
            ':id'=> $id
         ));
-        if($sentencia->rowCount()==0)
-        {
-            throw new Exception();
-            
-        }
 
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con los usuarios");
@@ -810,4 +940,25 @@ function eliminarusuario($bd,$id){
        
     }
 }
+
+
+function usublock($bd,$id){
+    try {
+        $sentencia = $bd->prepare("SELECT * from usuario WHERE id LIKE :id AND estado like 0");
+        $sentencia->execute(array(
+           'id'=> $id
+        ));
+        if($sentencia->rowCount()==1)
+        {
+            throw new Exception();
+            
+        }
+
+    } catch (Exception $e) {
+        header("Location: sesion.php?logout=yes&index=yes");
+        exit;
+       
+    }
+}
+
 ?>

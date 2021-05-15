@@ -1,9 +1,10 @@
 <?php 
+ob_start();
 session_start();
-
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
+include("./funcionesphp/block.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("clases/categorias.class.php");
 include("funcionesphp/funcionescategorias.php");
@@ -11,8 +12,10 @@ include("funcionesphp/funcionesobras.php");
 include("clases/obras.class.php");
 if(!isset($_SESSION["usuario"])){
     header("Location: index.php");
+    die();
 }
 $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+isblock($usuario->getestado());
 $categorias=categorias($bd);
 include("Includes/header.php");
     ?>
@@ -35,7 +38,7 @@ include("Includes/header.php");
 	<ul class="nav nav-tabs ml-auto">
       <li class="nav-item">
         
-	  <a class="btn btn-primary" href="#obra" id="guardar" data-toggle="tab">Guardar</a>
+	  <a style="margin-left: 17%;" class="btn btn-primary" href="#obra" id="guardar" data-toggle="tab">Guardar</a>
 	  </li>
     </ul>
     
@@ -82,7 +85,7 @@ margin:auto; " src="Imagenes/Obras/default.jpg" class="img-thumbnail"  alt="" />
 
  </div><br>
   <label for="sinopsis">Sinopsis: (Maximo 250 palabras)</label><br>
-  <textarea style="resize: none;" class="form-control" id="sinopsisobra"  rows="22" maxlength="1684"></textarea>
+  <textarea style="resize: none;" class="form-control" id="sinopsisobra"  rows="22" maxlength="1700"></textarea>
 </form>
  
 	</div>

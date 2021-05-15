@@ -8,11 +8,23 @@ if(isset($_POST["busqueda"]) || isset($_POST["busqueda1"])){
     $orden=$_POST["orden"];
     $categoria=$_POST["categoria"];
     if($_POST["textobusqueda"]==""){
-    header("Location: ../index.php?orden=$orden&categoria=$categoria");   
+        if($_POST["block"]){
+            header("Location: ../index.php?orden=$orden&categoria=$categoria&block=true");   
+        }
+        else{
+            header("Location: ../index.php?orden=$orden&categoria=$categoria");   
+        }
+   
     }
     else{
         $palabras=trim($_POST["textobusqueda"]);
-        header("Location: ../index.php?buscarpor=$palabras&orden=$orden&categoria=$categoria");   
+        if($_POST["block"]){
+            header("Location: ../index.php?buscarpor=$palabras&orden=$orden&categoria=$categoria&block=true"); 
+        }
+        else{
+            header("Location: ../index.php?buscarpor=$palabras&orden=$orden&categoria=$categoria");   
+        }
+      
     }
 
 }

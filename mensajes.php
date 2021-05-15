@@ -1,9 +1,11 @@
 <?php 
+ob_start();
 session_start();
 
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
+include("./funcionesphp/block.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("./funcionesphp/funcionesobras.php");
 include("clases/obras.class.php");
@@ -11,12 +13,15 @@ include('clases/capitulos.class.php');
 include('./funcionesphp/funcionescapitulos.php');
 include("Includes/header.php");
 if(isset($_SESSION["usuario"])){
+  
     $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+    isblock($usuario->getestado());
     $usuarios= arrayusuariosporid($bd);
   $id_chats= emisoresyreceptores($bd, $_SESSION['usuario']);
 }
 else{
   header("Location: index.php");
+  die();
 }
 
 
@@ -31,7 +36,6 @@ else{
     <body>
     <h1 class="text-center mt-3">
 			Mensajes
-
 		</h1>
     <div id="cont" class="container mb-5 mt-5">
     <div class="row  border">

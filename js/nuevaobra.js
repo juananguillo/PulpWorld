@@ -28,8 +28,9 @@ $(document).on("ready", function () {
         readURL(this);
       });
 
-    $("#guardar").one("click", function () {
-        var error=false;
+    $("#guardar").on("click", function () {
+        let error=false;
+        
         $("#err").hide();
         $("#titobra").css("border-color", "green");
         if($("#subidaimg").val()=="")
@@ -78,7 +79,11 @@ $(document).on("ready", function () {
                 method: 'POST',
                 type: 'POST',
                 success: function(data){
+                  if(data=="block"){
+                    window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+                  }else{
                 window.location.replace("./obra.php?obra="+data);
+                  }
                 }
             });
         

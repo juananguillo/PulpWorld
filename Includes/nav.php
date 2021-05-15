@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
 
     <a class="navbar-brand" href="index.php">
 
@@ -12,9 +12,10 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" href="index.php">Obras</a></li>
             <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
             <?php if(isset($_SESSION['usuario'])){?>
-                <li class="nav-item"><a class="nav-link" href="./notificaciones.php"><i class="fas fa-bell"></i> Notificaciones <?php $sinver=sinver($bd, $_SESSION["usuario"]);  if($sinver!=0) { ?><span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span> <?php } ?></a></li>
-                 <li class="nav-item"><a class="nav-link" href="mensajes.php"><i class="fas fa-envelope"></i> Mensajes
+                <li class="nav-item"><a class="nav-link text-danger" href="./notificaciones.php"><i class="fas fa-bell"></i> Notificaciones <?php $sinver=sinver($bd, $_SESSION["usuario"]);  if($sinver!=0) { ?><span class="badge badge-primary"><?php echo sinver($bd, $_SESSION["usuario"]) ?></span> <?php } ?></a></li>
+                 <li class="nav-item"><a class="nav-link text-success" href="mensajes.php"><i class="fas fa-envelope"></i> Mensajes
             <?php 
             $totalmen=sinleertotal($bd, $_SESSION["usuario"]);
             if($totalmen>0){
@@ -25,20 +26,17 @@
                 <?php } 
                 if(isset($_SESSION["usuario"])){
                 ?>
-                <li class="nav-item"><a class="nav-link" href="new.php">Escribir obra</a></li>
+                <li class="nav-item"><a class="nav-link text-primary" href="new.php"><i class="fas fa-pencil-alt"></i> Escribir obra</a></li>
                 <?php } ?>
         </ul>
         <?php if(isset($_SESSION['usuario'])){
-            if($usuario->getestado()==0){
-                header("Location: ./funcionesphp/sesion.php?logout=yes&index=yes");
-                exit;
-            }
+            
             ?>
 
 
 <div class="pull-right mr-4">
                 <ul class="nav pull-right">
-                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user"></i> Hola! <?php echo $usuario->getusuario(); ?><b class="caret"></b>  <span class="badge badge-primary">4</span></a>
+                    <li class="dropdown"><a href="#" class="dropdown-toggle text-dark" data-toggle="dropdown"><i class="fas fa-user"></i> Hola! <?php echo $usuario->getusuario(); ?><b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href=<?php echo "usuario.php?user={$_SESSION['usuario']}";?> ><i class="icon-cog"></i> Perfil</a></li>
                             <li class="divider"></li>

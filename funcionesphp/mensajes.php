@@ -10,7 +10,8 @@ include('funcionesmensajes.php');
 include("../clases/mensajes.class.php");
 include('funcionesusuarios.php');
 include("../clases/usuarios.class.php");
-
+$usublock=unusuarioporcodigo($bd, $id1);
+if($usublock->getestado()!=0){
 switch ($accion) {
 
   case 'actualizar':
@@ -96,5 +97,10 @@ break;
     break;
 }
 }
+else{
+  echo "block";
+}
+}
+
 
 ?>

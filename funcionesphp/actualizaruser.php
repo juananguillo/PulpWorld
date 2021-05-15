@@ -9,9 +9,12 @@ $nomyape=$_POST["nomyape"];
 include("funcionesusuarios.php");
 include("../clases/usuarios.class.php");
 include("conexionbd.php");
+session_start();
 $bd = conectardb();
-$user=unusuarioporcodigo($bd, $usuario);
-if ($_POST['contra'] != $user->getcontra()) {
+$user=unusuarioporcodigo($bd, $_POST["usuario"]);
+$usublock=unusuarioporcodigo($bd, $_SESSION["usuario"]);
+if($usublock->getestado()!=0){
+if ($_POST['contra']) {
     $pass_enc = password_hash($_POST['contra'], PASSWORD_DEFAULT);
 } else {
     $pass_enc = $user->getcontra();
@@ -32,5 +35,9 @@ if($img!=""){
     }
 }
 }
+else{
+    echo "block";
+}
 
+}
 ?>

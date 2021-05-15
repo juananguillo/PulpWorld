@@ -4,10 +4,28 @@
 }
 
 #textnot{
-    height: 50px;
-    padding: 1%;
+    
+    word-wrap:break-word;
 }
 
+
+p{
+    padding: 1%;
+}
 #err{
     height: 500px;
+}
+
+@media screen and (max-width: 1200px) {
+    #textnot{
+        height: 150px;
+        word-wrap:break-word;
+    }
+    #textnot>p{
+        padding: 3%;
+    }
+
+    #err{
+        height: 700px;
+    }
 }

@@ -1,5 +1,16 @@
 $(document).on("ready", function () {
-  
+
+
+  $("#formobra :input").change(function() {
+    nosave();
+   });
+
+   function nosave() {
+    $("#alert").text("Existen datos sin guardar");
+    $("#alert").addClass("alert alert-danger text-center");
+    }
+
+
   $(".redi").on("click", function () {
     var href = $(this).attr('href');
     var obra = $("#obraid").val()
@@ -62,6 +73,7 @@ $(document).on("ready", function () {
     else{
       $("#categorias").val(0);
     }
+    nosave();
 
   });
 
@@ -77,6 +89,7 @@ $(document).on("ready", function () {
 
   $("#subidaimg").on("change", function () {
     readURL(this);
+    nosave();
   });
 
   $("#guardar").on("click", function () {
@@ -108,13 +121,13 @@ $(document).on("ready", function () {
       data.append("sinopsis", $("#sinopsisobra").val());
       data.append("sinopsis", $("#sinopsisobra").val());
       data.append("obra", $(".valores").val());
+      data.append("usuario", $(".valores").prop("id"));
       var array = [];
 
       $(".sel").each(function () {
 
         array.push($(this).attr('id'));
       })
-
 
       data.append("cat", array);
 
@@ -129,7 +142,15 @@ $(document).on("ready", function () {
         type: 'POST',
         success: function (data) {
           console.log(data);
-         alert("Datos guardados con exito");
+          if(data=="block"){
+            window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+          }else{
+            $("#alert").text("");
+            $("#alert").removeClass("alert alert-warning text-center");
+            $("#sinopsisobra").css("border-color", "green");
+            alert("Datos guardados con exito");
+          }
+       
         }
       });
 

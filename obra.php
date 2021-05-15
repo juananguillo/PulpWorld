@@ -1,9 +1,10 @@
 <?php
+ob_start();
 session_start();
-
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
+include("./funcionesphp/block.php");
 include("funcionesphp/funcionesmarcapaginas.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("clases/obras.class.php");
@@ -31,6 +32,7 @@ if (isset($_GET["obra"])) {
 		$obras_guardadas = unaobraguardadaporid($bd, $biblioteca, $obra->getid());
 		if ($_SESSION["tipo"] != 1 && $obra->getestado() == 0) {
 			header("Location: index.php");
+			die();
 		}
 		$megusta = vermegusta($bd, $obra->getid(), $_SESSION["usuario"]);
 		$textomegusta = $megusta == 0 ? "Dar me gusta" : "Quitar me gusta";
@@ -48,12 +50,18 @@ if (isset($_GET["obra"])) {
 }
 if (($obra->getpublico() == 0 || $obra->getestado() == 0) && $_SESSION["usuario"] != $obra->getautor() && $_SESSION["tipo"] != 1) {
 	header("Location: index.php");
+	die();
 }
 $categorias = categorias($bd);
 $readonly = "disabled";
 if (isset($_SESSION['usuario'])) {
 	$usuario = unusuarioporcodigo($bd, $_SESSION['usuario']);
+	isblock($usuario->getestado());
 	$readonly = $_SESSION['usuario'] != $obra->getautor() ? "disabled" : "";
+	if($_SESSION["tipo"]==1){
+		$readonly ="";
+	}
+	
 }
 include("Includes/header.php");
 ?>
@@ -76,17 +84,14 @@ include("Includes/header.php");
 
 
 	<div class="container mt-5 mb-5 d-flex flex-column">
-		<h1 class="text-center">
-			<?php echo $obra->gettitulo(); ?>
-			<input type="hidden" id="obraid" value="<?php echo $obra->getid(); ?>">
-
-		</h1>
+	
 		<div class="row flex-fill h-100" style="min-height:0">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<img id="port" style=" display:block;
 margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="img-thumbnail" alt="" />
 				<br>
-				<?php if (isset($_SESSION["usuario"]) && $_SESSION["usuario"] == $obra->getautor()) { ?>
+				<?php 
+				 if (isset($_SESSION["usuario"]) && ($_SESSION['usuario'] == $obra->getautor() || $_SESSION["tipo"]==1)) { ?>
 					<form enctype="multipart/form-data" action="#" id="imgform" method="POST">
 						<div id="div_file">
 							<p id="textoboton">Cambiar Imagen</p>
@@ -94,12 +99,27 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 
 						</div>
 					</form>
+				
 					<br>
 				<?php } ?>
+				<h1 class="text-center">
+			<?php echo $obra->gettitulo(); ?>
+			<input type="hidden" id="obraid" value="<?php echo $obra->getid(); ?>">
+
+		</h1>
+				
+				<div class="text-center">
+				<a target="_blank" href="https://twitter.com/intent/tweet?text=Me gusta esta obra de Pulp World! http%3A//puplwordl.online/obra.php?obra=<?php echo $obra->getid(); ?>"><i class="fab fa-twitter fa-2x"></i></a>
+				<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A//puplwordl.online/obra.php?obra=<?php echo $obra->getid(); ?>"><i class="fab fa-facebook-square fa-2x"></i></a>
+				<a target="_blank" href="https://telegram.me/share/url?url=http%3A//puplwordl.online/obra.php?obra=<?php echo $obra->getid(); ?>&text=Me gusta esta obra de Pulp World"><i class="fab fa-telegram fa-2x"></i></a><br>
+				<strong>Si te gusta comparte!</strong>
+			</div>
+				<br>
 				<div class="text-center">
 					<strong>Likes</strong> <i class="fas fa-thumbs-up text-danger"> <span id="thislikes"> <?php echo $obra->getlikes(); ?></span></i>
 					<strong>Lecturas</strong> <i class="fas fa-eye text-primary"><?php echo $obra->getlecturas(); ?></i><br>
 				</div>
+				<br>
 				<div class="text-center">
 					<?php
 
@@ -121,6 +141,30 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					}
 					?></strong></p>
 				</div>
+				<?php 
+				if(isset($_SESSION["tipo"])){
+					if($_SESSION["tipo"]==1 || $_SESSION["usuario"]==$obra->getautor()){
+						?>
+						<div id="obrapublic" class="text-center mt-2 mb-2"><?php 
+						if($obra->getpublico()==0){
+							echo "<strong class='text-danger'>Obra sin publicar</strong>";
+						}
+						else{
+						echo "<strong class='text-success'>Obra publicada</strong>";
+						}
+						echo "</div>";
+					}
+					if($_SESSION["tipo"]==1){
+						?>
+						<div id="obrastate" class="text-center mt-2 mb-2 text-danger">
+							<?php 
+						if($obra->getestado()==0){
+							?>
+							<div id="obrastate" class="text-center mt-2 mb-2 text-danger">
+							<strong>Obra Bloqueada</strong>
+					
+					<?php } echo "</div>"; } }?>
+		
 				<div class="text-center">
 					<?php
 					if (count($capitulos) > 0) {
@@ -138,7 +182,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 							<?php
 							} else {
 							?>
-								<a class="btn btn-primary" <?php echo "href=capitulo.php?cap={$capitulos[0]->getid()}"; ?>>Empezar Lectura</a>
+								<a class="btn btn-primary" <?php echo "href=capitulo.php?cap={$capitulos[0]->getid()}"; ?>>Empezar</a>
 							<?php
 
 							}
@@ -179,6 +223,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 
 
 				</div>
+				<div style="width: 77%; margin:auto;" class="text-center mt-3"><p id="alert"></p></div>
 			</div>
 
 
@@ -200,6 +245,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					<li class="nav-item">
 						<a class="nav-link redi" id="navcom" href="#comentarios" data-toggle="tab">Comentarios</a>
 					</li>
+				
 					<?php if (isset($_SESSION['usuario']) && ($_SESSION['usuario'] == $obra->getautor() || $_SESSION["tipo"] == 1)) { ?>
 						<ul id="submenu" class="navbar-nav  ml-auto">
 							<li class="nav-item">
@@ -245,17 +291,20 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 						</ul>
 
 					<?php } ?>
+					
 				</ul>
 				<div class="tab-pane active in border obra" id="obra"><br>
 					<h3 class="text-center">Listado de Capitulos</h3>
 					<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $obra->getautor())) {
 					?>
-						<a href="funcionesphp/nuevocap.php?obra=<?php echo $obra->getid(); ?>" id="nuevocap">Crear un capitulo</a>
+						<a href="funcionesphp/nuevocap.php?obra=<?php echo $obra->getid(); ?>&autor=<?php echo $_SESSION['usuario']; ?>" id="nuevocap">Crear un capitulo</a>
 					<?php } ?>
 
 					<ul class="list-group">
 						<?php for ($i = 0; $i < count($capitulos); $i++) {
-
+							if($capitulos[$i]->getestado()==0 && $_SESSION["tipo"]==0){
+								continue;
+							}
 						?>
 
 							<li class="list-group-item">
@@ -273,9 +322,11 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 
 
 								<div class="pull-right action-buttons">
+									
+										<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $obra->getautor())) { ?>
 								
-									<?php if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $obra->getautor() || $_SESSION["tipo"] == 1)) { ?>
-										<a href="edicion.php?cap=<?php echo $capitulos[$i]->getid(); ?>&obra=<?php echo $obra->getid(); ?>"><span class="glyphicon glyphicon-pencil"></span>Editar</a>
+								<a href="edicion.php?cap=<?php echo $capitulos[$i]->getid(); ?>&obra=<?php echo $obra->getid(); ?>"><span class="glyphicon glyphicon-pencil"></span>Editar</a>
+									<?php } if (isset($_SESSION["usuario"]) && ($_SESSION["usuario"] == $obra->getautor() || $_SESSION["tipo"] == 1)) { ?>
 										<?php 
 										if($capitulos[$i]->getpublico()==0){
 											echo "Estado: <strong>Sin publicar</strong>";
@@ -284,7 +335,12 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 											echo "Estado: <strong>Publico</strong>";
 										}
 										?>
-									<?php } ?>
+										<?php if($_SESSION["tipo"]==1) {
+		if($capitulos[$i]->getestado()==0){
+		?>
+		
+		<strong class="text-danger">Capitulo Bloqueado</strong>
+									<?php } } }?>
 								</div>
 							</li>
 						<?php } ?>
@@ -292,6 +348,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 				</div>
 
 				<div class="tab-pane fade border obra" id="sinopsis">
+					<form id="formobra">
 					<br>
 					<label for="titulo">Titulo:</label><br>
 					<p id="err1"></p>
@@ -299,7 +356,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					
 					
 					<?php
-					if (isset($_SESSION['usuario']) && $_SESSION['usuario'] == $obra->getautor()) {
+					if (isset($_SESSION['usuario']) && ($_SESSION['usuario'] == $obra->getautor() || $_SESSION["tipo"]==1)) {
 					?>
 						<label for="filter">Selecciona el genero (Minimo 1 Maximo 4)</label>
 						<select class="selectpicker" id="categorias">
@@ -324,8 +381,9 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					}
 					?>
 					<label for="sinopsis">Sinopsis:</label>
-					<textarea maxlength="800" <?php echo $readonly ?> style="resize: none;" class="form-control text-justify" id="sinopsisobra" rows="22"><?php echo $obra->getsinopsis(); ?>
+					<textarea maxlength="1700" <?php echo $readonly ?> style="resize: none;" class="form-control text-justify" id="sinopsisobra" rows="22"><?php echo $obra->getsinopsis(); ?>
 	</textarea>
+	</form>
 				</div>
 
 
@@ -399,7 +457,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					</div>
 
 					<hr>
-					<!-- comments wrapper -->
+				
 
 
 					<ul style="list-style:none;  margin:0 0 0 0;padding:0 0 0 0;" id="comments-wrapper">
@@ -412,7 +470,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 								<li><a class="reply-btn resp2" href="#" data-toggle="modal" data-target="#coment" <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
 							<?php } ?>
 
-							<!-- reply -->
+							
 							<ul style="list-style:none;">
 								<?php for ($e = 0; $e < count($respuestas); $e++) { ?>
 
@@ -420,7 +478,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 									<li class="font-weight-bold"><?php echo $usuarios[$respuestas[$e]->getid_usuario()]->getusuario(); ?></li>
 									<li><?php echo $respuestas[$e]->getmensaje(); ?></li>
 									<?php if (isset($_SESSION["usuario"])) { ?>
-										<li><a class="reply-btn resp2" data-toggle="modal" data-target="#coment" href="#" <?php echo " data-value={$usuarios[$comentarios[$i]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
+										<li><a class="reply-btn resp2" data-toggle="modal" data-target="#coment" href="#" <?php echo " data-value={$usuarios[$respuestas[$e]->getid_usuario()]->getusuario()} data-id={$comentarios[$i]->getid()}" ?>>Responder</a></li>
 
 
 
@@ -439,7 +497,7 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 					<div id="showLess"><button class="btn btn-link">Ocultar</button></div>
 				</div>
 			</div>
-			<!-- // comments wrapper -->
+			
 
 		</div>
 
@@ -449,7 +507,10 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 	</div>
 	</div>
 	</div>
-
+<div class="text-center">
+<a class="btn btn-secondary" href="<?php echo $_SERVER['HTTP_REFERER'] ?>"><i class="fas fa-undo-alt"></i> Volver</a>
+</div>
+	
 	</div>
 	<?php
 	include("Includes/footer.php")

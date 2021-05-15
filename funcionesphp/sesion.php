@@ -1,5 +1,5 @@
 <?php 
-
+ob_start();
 session_start();
 if($_POST['botonsesion']){
 include("conexionbd.php");
@@ -27,10 +27,11 @@ header('Location: ' . $_SERVER['HTTP_REFERER']);
 if(isset($_GET['logout'])){
     session_destroy();
     if($_GET['index']){
-        header("Location: ../index.php");
+        header("Location: ../index.php?alerta=Este usuario ha sido bloqueado por incumplir las normas, para mas info contacte con pulpworldinfo@gmail.com");
     }else{
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
+    
   
 }
 

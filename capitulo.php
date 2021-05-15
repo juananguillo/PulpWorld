@@ -1,10 +1,12 @@
 <?php 
+ob_start();
 session_start();
 include("./funcionesphp/conexionbd.php");
 $bd = conectardb();
 include("clases/usuarios.class.php");
 include("./funcionesphp/funcionesusuarios.php");
 include("clases/marcapaginas.class.php");
+include("./funcionesphp/block.php");
 include("funcionesphp/funcionesmarcapaginas.php");
 include("clases/obras.class.php");
 include("clases/capitulos.class.php");
@@ -20,16 +22,19 @@ if(isset($_GET["cap"])){
 	$usuarios=arrayusuariosporid($bd);
     if($capitulo->getestado()==0 && $_SESSION["tipo"]==0){}
     if(!isset($_SESSION["usuario"])){
-        if($capitulo->getestado()==0 || $capitulo->getpublico()==0){
+        if($capitulo->getestado()==0 || $capitulo->getpublico()==0 || $obra->getestado()==0){
             header("Location: index.php");
+            die();
         }
 		$capitulos= capitulos($bd, $capitulo->getid_obra());
 	}
 	if(isset($_SESSION["usuario"])){
-        if($capitulo->getestado()==0 && $_SESSION["tipo"]==0){
+        if(($capitulo->getestado()==0 || $obra->getestado()==0) && $_SESSION["tipo"]==0){
             header("Location: index.php");
+            die();
         }
         $usuario= unusuarioporcodigo($bd, $_SESSION['usuario']);
+        isblock($usuario->getestado());
 		if($_SESSION["usuario"]==$obra->getautor() || $_SESSION["tipo"]==1){
 			$capitulos= allcapitulos($bd, $capitulo->getid_obra());
 		}
@@ -41,10 +46,14 @@ if(isset($_GET["cap"])){
     $marcapaginas=vermarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
     if($obra->getautor()!=$_SESSION["usuario"] &&  $_SESSION["tipo"]==0 && ($capitulo->getpublico()==0 || $obra->getpublico()==0)){
         header("Location: index.php");
+        die();
     }
         if($marcapaginas){
             if($marcapaginas->getid_capitulo()==$capitulos[count($capitulos)-1]->getid()){
                 borrarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid());
+                if(verlectura($bd, $_SERVER['REMOTE_ADDR'], $obra->getid())==0){
+                    crearlectura($bd, $_SERVER['REMOTE_ADDR'], $obra->getid());
+                     }
             }
             else{
             actualizarmarcapaginas($bd,$_SESSION["usuario"], $obra->getid(), $capitulo->getid());
@@ -70,8 +79,12 @@ if(isset($_GET["cap"])){
 }
 else{
 	header("Location: index.php");
+    die();
 }
 $categorias=categorias($bd);
+
+
+
 
 if($capitulos[count($capitulos)-1]->getid()==$capitulo->getid()){
     if(verlectura($bd, $_SERVER['REMOTE_ADDR'], $obra->getid())==0){
@@ -82,6 +95,7 @@ include("Includes/header.php");
     ?>
     <link rel="stylesheet" href="css/libro.css">
     <script src="js/estado.js"></script>
+    <script src="js/zoom.js"></script>
     </head>
 <body>
     <?php 
@@ -98,8 +112,11 @@ include("Includes/header.php");
     <h3 class="text-center mb-5">
     <?php echo $capitulo->gettitulo(); ?>
     </h3>
-    
-    <div class="container h-100 mt-5 mb-5 d-flex flex-column">
+    <div class="text-center">
+    <button id="zoomin" class="btn btn-primary"><i class="fas fa-search-plus"></i></button>
+    <button id="zoomout"  class="btn btn-primary"><i class="fas fa-search-minus"></i></button>
+    </div>
+    <div class="container h-100 mt-3 mb-5 d-flex flex-column">
     <ul class="nav nav-tabs">
       <li class="nav-item">
 	  <a class="nav-link active" href="#contenido" data-toggle="tab">Contenido</a>

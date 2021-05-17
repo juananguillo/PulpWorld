@@ -575,12 +575,12 @@ function filtrarusuarios3($bd,$desc,$orden,$tipo){
         if($tipo==0){
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
             WHERE u.estado LIKE 1
-            ORDER BY u.$orden ASC
+            ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }
         else{
             $sentencia = $bd->prepare("SELECT u.* FROM usuario u
-            ORDER BY u.$orden ASC
+            ORDER BY u.$orden DESC
         LIMIT $desc, 20000000");
         }   
     

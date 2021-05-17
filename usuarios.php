@@ -138,7 +138,7 @@ if(isset($_SESSION['usuario'])){
   
  
 </div>
-    <div>
+    <div id="content">
     <h1 class="display-3 text-center mb-5">Usuarios</h1>
     </div>
  
@@ -271,7 +271,7 @@ if(isset($_SESSION["tipo"])){
         if ($desplazamiento > 0) {
             $pagant=$pagina-1;
             $prev = $desplazamiento - 12;
-            $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant";
+            $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant#content";
             echo "<li class='page-item active'>";
             echo  "<a class='page-link mr-4' href=$url tabindex='-1'>Anterior</a>";
         }
@@ -288,7 +288,7 @@ if(isset($_SESSION["tipo"])){
             $o=0;
               for ($i=0; $i < $total; $i+=12) { 
                   $o++;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor#content";
                 if($pagina==$o){
                  echo "<li class='page-item active'>
                 <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
@@ -301,7 +301,7 @@ if(isset($_SESSION["tipo"])){
               if ($total > ($desplazamiento + 12)) {
                 $pagsec=$pagina+1;
                 $prox = $desplazamiento + 12;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec#content";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
               }
@@ -319,6 +319,18 @@ if(isset($_SESSION["tipo"])){
     <script>
     $('.dropdown-menu').on('click', function(event) {
   event.stopPropagation();
+});
+if($("#categorias option:selected").val()=="Usuarios"){
+   $("#orden option:eq(1)").attr('disabled','disabled');
+}
+$("#categorias").on("change", function () {  
+
+if($("#categorias option:selected").val()=="Usuarios"){
+    $("#orden option:eq(1)").attr('disabled','disabled');
+}
+else{
+    $("#orden option:eq(1)").removeAttr('disabled');
+}
 });
         
        

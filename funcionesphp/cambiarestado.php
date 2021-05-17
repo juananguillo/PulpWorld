@@ -35,7 +35,8 @@ switch ($_POST["accion"]) {
     
       
         for ($i=0; $i < count($seguidores); $i++) { 
-            notifiobras($bd, $seguidores[$i]["id_seguidor"], 0, $id_obra, "ha publicado una nueva obra, no te la pierdas!");
+            notifiobras($bd, $seguidores[$i]["id_seguidor"], 0, $id_obra,
+             "ha publicado una nueva obra, no te la pierdas!");
         }
 
         break;

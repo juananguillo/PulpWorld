@@ -98,7 +98,6 @@ include("Includes/header.php");
         </div>
 
         <div class="container text-white">
-
             <h1 class="display-5">Bienvenido a Pulp World!</h1>
             <p class="lead">Pulp World es una plataforma online de lectura y escritura que nace con el proposito de que la gente pueda leer, escribir y públicar relatos de una forma sencilla</p>
             <hr class="my-4">
@@ -120,7 +119,7 @@ include("Includes/header.php");
 
 
     </div>
-    <div>
+    <div id="content">
         <h1 class="display-3 text-center mb-5">Historias Pulp</h1>
     </div>
 
@@ -358,7 +357,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             if ($desplazamiento > 0) {
                 $pagant = $pagina - 1;
                 $prev = $desplazamiento - 12;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant#content";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link mr-4' href=$url tabindex='-1'>Anterior</a>";
             } else {
@@ -374,7 +373,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             $o = 0;
             for ($i = 0; $i < $total; $i += 12) {
                 $o++;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor#content";
                 if ($pagina == $o) {
                     echo "<li class='page-item active'>
                 <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
@@ -387,7 +386,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             if ($total > ($desplazamiento + 12)) {
                 $prox = $desplazamiento + 12;
                 $pagsec = $pagina + 1;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec#content";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
             } else {

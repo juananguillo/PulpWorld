@@ -413,18 +413,21 @@ function totalobras1($db,$desc, $orden, $cat,$tipo){
         if($tipo==0){
             $sentencia = $db->prepare("SELECT count(*) from obras o, genero g
         WHERE estado like 1 AND  g.id_categoria like $cat AND g.id_obra LIKE o.id
-        ORDER BY $orden DESC");
+        ORDER BY $orden DESC
+        ");
         $sentencia->execute();
         $total=$sentencia->fetchColumn();  
         }
         else{
         $sentencia = $db->prepare("SELECT count(*) from obras o, genero g
         WHERE  g.id_categoria like $cat AND g.id_obra LIKE o.id
-        ORDER BY $orden DESC");
+        ORDER BY $orden DESC
+        ");
         $sentencia->execute();
         $total=$sentencia->fetchColumn(); 
-        return $total;
+     
         }
+        return $total;
     
     } catch (Exception $e) {
         header("Location: error.php?error=Ha habido un problema con las obras");

@@ -53,7 +53,7 @@ function cambiarfoto($bd,$img, $id, $old){
 function obrasguardadasbiblio($bd, $id){
     try {
             $sentencia = $bd->prepare("SELECT DISTINCT o.* FROM obras o, obras_guardadas og
-            WHERE og.id_biblioteca like $id AND og.id_obra like o.id");
+            WHERE og.id_biblioteca like $id AND og.id_obra like o.id ORDER BY o.id DESC");
               $sentencia->execute();
        
         if($sentencia->rowCount()==0)

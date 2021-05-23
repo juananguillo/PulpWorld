@@ -5,6 +5,10 @@ $(document).on("ready", function () {
     nosave();
    });
 
+   $(".sel").click(function() {
+    nosave();
+   });
+
    function nosave() {
     $("#alert").text("Existen datos sin guardar");
     $("#alert").addClass("alert alert-danger text-center");

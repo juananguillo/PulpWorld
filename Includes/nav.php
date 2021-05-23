@@ -2,7 +2,7 @@
 
     <a class="navbar-brand" href="index.php">
 
-        Pulp Word
+        Pulp World
     </a>
 
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#firstnavbar">

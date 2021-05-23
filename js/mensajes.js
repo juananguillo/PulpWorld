@@ -2,7 +2,7 @@
 $(document).on("ready", function () {
 
   function block(params) {
-    console.log(params);
+    //console.log(params);
     if(params=="block"){
       window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
     }
@@ -26,17 +26,7 @@ $(document).on("ready", function () {
      });
 
 
-     $("#textobusqueda").on("change keyup keydown paste cut copy", function () {
-      if($("#textobusqueda").length){
-      if($("#textobusqueda").val().trim()==""){
-     
-         $("#busqueda").prop('disabled', true);
-      }else{
-     
-         $("#busqueda").prop('disabled', false);
-      }
-  }
-   });
+  
 
     setInterval(function() { 
         $.post("./funcionesphp/mensajes.php", {

@@ -85,7 +85,7 @@ margin:auto; " src="Imagenes/Obras/default.jpg" class="img-thumbnail"  alt="" />
 
  </div><br>
   <label for="sinopsis">Sinopsis: (Maximo 250 palabras)</label><br>
-  <textarea style="resize: none;" class="form-control" id="sinopsisobra"  rows="22" maxlength="1700"></textarea>
+  <textarea style="resize: none;" class="form-control text-justify" id="sinopsisobra"  rows="22" maxlength="1700"></textarea>
 </form>
  
 	</div>

@@ -1,5 +1,5 @@
 $(document).on("ready", function () {
-    let divtxt = $('p');
+    let divtxt = $('#capcontent > p');
     $('#zoomin').click(function() {
         var curSize = divtxt.css('fontSize');
         var newSize = parseInt(curSize.replace("px", "")) + 1;

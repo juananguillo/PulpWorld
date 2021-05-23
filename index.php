@@ -98,7 +98,7 @@ include("Includes/header.php");
         </div>
 
         <div class="container text-white">
-            <h1 class="display-5">Bienvenido a Pulp World!</h1>
+            <h1 class="display-5">¡Bienvenido a Pulp World!</h1>
             <p class="lead">Pulp World es una plataforma online de lectura y escritura que nace con el proposito de que la gente pueda leer, escribir y públicar relatos de una forma sencilla</p>
             <hr class="my-4">
             <?php if (!isset($_SESSION['usuario'])) {
@@ -120,7 +120,7 @@ include("Includes/header.php");
 
     </div>
     <div id="content">
-        <h1 class="display-3 text-center mb-5">Historias Pulp</h1>
+        <h1 class="display-3 text-center mb-5">Obras Pulp</h1>
     </div>
 
     <div class="container-fluid mb-3">
@@ -236,7 +236,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div  style=" height: 500px; overflow-y: scroll;" class="modal-body">
                                                     <div style="height: 300px;">
                                                         <img style="width: 70%; height: 20rem;" class="rounded mx-auto d-block mh-100" src=<?php echo "Imagenes/Obras/" . $obras[$i]->getportada(); ?> />
                                                     </div>
@@ -304,7 +304,11 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
                                                 echo "</div>";
                                             }
                                         } ?>
-                                        <div class="text-center">
+                                        <?php if(count($generos)>2){
+                                            echo  "<div class='text-center'>";
+                                        }else{
+                                            echo  "<div class='text-center mb-3'>";
+                                        }  ?>
 
                                             <?php
                                             foreach ($generos as $key => $value) {

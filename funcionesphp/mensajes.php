@@ -68,20 +68,32 @@ break;
         break;
 
    case 'filtrar':
-    $usuariosfiltrados= filtrarusuariosporpalabrastodos($bd, 0, "id", $_POST["palabras"], 0);
-    $id_chats= emisoresyreceptores($bd, $id1);
     $array=[];
-    foreach ($usuariosfiltrados as $key => $value) {
+    $id_chats= emisoresyreceptores($bd, $id1);
+    if(strlen($_POST["palabras"])>0){
+      $usuariosfiltrados= filtrarusuariosporpalabrastodos($bd, 0, "id", $_POST["palabras"], 0);
+      foreach ($usuariosfiltrados as $key => $value) {
+     
+     if(in_array($value->getid(), $id_chats)){
+      array_push($array,$value->getid());
+     }
+    }
    
-   if(in_array($value->getid(), $id_chats)){
-    array_push($array,$value->getid());
-   }
-   $usuarios= arrayusuariosporid($bd);
  
     }
+    else{
+
+      $array=$id_chats;
+
+    }
+    $usuarios= arrayusuariosporid($bd);
+
     foreach ($array as $key => $value) {
       $chat_user=$usuarios[$value];
       $t= sinleermen($bd, $id1, $chat_user->getid());
+      if($chat_user->getestado()==0){
+        continue;
+      }
       echo "
       <div  id='{$chat_user->getid()}' style='cursor: pointer; overflow:hidden;' class='border mt-2 mb-3 chatid'>
       <img align='left' class='foto rounded-circle mt-1 mr-2' src='Imagenes/Usuarios/{$chat_user->getfoto()} '>

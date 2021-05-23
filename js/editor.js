@@ -9,7 +9,7 @@ tinymce.init({
     },
 
     plugins : "paste",
-    paste_retain_style_properties: "font-size font-style text-align",
+    paste_as_text: true,
     //plugins: 'tinymcespellchecker',
     //spellchecker_active: true,
     toolbar: 'spellchecker | undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',

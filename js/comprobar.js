@@ -120,8 +120,10 @@ $(document).on("ready", function () {
     },
     messages: {
   
-      usureg: { required: "El campo es obligatorio", minlength: "El usuario debe tener minimo 6 caracteres",maxlength: "El usuario debe tener minimo 15 caracteres"
-    }
+      usulog: { required: "El campo es obligatorio", minlength: "El usuario debe tener minimo 6 caracteres",maxlength: "El usuario debe tener minimo 15 caracteres"
+    },
+
+    contralog: {required: "El campo es obligatorio"}
     }
   });
 

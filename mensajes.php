@@ -42,7 +42,7 @@ else{
          <div class="col-md-3 col-xs-12 col-sm-12 col-md-4 col-lg-4  border classcol">
            <div class="input-group mb-3">
          <input type="text" class="form-control " id="textobusqueda" name="textobusqueda" placeholder="Busqueda avanzada">
-         <button disabled id="busqueda" name="busqueda" class="btn btn-primary busqueda"><i class="fas fa-search"></i></button>
+         <button  id="busqueda" name="busqueda" class="btn btn-primary busqueda"><i class="fas fa-search"></i></button>
 </div>
 <input type="hidden" id="usuid" value="<?php echo $_SESSION["usuario"]; ?>">
 <div id="chats">

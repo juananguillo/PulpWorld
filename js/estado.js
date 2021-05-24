@@ -3,7 +3,7 @@ $(document).on("ready", function () {
 function block(params) {
   console.log(params);
   if(params=="block"){
-    //window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+    window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
   }
 }
 

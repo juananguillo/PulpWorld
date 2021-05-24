@@ -1,4 +1,14 @@
 $(document).on("ready", function () {
+
+
+  function block(params) {
+    console.log(params);
+    if(params=="block"){
+      window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+    }
+  }
+
+
     if ($("#obraid").length ) {
     like();
     dislike();
@@ -10,6 +20,7 @@ $(document).on("ready", function () {
           accion: "dar"
         },
         function (data) {
+          block(data);
          $("#dar").html("<i class='fas fa-thumbs-up'> Quitar me gusta</i>");
          $("#dar").removeClass("btn-success");
          $("#dar").addClass("btn-danger");
@@ -28,6 +39,7 @@ $(document).on("ready", function () {
             accion: "quitar"
           },
           function (data) {
+            block(data);
            $("#quitar").html("<i class='fas fa-thumbs-up'> Dar me gusta</i>");
            $("#quitar").removeClass("btn-danger");
            $("#quitar").addClass("btn-success");
@@ -50,6 +62,7 @@ else{
             accion: "dar"
             },
             function (data) {
+              block(data);
              $("#dar").html("<i class='fas fa-users'> Dejar de seguir</i>");
              $("#dar").removeClass("btn-success");
              $("#dar").addClass("btn-danger");
@@ -69,6 +82,7 @@ else{
               accion: "quitar"
             },
             function (data) {
+              block(data);
              $("#quitar").html("<i class='fas fa-users'> Seguir</i>");
              $("#quitar").removeClass("btn-danger");
              $("#quitar").addClass("btn-success");

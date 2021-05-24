@@ -1,4 +1,13 @@
 $(document).on("ready", function () {
+
+
+   function block(params) {
+      console.log(params);
+      if(params=="block"){
+        window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
+      }
+    }
+
     $("#textomn").on("change keyup keydown paste cut copy", function () {
         if($("#textomn").length){
         if($("#textomn").val().trim()==""){
@@ -19,6 +28,7 @@ $(document).on("ready", function () {
             accion: "insertar"
           },
           function (data) {
+             block(data);
               alert("El mensaje se ha enviado con exito");
            $(".close").click();
           });

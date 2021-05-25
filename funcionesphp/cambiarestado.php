@@ -26,7 +26,12 @@ switch ($_POST["accion"]) {
                 quitarnotificapi($bd, $seguidores[$i]["id_seguidor"], $capis[$e]->getid(), 1);
             }
         }
+        if($o->getportada()!="default.jpg"){
+            unlink('../Imagenes/Obras/'.$o->getportada());
+        }
+       
         eliminarobra($bd,$id_obra);
+        
         break;
     }
 
@@ -170,6 +175,10 @@ switch ($_POST["accion"]) {
 
     case 'eliminar':
         eliminarusuario($bd, $id_user);
+        if($usublock->getfoto()!="default.jpg"){
+            unlink('../Imagenes/Usuarios/'.$usublock->getfoto());
+        }
+    
         break;
 }
    

@@ -361,7 +361,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             if ($desplazamiento > 0) {
                 $pagant = $pagina - 1;
                 $prev = $desplazamiento - 12;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant#content";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$ordnum&desplazamiento=$prev&buscarpor=$buscarpor&pag=$pagant#content";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link mr-4' href=$url tabindex='-1'>Anterior</a>";
             } else {
@@ -377,7 +377,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             $o = 0;
             for ($i = 0; $i < $total; $i += 12) {
                 $o++;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$i&pag=$o&buscarpor=$buscarpor#content";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$ordnum&desplazamiento=$i&pag=$o&buscarpor=$buscarpor#content";
                 if ($pagina == $o) {
                     echo "<li class='page-item active'>
                 <a class='page-link' href=$url>$o <span class='sr-only'>(current)</span></a>
@@ -390,7 +390,7 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
             if ($total > ($desplazamiento + 12)) {
                 $prox = $desplazamiento + 12;
                 $pagsec = $pagina + 1;
-                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$orden&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec#content";
+                $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$ordnum&desplazamiento=$prox&buscarpor=$buscarpor&pag=$pagsec#content";
                 echo "<li class='page-item active'>";
                 echo  "<a class='page-link ml-4' href=$url tabindex='-1'>Siguiente</a>";
             } else {

@@ -27,7 +27,8 @@ header('Location: ' . $_SERVER['HTTP_REFERER']);
 if(isset($_GET['logout'])){
     session_destroy();
     if($_GET['index']){
-        header("Location: ../index.php?alerta=Este usuario ha sido bloqueado por incumplir las normas, para mas info contacte con pulpworldinfo@gmail.com");
+        $alerta=isset($_GET["destroy"]) ? "Sentimos tu decision y esperamos que vuelvas!" :"Este usuario ha sido bloqueado por incumplir las normas, para mas info contacte con contacto o pulpworldinfo@gmail.com"; 
+        header("Location: ../index.php?alerta=$alerta");
     }else{
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }

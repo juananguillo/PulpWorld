@@ -239,6 +239,7 @@ $(document).on("ready", function () {
     }
     });
 
+
       if (!error) {
         var f = document.getElementById("subidaimg");
         var img = f.files[0];

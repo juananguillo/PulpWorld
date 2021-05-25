@@ -11,16 +11,11 @@ if(isset($_POST['botonregistro'])){
     $id = $bd->lastInsertId();
     crearbiblioteca($bd, $id);
     
-    header("Location: ../index.php?alerta=El usuario ha sido creado, inicia sesion");
+    header("Location: ../index.php?alerta=El usuario ha sido creado con exito, para disfrutar de la aplicación tienes que iniciar sesion!");
     exit;
 
 }
 
-if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash'])){
-   
-}else{
-    
-}
 
 if(isset($_POST['usulog'])) {
    

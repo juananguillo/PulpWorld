@@ -1,7 +1,6 @@
 $(document).on("ready", function () {
 
 function block(params) {
-  console.log(params);
   if(params=="block"){
     window.location.replace("./funcionesphp/sesion.php?logout=yes&index=yes");
   }
@@ -32,7 +31,6 @@ function block(params) {
         });
       
       }
-      eliminar();
     });
    
   }
@@ -161,11 +159,10 @@ function desbloquear() {
           },
           function (data) {
             block(data);
-            window.location = './funcionesphp/sesion.php?logout=yes&index=yes'
+            window.location = './funcionesphp/sesion.php?logout=yes&index=yes&destroy=yes';
           });
         
         }
-        eliminar();
       });
      
     }
@@ -227,7 +224,6 @@ function desbloquear() {
           });
         
         }
-        eliminar();
       });
      
     }

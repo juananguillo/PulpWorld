@@ -20,7 +20,6 @@ if($_POST["accion"]=="dar"){
 }
 }
 elseif(isset($_POST["id_seguido"])){
-    include("funcionesusuarios.php");
 $id_seguido=$_POST["id_seguido"];
 $id_seguidor=$_POST["id_seguidor"];
     if($_POST["accion"]=="dar"){

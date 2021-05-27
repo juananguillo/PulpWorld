@@ -374,8 +374,11 @@ margin:auto; " class="card-img-top" src=<?php echo "Imagenes/Obras/" . $obras[$i
 
             </li>
             <?php
-            $o = 0;
-            for ($i = 0; $i < $total; $i += 12) {
+            $o=  $pagina>4 ? $pagina :0;
+            for ($i = 0; $i < 48; $i += 12) {
+                if($i>=$total){
+                    break;
+                }
                 $o++;
                 $url = $_SERVER["PHP_SELF"] . "?categoria=$cat&orden=$ordnum&desplazamiento=$i&pag=$o&buscarpor=$buscarpor#content";
                 if ($pagina == $o) {

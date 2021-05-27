@@ -286,6 +286,14 @@ if(isset($_SESSION["tipo"])){
             </li>
             <?php 
              $o=  $pagina>4 ? $pagina :0;
+             $o=$o>0?$o-1:$o;
+
+             if($o>0){
+                 while ($o % 4) {
+                     $o--;
+                 }
+                 
+             }
              for ($i = 0; $i < 48; $i += 12) {
                  if($i>=$total){
                      break;

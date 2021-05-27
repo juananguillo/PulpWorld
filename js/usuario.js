@@ -1,6 +1,94 @@
 $(document).on("ready", function () {
   
 
+  function showmoreuser() {
+    let total = $("#showmorebuttonobra li").size();
+   var x=10;
+    $('#showLessbuttonobra').hide();
+    $('#showmorebuttonobra li:lt('+x+')').show();
+    $('#loadMorebuttonobra').click(function () {
+       if(x<total){
+        x+=10;
+        $('#showmorebuttonobra li:lt('+x+')').show();
+        $('#showLessbuttonobra').show();
+       }
+       if(x>total){
+          $('#loadMorebuttonobra').hide();
+       }
+ 
+    });
+    $('#showLessbuttonobra').click(function () {
+      
+       if(x>10){
+        x-=10;
+        $('#showmorebuttonobra li').not(':lt('+x+')').hide();
+      if(x==10){
+       $('#showLessbuttonobra').hide();
+   
+ 
+      }
+      $('#loadMorebuttonobra').show();
+        }else{
+     
+          $('#showLessbuttonobra').hide();
+          $('#loadMorebuttonobra').show();
+        }
+    });
+   }
+
+
+
+
+  if($("#showmorebuttonobra li").size()<10){
+    $('#loadMorebuttonobra').hide();
+ }
+
+
+
+ showmoreuser();
+
+
+ function showmoreuser2() {
+  let total = $("#showmorebuttonobra2 li").size();
+ var x1=10;
+  $('#showLessbuttonobra2').hide();
+  $('#showmorebuttonobra2 li:lt('+x1+')').show();
+  $('#loadMorebuttonobra2').click(function () {
+     if(x1<total){
+      x1+=10;
+      $('#showmorebuttonobra2 li:lt('+x1+')').show();
+      $('#showLessbuttonobra2').show();
+     }
+     if(x1>total){
+        $('#loadMorebuttonobra2').hide();
+     }
+
+  });
+  $('#showLessbuttonobra2').click(function () {
+    
+     if(x1>10){
+      x1-=10;
+      $('#showmorebuttonobra2 li').not(':lt('+x1+')').hide();
+    if(x1==10){
+     $('#showLessbuttonobra2').hide();
+ 
+
+    }
+    $('#loadMorebuttonobra2').show();
+      }else{
+   
+        $('#showLessbuttonobra2').hide();
+        $('#loadMorebuttonobra2').show();
+      }
+  });
+ }
+ if($("#showmorebuttonobra2 li").size()<10){
+  $('#loadMorebuttonobra2').hide();
+}
+
+ showmoreuser2();
+
+
   $("#formusuario :input").change(function() {
    nosave();
   });

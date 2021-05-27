@@ -1,5 +1,49 @@
 $(document).on("ready", function () {
 
+  function showmore() {
+    var total = $("#showmorebutton li").size();
+    x=10;
+    $('#showLessbutton').hide();
+    $('#showmorebutton li:lt('+x+')').show();
+    $('#loadMorebutton').click(function () {
+       if(x<total){
+        x+=10;
+        $('#showmorebutton li:lt('+x+')').show();
+        $('#showLessbutton').show();
+       }
+       if(x>total){
+          $('#loadMorebutton').hide();
+       }
+ 
+    });
+    $('#showLessbutton').click(function () {
+      
+       if(x>10){
+        x-=10;
+        $('#showmorebutton li').not(':lt('+x+')').hide();
+      if(x==10){
+       $('#showLessbutton').hide();
+   
+ 
+      }
+      $('#loadMorebutton').show();
+        }else{
+     
+          $('#showLessbutton').hide();
+          $('#loadMorebutton').show();
+        }
+    });
+   }
+
+
+
+  if($("#showmorebutton li").size()<10){
+    $('#loadMorebutton').hide();
+ }
+
+
+
+ showmore();
 
   $("#formobra :input").change(function() {
     nosave();

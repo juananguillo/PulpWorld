@@ -63,5 +63,15 @@ height: 20rem;
 	}
 } 
 
+#showmorebutton li{ display:none;
+}
+
+#showmorebuttonobra li{ display:none;
+}
+
+#showmorebuttonobra2 li{ display:none;
+}
+
+
  #comments-wrapper li{ display:none;
 }

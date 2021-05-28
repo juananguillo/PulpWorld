@@ -20,6 +20,7 @@ include("funcionesphp/funcionesbiblioteca.php");
 if (isset($_GET["obra"])) {
 	$categorias = categorias($bd);
 	$obra = obtenerunaobra($bd, $_GET["obra"]);
+	$aut=unusuarioporcodigo($bd, $obra->getautor());
 	$generos = generos($bd, $obra->getid());
 	$comentarios = obtenercoments($bd, $_GET["obra"]);
 	$usuarios = arrayusuariosporid($bd);
@@ -252,11 +253,11 @@ margin:auto; " <?php echo "src=Imagenes/Obras/{$obra->getportada()}"; ?> class="
 								<button id="guardar" class="btn btn-primary">Guardar</button>
 								<?php
 
-								if ($_SESSION["tipo"] == 1 && $obra->getestado() == 1) {
+								if ($_SESSION["tipo"] == 1 && $obra->getestado() == 1 && $aut->getestado()==1) {
 								?>
 									<button id="bloquear" class="btn btn-primary">Bloquear</button>
 								<?php
-								} elseif ($_SESSION["tipo"] == 1 && $obra->getestado() == 0) {
+								} elseif ($_SESSION["tipo"] == 1 && $obra->getestado() == 0 && $aut->getestado()==1) {
 								?>
 									<button id="desbloquear" class="btn btn-primary">Desbloquear</button>
 								<?php

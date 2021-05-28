@@ -160,9 +160,18 @@ elseif(isset($_POST["id_user"])){
     
 $id_user=$_POST["id_user"];
 
+$usua=unusuarioporcodigo($bd, $id_user);
+
+for ($i=0; $i < $usua->getobras() ; $i++) { 
+    menosuna($bd, $id_user);
+}
+
 switch ($_POST["accion"]) {
     case 'bloquear':
         bloquearuser($bd,$id_user);
+
+
+
         $obras= obrasautor($bd,1,$id_user);
         foreach ($obras as $key => $value) {
             bloquear($bd, $value->getid());

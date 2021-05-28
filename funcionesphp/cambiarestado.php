@@ -38,12 +38,12 @@ switch ($_POST["accion"]) {
     case 'publicar':
         publicar($bd, $id_obra);
     
-      
+      if($o->getestado()==1){
         for ($i=0; $i < count($seguidores); $i++) { 
             notifiobras($bd, $seguidores[$i]["id_seguidor"], 0, $id_obra,
              "ha publicado una nueva obra, no te la pierdas!");
         }
-
+    }
         break;
     
     case 'despublicar':
@@ -122,7 +122,7 @@ elseif(isset($_POST["id_capi"])){
 
         case 'publicar':
             publicarcapi($bd, $id_capi);
-           if($obra->getpublico()==1){
+           if($obra->getpublico()==1 && $obra->getestado()==1){
             for ($i=0; $i < count($seguidores); $i++) { 
             notificapi($bd, $seguidores[$i]["id_seguidor"], 1, $id_capi, "ha publicado un nuevo capitulo, no te lo pierdas!");
             }
